@@ -12,20 +12,18 @@
     </Compiler>
   </ToolsConfig>
   <VirtualDirectory Name="core">
-    <File Name="../../../../../../Driver/core/core_801.h">
+    <File Name="../../../../../Driver/core/core_801.h">
       <FileOption/>
     </File>
-    <File Name="../../../../../../Driver/core/csi_gcc.h">
+    <File Name="../../../../../Driver/core/csi_gcc.h">
       <FileOption/>
     </File>
   </VirtualDirectory>
   <VirtualDirectory Name="startup">
-    <File Name="../../../../../../Driver/startup/crt0.S">
+    <File Name="../../../../../Driver/startup/crt0.S">
       <FileOption/>
     </File>
-    <File Name="../../../../../../Driver/startup/mem_init.c">
-      <FileOption/>
-    </File>
+    <File Name="../../../../../Driver/startup/mem_init.c"/>
   </VirtualDirectory>
   <VirtualDirectory Name="user">
     <File Name="../user/main.c">
@@ -39,41 +37,46 @@
     </File>
   </VirtualDirectory>
   <VirtualDirectory Name="driver">
-    <VirtualDirectory Name="inc">
-      <File Name="../../../../../../Driver/driver/inc/n3f004.h">
-        <FileOption/>
-      </File>
-      <File Name="../../../../../../Driver/driver/inc/syscon.h">
-        <FileOption/>
-      </File>
-      <File Name="../../../../../../Driver/driver/inc/types_local.h">
-        <FileOption/>
-      </File>
-      <File Name="../../../../../../Driver/driver/inc/coret.h">
-        <FileOption/>
-      </File>
-      <File Name="../../../../../../Driver/driver/inc/gpio.h">
-        <FileOption/>
-      </File>
-      <File Name="../../../../../../Driver/driver/inc/ifc.h">
-        <FileOption/>
-      </File>
-      <File Name="../../../../../../Driver/driver/inc/bt.h"/>
-    </VirtualDirectory>
     <VirtualDirectory Name="src">
-      <File Name="../../../../../../Driver/driver/src/bt.c">
+      <File Name="../../../../../Driver/driver/src/bt.c">
         <FileOption/>
       </File>
-      <File Name="../../../../../../Driver/driver/src/coret.c">
+      <File Name="../../../../../Driver/driver/src/coret.c">
         <FileOption/>
       </File>
-      <File Name="../../../../../../Driver/driver/src/n3f004.c">
+      <File Name="../../../../../Driver/driver/src/gpio.c">
         <FileOption/>
       </File>
-      <File Name="../../../../../../Driver/driver/src/syscon.c">
+      <File Name="../../../../../Driver/driver/src/ifc.c">
         <FileOption/>
       </File>
-      <File Name="../../../../../../Driver/driver/src/gpio.c">
+      <File Name="../../../../../Driver/driver/src/n3f004.c">
+        <FileOption/>
+      </File>
+      <File Name="../../../../../Driver/driver/src/syscon.c">
+        <FileOption/>
+      </File>
+    </VirtualDirectory>
+    <VirtualDirectory Name="inc">
+      <File Name="../../../../../Driver/driver/inc/bt.h">
+        <FileOption/>
+      </File>
+      <File Name="../../../../../Driver/driver/inc/coret.h">
+        <FileOption/>
+      </File>
+      <File Name="../../../../../Driver/driver/inc/gpio.h">
+        <FileOption/>
+      </File>
+      <File Name="../../../../../Driver/driver/inc/ifc.h">
+        <FileOption/>
+      </File>
+      <File Name="../../../../../Driver/driver/inc/n3f004.h">
+        <FileOption/>
+      </File>
+      <File Name="../../../../../Driver/driver/inc/syscon.h">
+        <FileOption/>
+      </File>
+      <File Name="../../../../../Driver/driver/inc/types_local.h">
         <FileOption/>
       </File>
     </VirtualDirectory>
@@ -192,7 +195,7 @@
         <Undefine/>
         <Optim>Optimize size (-Os)</Optim>
         <DebugLevel>Maximum (-g3)</DebugLevel>
-        <IncludePath>$(ProjectPath);$(ProjectPath)/../../../../../../Driver/core;$(ProjectPath)/../../../../../../Driver/driver/inc</IncludePath>
+        <IncludePath>$(ProjectPath);$(ProjectPath)/../../../../../../Driver/core;$(ProjectPath)/../../../../../../Driver/driver/inc;$(ProjectPath)/../../../../../Driver/driver/inc</IncludePath>
         <OtherFlags>-ffunction-sections -fdata-sections</OtherFlags>
         <Verbose>no</Verbose>
         <Ansi>no</Ansi>
@@ -209,7 +212,7 @@
       <Asm>
         <Define/>
         <Undefine/>
-        <IncludePath>;$(ProjectPath);$(ProjectPath)/../../../../../../Driver/core;$(ProjectPath)/../../../../../../Driver/driver/inc;$(ProjectPath)/../../../../projects/examples/hello_world/configs</IncludePath>
+        <IncludePath>;$(ProjectPath);$(ProjectPath)/../../../../../../Driver/core;$(ProjectPath)/../../../../../../Driver/driver/inc;$(ProjectPath)/../../../../../Driver/driver/inc;$(ProjectPath)/../../../../projects/examples/hello_world/configs</IncludePath>
         <OtherFlags/>
         <DebugLevel>gdwarf2</DebugLevel>
       </Asm>
