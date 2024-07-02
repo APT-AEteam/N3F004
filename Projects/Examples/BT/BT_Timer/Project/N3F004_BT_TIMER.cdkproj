@@ -23,7 +23,9 @@
     <File Name="../../../../../Driver/startup/crt0.S">
       <FileOption/>
     </File>
-    <File Name="../../../../../Driver/startup/mem_init.c"/>
+    <File Name="../../../../../Driver/startup/mem_init.c">
+      <FileOption/>
+    </File>
   </VirtualDirectory>
   <VirtualDirectory Name="user">
     <File Name="../user/main.c">
@@ -195,7 +197,7 @@
         <Undefine/>
         <Optim>Optimize size (-Os)</Optim>
         <DebugLevel>Maximum (-g3)</DebugLevel>
-        <IncludePath>$(ProjectPath);$(ProjectPath)/../../../../../../Driver/core;$(ProjectPath)/../../../../../../Driver/driver/inc;$(ProjectPath)/../../../../../Driver/driver/inc</IncludePath>
+        <IncludePath>../../../../../Driver/core/;../../../../../Driver/driver/inc/</IncludePath>
         <OtherFlags>-ffunction-sections -fdata-sections</OtherFlags>
         <Verbose>no</Verbose>
         <Ansi>no</Ansi>
