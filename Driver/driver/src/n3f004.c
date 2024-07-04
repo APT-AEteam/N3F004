@@ -43,7 +43,7 @@ CSP_IGRP_T  	*GPIOGRP  = (CSP_IGRP_T *)APB_IGRPBase;
 //
 CSP_BT_T    	*BT0      = (CSP_BT_T   *)APB_BT0Base ;
 CSP_BT_T    	*BT1      = (CSP_BT_T   *)APB_BT1Base ;
-//CSP_CRC_T   	*CRC      = (CSP_CRC_T  *)AHB_CRCBase ;
+CSP_CRC_T   	*CRC      = (CSP_CRC_T  *)AHB_CRCBase ;
 
 /* Private variablesr---------------------------------------------------------*/
 /* defines -------------------------------------------------------------------*/

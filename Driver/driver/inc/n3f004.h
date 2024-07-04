@@ -23,8 +23,8 @@
 #include "bt.h"
 #include "coret.h"
 //#include "countera.h"
-//#include "crc.h"
-//#include "ept.h"
+#include "crc.h"
+#include "ept.h"
 //#include "et.h"
 #include "gpio.h"
 //#include "gpt.h"
@@ -169,14 +169,14 @@ extern CSP_IGRP_T	*GPIOGRP  ;
 //
 //extern CSP_GPT_T 	*GPT0     ;
 //
-//extern CSP_EPT_T 	*EPT0     ;
+extern CSP_EPT_T 	*EPT0     ;
 //
 //extern CSP_LPT_T 	*LPT      ;
 //
 extern CSP_BT_T  	*BT0      ;
 extern CSP_BT_T  	*BT1      ;
 //
-//extern CSP_CRC_T 	*CRC      ;
+extern CSP_CRC_T 	*CRC      ;
 
 
 //ISR Define for generating special interrupt related ASM (CK802), with compile option -mistack

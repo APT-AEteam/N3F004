@@ -58,6 +58,10 @@
       <File Name="../../../../../Driver/driver/src/syscon.c">
         <FileOption/>
       </File>
+      <File Name="../../../../../Driver/driver/src/ept.c">
+        <FileOption/>
+      </File>
+      <File Name="../../../../../Driver/driver/src/crc.c"/>
     </VirtualDirectory>
     <VirtualDirectory Name="inc">
       <File Name="../../../../../Driver/driver/inc/bt.h">
@@ -81,19 +85,14 @@
       <File Name="../../../../../Driver/driver/inc/types_local.h">
         <FileOption/>
       </File>
+      <File Name="../../../../../Driver/driver/inc/ept.h">
+        <FileOption/>
+      </File>
+      <File Name="../../../../../Driver/driver/inc/crc.h">
+        <FileOption/>
+      </File>
     </VirtualDirectory>
   </VirtualDirectory>
-  <DebugSessions>
-    <watchExpressions/>
-    <memoryExpressions>;;;</memoryExpressions>
-    <statistics>;;MHZ</statistics>
-    <peripheralTabs/>
-    <WatchDisplayFormat/>
-    <LocalDisplayFormat/>
-    <debugLayout/>
-    <memoryTabColSizeExpressions/>
-    <QuickWatchDisplayFormat/>
-  </DebugSessions>
   <BuildConfigs>
     <BuildConfig Name="BuildSet">
       <Target>
@@ -316,4 +315,15 @@
       </Flash>
     </BuildConfig>
   </BuildConfigs>
+  <DebugSessions>
+    <watchExpressions/>
+    <memoryExpressions>;;;</memoryExpressions>
+    <statistics>;;MHZ</statistics>
+    <peripheralTabs/>
+    <WatchDisplayFormat/>
+    <LocalDisplayFormat/>
+    <debugLayout/>
+    <memoryTabColSizeExpressions/>
+    <QuickWatchDisplayFormat/>
+  </DebugSessions>
 </Project>
