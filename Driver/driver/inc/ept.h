@@ -80,13 +80,13 @@
    __IOM  U32_T	EVSWF;	  //0x00CC 
    __IM     U32_T  	RISR;        //0x00D0    Interrupt RISR
    __IM     U32_T  	MISR;       //0x00D4    Interrupt MISR
-   __IOM  U32_T   IMCR;         //0x00D8    Interrupt IMCR
-   __IOM  U32_T   ICR;             //0x00DC    Interrupt clear
+   __IOM  U32_T    IMCR;         //0x00D8    Interrupt IMCR
+   __IOM  U32_T    ICR;             //0x00DC    Interrupt clear
    __IOM  U32_T   _RSVD8;		//0x00e0	                                     
    __IOM  U32_T   _RSVD9;		//0x00e4	                                        
    __IOM  U32_T   REGPROT;    //0x00e8 
 
-} CSP_EPT_T;
+} csp_ept_t;
 
 
 /******************************************************************************
@@ -113,7 +113,7 @@ typedef enum{
 #define EPT_START_POS		(6)
 #define EPT_START_MSK		(0x1ul << EPT_START_POS)
 #define EPT_START_SHD       (0ul << EPT_START_POS)
-#define EPT_START_IMMD      (1ul << EPT_START_POS)
+#define EPT_START_IMM      (1ul << EPT_START_POS)
 #define EPT_FLTPRS_POS		(8)
 #define EPT_FLTPRS_MSK		(0xfful << EPT_FLTPRS_POS)
 typedef enum{
@@ -126,21 +126,21 @@ typedef enum{
 /******************************************************************************
 * RSSR : start and stop control register
 ******************************************************************************/
-#define EPT_START		(0x1ul)
-#define EPT_CNTDIR_POS	(3)
+#define EPT_START					(0x1ul)
+#define EPT_CNTDIR_POS		(3)
 #define EPT_CNTDIR_MSK	(0x1 << EPT_CNTDIR_POS)
-#define EPT_RESET_POS	(12)
-#define EPT_RESET_MSK	(0xf << EPT_RESET_POS)
-#define EPT_RESET		(0x5ul << EPT_RESET_POS)
+#define EPT_RESET_POS		(12)
+#define EPT_RESET_MSK		(0xf << EPT_RESET_POS)
+#define EPT_RESET					(0x5ul << EPT_RESET_POS)
 
 /******************************************************************************
 * CR :  control register
 ******************************************************************************/
 #define EPT_CNTMD_MSK	(3ul)
 typedef enum{
-	EPT_CNTMD_increase = 0,
-	EPT_CNTMD_decrease,
-	EPT_CNTMD_increaseTOdecrease
+	EPT_CNTMD_UP = 0,
+	EPT_CNTMD_DN,
+	EPT_CNTMD_UP_DN
 }ept_cntmd_e;
 
 #define EPT_STARTSRC_POS	(2)
@@ -170,8 +170,8 @@ typedef enum {
 #define EPT_OPMD_POS	(6)
 #define EPT_OPMD_MSK	(0x1 << EPT_OPMD_POS)
 typedef enum{
-	EPT_OPM_Continue = 0,
-	EPT_OPM_Once,
+	EPT_OPM_CONTINUE = 0,
+	EPT_OPM_ONCE,
 }ept_opmd_e;
 
 
@@ -230,8 +230,8 @@ typedef enum {
 	EPT_CGFLT_64
 }ept_cnflt_e;
 
-#define EPT_PSCLD_POS	(16)
-#define EPT_PSCLD_MSK	(0x3 << EPT_PSCLD_POS)
+#define EPT_PSCLD_POS		(16)
+#define EPT_PSCLD_MSK		(0x3 << EPT_PSCLD_POS)
 typedef enum {
 	EPT_PSCLD_ZRO =0,
 	EPT_PSCLD_PRD,
@@ -239,19 +239,19 @@ typedef enum {
 	EPT_PSCLD_DIS
 } ept_pscld_e;
 
-#define EPT_MODE_POS	(18)
-#define EPT_MODE_MSK     (1ul << EPT_MODE_POS)
+#define EPT_MODE_POS		(18)
+#define EPT_MODE_MSK    	(1ul << EPT_MODE_POS)
 typedef enum{
 	EPT_MODE_CAP = 0,
 	EPT_MODE_OUT
 }ept_md_e;
 
-#define EPT_CAPREARM   (1ul << 19)
+#define EPT_CAPREARM  		 (1ul << 19)
 
-#define EPT_CAPMD_POS    (20)
-#define EPT_CAPMD_MSK	(0x1 << EPT_CAPMD_POS)
+#define EPT_CAPMD_POS    	 (20)
+#define EPT_CAPMD_MSK	 (0x1 << EPT_CAPMD_POS)
 typedef enum {
-	EPT_CAPMD_CONTINUS =0,
+	EPT_CAPMD_CONTINUE =0,
 	EPT_CAPMD_ONCE
 }ept_capmd_e;
 
@@ -284,23 +284,23 @@ typedef enum {
 	EPT_SYNCXEN
 }ept_syncxen_e;
 
-#define EPT_OSTMD_POS(ch)	(ch+8)
-#define EPT_OSTMD_MSK(ch)	(1<<(EPT_OSTMD_POS(ch)))
+#define EPT_OSTMD_POS(ch)		(ch+8)
+#define EPT_OSTMD_MSK(ch)		(1<<(EPT_OSTMD_POS(ch)))
 
 typedef enum {
-	EPT_OSTMD_CONTINUS = 0,
+	EPT_OSTMD_CONTINUE = 0,
 	EPT_OSTMD_ONCE
 }ept_syncmd_e;
 
-#define EPT_REARM_POS(ch)	(ch+16)
-#define EPT_REARM_MSK(ch)	(1<<(ch+16))
-#define EPT_REARM(ch) 		(1<<(ch+16))
+#define EPT_REARM_POS(ch)		(ch+16)
+#define EPT_REARM_MSK(ch)		(1<<(ch+16))
+#define EPT_REARM(ch) 				(1<<(ch+16))
 
-#define EPT_TRGO0SEL_POS	(24)
-#define EPT_TRGO0SEL_MSK	(0x7<<EPT_TRGO0SEL_POS)
+#define EPT_TRGO0SEL_POS		(24)
+#define EPT_TRGO0SEL_MSK		(0x7<<EPT_TRGO0SEL_POS)
 
-#define EPT_TRGO1SEL_POS	(27)
-#define EPT_TRGO1SEL_MSK	(0x7<<EPT_TRGO1SEL_POS)
+#define EPT_TRGO1SEL_POS		(27)
+#define EPT_TRGO1SEL_MSK		(0x7<<EPT_TRGO1SEL_POS)
 
 typedef enum {
 	EPT_TRGOXSEL_SYNC0 =0,
@@ -334,9 +334,9 @@ typedef enum
 	EPT_GLDMD_SEL_ZRO	=	0,
 	EPT_GLDMD_SEL_PRD	,
 	EPT_GLDMD_SEL_ZRO_PRD	,
-	EPT_GLDMD_SEL_ZRO_ExiLoad_SYNC		,
-	EPT_GLDMD_SEL_PRD_ExiLoad_SYNC		,
-	EPT_GLDMD_SEL_ZRO_PRD_ExiLoad_SYNC,
+	EPT_GLDMD_SEL_ZRO_EXI_SYNC		,
+	EPT_GLDMD_SEL_PRD_EXI_SYNC		,
+	EPT_GLDMD_SEL_ZRO_PRD_EXI_SYNC,
 	EPT_GLDMD_Selecte_SW  = 0xf
 }ept_gldmd_sel_e;
 
@@ -356,33 +356,33 @@ typedef enum{
 /******************************************************************************
 * GLDCFG :  global load  config register
 ******************************************************************************/
-#define EPT_LD_PRDR_POS (0)
-#define EPT_LD_PRDR_MSK	(0x1 << EPT_LD_PRDR_POS)
-#define EPT_LD_CMPA_POS (1)
-#define EPT_LD_CMPA_MSK	(0x1 << EPT_LD_CMPA_POS)
-#define EPT_LD_CMPB_POS (2)
-#define EPT_LD_CMPB_MSK	(0x1 << EPT_LD_CMPB_POS)
-#define EPT_LD_CMPC_POS (3)
-#define EPT_LD_CMPC_MSK	(0x1 << EPT_LD_CMPC_POS)
-#define EPT_LD_CMPD_POS (4)
-#define EPT_LD_CMPD_MSK	(0x1 << EPT_LD_CMPD_POS)
-#define EPT_LD_DBDTR_POS (5)
+#define EPT_LD_PRDR_POS 		(0)
+#define EPT_LD_PRDR_MSK		(0x1 << EPT_LD_PRDR_POS)
+#define EPT_LD_CMPA_POS		(1)
+#define EPT_LD_CMPA_MSK		(0x1 << EPT_LD_CMPA_POS)
+#define EPT_LD_CMPB_POS 		(2)
+#define EPT_LD_CMPB_MSK		(0x1 << EPT_LD_CMPB_POS)
+#define EPT_LD_CMPC_POS 		(3)
+#define EPT_LD_CMPC_MSK		(0x1 << EPT_LD_CMPC_POS)
+#define EPT_LD_CMPD_POS 		(4)
+#define EPT_LD_CMPD_MSK		(0x1 << EPT_LD_CMPD_POS)
+#define EPT_LD_DBDTR_POS 	(5)
 #define EPT_LD_DBDTR_MSK	(0x1 << EPT_LD_DBDTR_POS)
-#define EPT_LD_DBDTF_POS (6)
+#define EPT_LD_DBDTF_POS 	(6)
 #define EPT_LD_DBDTF_MSK	(0x1 << EPT_LD_DBDTF_POS)
-#define EPT_LD_DBCR_POS (7)
-#define EPT_LD_DBCR_MSK	(0x1 << EPT_LD_DBCR_POS)
-#define EPT_LD_AQCRA_POS (8)
+#define EPT_LD_DBCR_POS 		(7)
+#define EPT_LD_DBCR_MSK		(0x1 << EPT_LD_DBCR_POS)
+#define EPT_LD_AQCRA_POS 	(8)
 #define EPT_LD_AQCRA_MSK	(0x1 << EPT_LD_AQCRA_POS)
-#define EPT_LD_AQCRB_POS (9)
+#define EPT_LD_AQCRB_POS	(9)
 #define EPT_LD_AQCRB_MSK	(0x1 << EPT_LD_AQCRB_POS)
-#define EPT_LD_AQCRC_POS (10)
+#define EPT_LD_AQCRC_POS 	(10)
 #define EPT_LD_AQCRC_MSK	(0x1 << EPT_LD_AQCRC_POS)
-#define EPT_LD_AQCRD_POS (11)
+#define EPT_LD_AQCRD_POS 	(11)
 #define EPT_LD_AQCRD_MSK	(0x1 << EPT_LD_AQCRD_POS)
-#define EPT_LD_AQCSF_POS (12)
+#define EPT_LD_AQCSF_POS	(12)
 #define EPT_LD_AQCSF_MSK	(0x1 << EPT_LD_AQCSF_POS)
-#define EPT_LD_EMOSR_POS (13)
+#define EPT_LD_EMOSR_POS 	(13)
 #define EPT_LD_EMOSR_MSK	(0x1 << EPT_LD_EMOSR_POS)
 typedef enum{
 	EPT_LD_NOTGLD = 0,
@@ -414,39 +414,38 @@ typedef enum{
 #define EPT_CMPDATA_MSK	(0xffff)	
 #define EPT_CMPDATA_OVWRT (0x1 << 31)
 
-
 /******************************************************************************
 * CMPLDR : compare val load control register
 ******************************************************************************/
 typedef enum		
 {
-	EPT_LDR_DIS							=		0,
+	EPT_LDR_DIS								=		0,
 	EPT_LDR_IM								=		1,
 	EPT_LDR_ZRO							=		2,
 	EPT_LDR_PRD							=		3,
 	EPT_LDR_EXI_SYNC					=		4
 }ept_ldr_e;
 
-#define EPT_CMPA_LD_POS	(0)
-#define EPT_CMPA_LD_MSK	(0x1 << EPT_CMPA_LD_POS)
-#define EPT_CMPB_LD_POS	(1)
-#define EPT_CMPB_LD_MSK	(0x1 << EPT_CMPB_LD_POS)
-#define EPT_CMPC_LD_POS	(2)
-#define EPT_CMPC_LD_MSK	(0x1 << EPT_CMPC_LD_POS)
-#define EPT_CMPD_LD_POS	(3)
-#define EPT_CMPD_LD_MSK	(0x1 << EPT_CMPD_LD_POS)
+#define EPT_CMPA_LD_POS		(0)
+#define EPT_CMPA_LD_MSK		(0x1 << EPT_CMPA_LD_POS)
+#define EPT_CMPB_LD_POS		(1)
+#define EPT_CMPB_LD_MSK		(0x1 << EPT_CMPB_LD_POS)
+#define EPT_CMPC_LD_POS		(2)
+#define EPT_CMPC_LD_MSK		(0x1 << EPT_CMPC_LD_POS)
+#define EPT_CMPD_LD_POS		(3)
+#define EPT_CMPD_LD_MSK		(0x1 << EPT_CMPD_LD_POS)
 typedef enum {
 	EPT_CMPLD_SHDW = 0,
 	EPT_CMPLD_IMM
 }ept_cmpdata_ldmd_e;
 
-#define EPT_CMPA_LDTIME_POS	(4)
+#define EPT_CMPA_LDTIME_POS		(4)
 #define EPT_CMPA_LDTIME_MSK	(0x7 << EPT_CMPA_LDTIME_POS)
-#define EPT_CMPB_LDTIME_POS	(7)
+#define EPT_CMPB_LDTIME_POS		(7)
 #define EPT_CMPB_LDTIME_MSK	(0x7 << EPT_CMPB_LDTIME_POS)
-#define EPT_CMPC_LDTIME_POS	(10)
+#define EPT_CMPC_LDTIME_POS		(10)
 #define EPT_CMPC_LDTIME_MSK	(0x7 << EPT_CMPC_LDTIME_POS)
-#define EPT_CMPD_LDTIME_POS	(13)
+#define EPT_CMPD_LDTIME_POS		(13)
 #define EPT_CMPD_LDTIME_MSK	(0x7 << EPT_CMPD_LDTIME_POS)
 typedef enum{
 	EPT_LDXMD_DIS =0,
@@ -457,7 +456,7 @@ typedef enum{
 
 
 #define EPT_SHDWAFULL 	(0x1 <<20)
-#define EPT_SHDWBFULL 	(0x1 <<21)
+#define EPT_SHDWBFULL 		(0x1 <<21)
 
 /******************************************************************************
 * AQLDR : wave output load control register
@@ -476,14 +475,14 @@ typedef enum {
 	EPT_AQCR_SHDW
 }ept_aqcr_ldmd_e;
 
-#define EPT_LDAMD_POS		(2)
+#define EPT_LDAMD_POS			(2)
 #define EPT_LDAMD_MSK		(0x7 << EPT_LDAMD_POS)
-#define EPT_LDBMD_POS		(5)
-#define EPT_LDBMD_MSK		(0x7 << EPT_LDBMD_POS)
+#define EPT_LDBMD_POS			(5)
+#define EPT_LDBMD_MSK			(0x7 << EPT_LDBMD_POS)
 
-#define EPT_LDCMD_POS		(10)
-#define EPT_LDCMD_MSK		(0x7 << EPT_LDCMD_POS)
-#define EPT_LDDMD_POS		(13)
+#define EPT_LDCMD_POS			(10)
+#define EPT_LDCMD_MSK			(0x7 << EPT_LDCMD_POS)
+#define EPT_LDDMD_POS			(13)
 #define EPT_LDDMD_MSK		(0x7 << EPT_LDDMD_POS)
 
 
@@ -497,18 +496,18 @@ typedef enum{
 	EPT_PWM4
 }ept_pwm_out_e;
 
-#define EPT_ACT_ZRO_POS	(0)
-#define EPT_ACT_ZRO_MSK	(0x3 << EPT_ACT_ZRO_POS)
-#define EPT_ACT_PRD_POS	(2)
-#define EPT_ACT_PRD_MSK	(0x3 << EPT_ACT_PRD_POS)
-#define EPT_ACT_C1U_POS	(4)
-#define EPT_ACT_C1U_MSK	(0x3 << EPT_ACT_C1U_POS)
-#define EPT_ACT_C1D_POS	(6)
-#define EPT_ACT_C1D_MSK	(0x3 << EPT_ACT_C1D_POS)
-#define EPT_ACT_C2U_POS	(8)
-#define EPT_ACT_C2U_MSK	(0x3 << EPT_ACT_C2U_POS)
-#define EPT_ACT_C2D_POS	(10)
-#define EPT_ACT_C2D_MSK	(0x3 << EPT_ACT_C2D_POS)
+#define EPT_ACT_ZRO_POS		(0)
+#define EPT_ACT_ZRO_MSK		(0x3 << EPT_ACT_ZRO_POS)
+#define EPT_ACT_PRD_POS		(2)
+#define EPT_ACT_PRD_MSK		(0x3 << EPT_ACT_PRD_POS)
+#define EPT_ACT_C1U_POS		(4)
+#define EPT_ACT_C1U_MSK		(0x3 << EPT_ACT_C1U_POS)
+#define EPT_ACT_C1D_POS		(6)
+#define EPT_ACT_C1D_MSK		(0x3 << EPT_ACT_C1D_POS)
+#define EPT_ACT_C2U_POS		(8)
+#define EPT_ACT_C2U_MSK		(0x3 << EPT_ACT_C2U_POS)
+#define EPT_ACT_C2D_POS		(10)
+#define EPT_ACT_C2D_MSK		(0x3 << EPT_ACT_C2D_POS)
 
 typedef enum{
 	EPT_PWM_ACT_DIS =0,
@@ -616,17 +615,17 @@ typedef enum{
 	EPT_DBSEL_CHC,
 }ept_dbsel_e;
 
-#define DB_CHA_OUTSEL_POS	(0)
-#define DB_CHA_OUTSEL_MSK	(0x3) 
-#define DB_CHB_OUTSEL_POS	(8)
-#define DB_CHB_OUTSEL_MSK	(0x3 << DB_CHB_OUTSEL_POS) 
-#define DB_CHC_OUTSEL_POS	(16)
-#define DB_CHC_OUTSEL_MSK	(0x3 << DB_CHC_OUTSEL_POS) 
+#define DB_CHA_OUTSEL_POS			(0)
+#define DB_CHA_OUTSEL_MSK		(0x3) 
+#define DB_CHB_OUTSEL_POS			(8)
+#define DB_CHB_OUTSEL_MSK		(0x3 << DB_CHB_OUTSEL_POS) 
+#define DB_CHC_OUTSEL_POS			(16)
+#define DB_CHC_OUTSEL_MSK		(0x3 << DB_CHC_OUTSEL_POS) 
 typedef enum {
-	E_DBOUT_DIS = 0,    //OUTA close;       OUTB close
-	E_DBOUT_BF,         //OUTA close;       OUTB_Falling_edge
-	E_DBOUT_AR,         //OUTA Rising edge  OUTB close
-	E_DBOUT_AR_BF       //OUTA Rising edge  OUTB_Falling_edge
+	EPT_DB_OUT_DIS = 0,    		
+	EPT_DB_OUTB_F,         		
+	EPT_DB_OUTA_R,        		
+	EPT_DB_OUTA_R_OUTB_F     	  
 }ept_db_outsel_e;
 
 #define DB_CHA_POL_POS	(2)
@@ -636,18 +635,18 @@ typedef enum {
 #define DB_CHC_POL_POS	(18)
 #define DB_CHC_POL_MSK	(0x3 << DB_CHC_POL_POS)
 typedef enum {
-	E_DAB_POL_DIS = 0,
-	E_DB_POL_A,
-	E_DB_POL_B,
-	E_DB_POL_AB
-}ept_db_pol_e;       //
-#define DB_CHA_INSEL_POS	(4)
+	EPT_DAB_POL_DIS = 0,
+	EPT_DB_POL_A,
+	EPT_DB_POL_B,
+	EPT_DB_POL_AB
+}ept_db_pol_e;       
+#define DB_CHA_INSEL_POS		(4)
 #define DB_CHA_INSEL_MSK	(0x3 << DB_CHA_INSEL_POS)
 typedef enum {
-	E_DBCHXIN_PWMA_RISE_FALL = 0,
-	E_DBCHXIN_PWMB_RISE_PWMA_FALL,
-	E_DBCHXIN_PWMA_RISE_PWMB_FALL,
-	E_DBCHXIN_PWMB_RISE_FALL
+	EPT_DBIN_PWMA_RISE_FALL = 0,
+	EPT_DBIN_PWMB_RISE_PWMA_FALL,
+	EPT_DBIN_PWMA_RISE_PWMB_FALL,
+	EPT_DBIN_PWMB_RISE_FALL
 }ept_dbchx_insel_e;
 
 #define DB_CHA_OUTSWAP_POS	(6)
@@ -667,14 +666,14 @@ typedef enum
 	EPT_PBTOCHX_PATOCHY				
 }ept_outwrap_e;
 
-#define DB_CHB_INSEL_POS	(12)
+#define DB_CHB_INSEL_POS		(12)
 #define DB_CHB_INSEL_MSK	(0x3 << DB_CHB_INSEL_POS)
 
-#define DB_CHC_INSEL_POS	(20)
+#define DB_CHC_INSEL_POS		(20)
 #define DB_CHC_INSEL_MSK	(0x3 << DB_CHC_INSEL_POS)
 
 
-#define EPT_DCKSEL_POS		(24)
+#define EPT_DCKSEL_POS			(24)
 #define EPT_DCKSEL_MSK		(0x1 << EPT_DCKSEL_POS)
 typedef enum {
 	EPT_DBCLK_TCLK = 0,
@@ -715,49 +714,34 @@ typedef enum
 	EPT_EP_INPUT_ORL1 =0xf	,
 }ept_ep_input_e;
 
-typedef enum{
-	EPT_HD_LK_EP0 = 0,
-	EPT_HD_LK_EP1,
-	EPT_HD_LK_EP2,
-	EPT_HD_LK_EP3,
-	EPT_HD_LK_EP4,
-	EPT_HD_LK_EP5,
-	EPT_HD_LK_EP6,
-	EPT_HD_LK_EP7,
-	EPT_HD_LK_CPU_FAULT,
-	EPT_HD_LK_MEM_FAULT,
-	EPT_HD_LK_EOM_FAULT,
-}ept_hdlk_e;
-
-
 /******************************************************************************
 * EMSRC2 config ORL0, ORL1 and input Filters
 ******************************************************************************/
-#define EPT_ORL0_POS	(0)
-#define EPT_ORL1_POS	(16)
+#define EPT_ORL0_POS			(0)
+#define EPT_ORL1_POS			(16)
 
 #define EPT_EPPACE0_POS	(8)
 #define EPT_EPPACE0_MSK	(0xf << EPT_EPPACE0_POS)
 
 typedef enum{
-	EPFLT0_DIS = 0,
-	EPFLT0_2P,
-	EPFLT0_4P,
-	EPFLT0_6P,
-	EPFLT0_8P,
-	EPFLT0_16P,
-	EPFLT0_32P,
-	EPFLT0_64P
+	EPT_EPFLT0_DIS = 0,
+	EPT_EPFLT0_2P,
+	EPT_EPFLT0_4P,
+	EPT_EPFLT0_6P,
+	EPT_EPFLT0_8P,
+	EPT_EPFLT0_16P,
+	EPT_EPFLT0_32P,
+	EPT_EPFLT0_64P
 }ept_epflt_e;
 
 /******************************************************************************
 * EMPOL :emergency status input polarity control register
 ******************************************************************************/
-#define POL_POS_EBI(n)	(n)
+#define POL_POS_EBI(n)		(n)
 #define POL_MSK_EBI(n)	(0x1 << POL_POS_EBI(n))
 typedef enum {
-	EBI_POL_H = 0,
-	EBI_POL_L
+	EPT_EBI_POL_HIGH = 0,
+	EPT_EBI_POL_LOW
 }ept_ebipol_e;
 
 /******************************************************************************
@@ -766,12 +750,12 @@ typedef enum {
 #define EPT_LCKMD_POS_EP(n)	((n) << 1)
 #define EPT_LCKMD_MSK_EP(n)	(0x3 << EPT_LCKMD_POS_EP(n))
 
-#define EPT_EMOSR_SHDWEN_POS (21)
+#define EPT_EMOSR_SHDWEN_POS 	(21)
 #define EPT_EMSOR_SHDWEN_MSK  (0x1 << EPT_EMOSR_SHDWEN_POS)
-#define EPT_EMSOR_SHDWEN (0x1 << EPT_EMOSR_SHDWEN_POS)
+#define EPT_EMSOR_SHDWEN				 (0x1 << EPT_EMOSR_SHDWEN_POS)
 
-#define EPT_OSRLDMD_POS      22                                            
-#define EPT_OSRLDMD_MSK     (0x3UL << EPT_OSRLDMD_POS)     
+#define EPT_OSRLDMD_POS    			  22                                            
+#define EPT_OSRLDMD_MSK    			 (0x3UL << EPT_OSRLDMD_POS)     
 typedef enum{
 	EM_OSRLD_DIS=0,
 	EM_OSRLD_ZRO ,
@@ -789,8 +773,8 @@ typedef enum{
 	EM_SLCLR_DIS
 }ept_emslclr_e;
 
-#define EPT_EPASYNC_POS (26)
-#define EPT_EPASYNC_MSK (1ul << 26)
+#define EPT_EPASYNC_POS 		(26)
+#define EPT_EPASYNC_MSK 	(1ul << 26)
 typedef enum{
 	EPT_EMASYNC_ENABLE =0,
 	EPT_EMASYNC_DISABLE
@@ -836,20 +820,20 @@ typedef enum
 /******************************************************************************
 * EMOSR :emergency status output control register
 ******************************************************************************/
-#define EPT_EMCHAX_O_POS	(0)
-#define EPT_EMCHAX_O_MSK	(0x3)
-#define EPT_EMCHBX_O_POS	(2)
-#define EPT_EMCHBX_O_MSK	(0x3 << EPT_EMCHBX_O_POS)
-#define EPT_EMCHCX_O_POS	(4)
-#define EPT_EMCHCX_O_MSK	(0x3 << EPT_EMCHCX_O_POS)
-#define EPT_EMCHD_O_POS		(6)
+#define EPT_EMCHAX_O_POS		(0)
+#define EPT_EMCHAX_O_MSK		(0x3)
+#define EPT_EMCHBX_O_POS		(2)
+#define EPT_EMCHBX_O_MSK		(0x3 << EPT_EMCHBX_O_POS)
+#define EPT_EMCHCX_O_POS		(4)
+#define EPT_EMCHCX_O_MSK		(0x3 << EPT_EMCHCX_O_POS)
+#define EPT_EMCHD_O_POS			(6)
 #define EPT_EMCHD_O_MSK		(0x3 << EPT_EMCHD_O_POS)
-#define EPT_EMCHAY_O_POS	(8)
-#define EPT_EMCHAY_O_MSK	(0x3 << EPT_EMCHAY_O_POS)
-#define EPT_EMCHBY_O_POS	(10)
-#define EPT_EMCHBY_O_MSK	(0x3 << EPT_EMCHBY_O_POS)
-#define EPT_EMCHCY_O_POS	(12)
-#define EPT_EMCHCY_O_MSK	(0x3 << EPT_EMCHCY_O_POS)
+#define EPT_EMCHAY_O_POS		(8)
+#define EPT_EMCHAY_O_MSK		(0x3 << EPT_EMCHAY_O_POS)
+#define EPT_EMCHBY_O_POS		(10)
+#define EPT_EMCHBY_O_MSK		(0x3 << EPT_EMCHBY_O_POS)
+#define EPT_EMCHCY_O_POS		(12)
+#define EPT_EMCHCY_O_MSK		(0x3 << EPT_EMCHCY_O_POS)
 
 typedef enum
 {
@@ -915,7 +899,7 @@ typedef enum{
 }ept_trgsrc_e;
 
 
-#define EPT_INITEN_POS_CNT(n)	(16+n)
+#define EPT_INITEN_POS_CNT(n)		(16+n)
 #define EPT_INITEN_MSK_CNT(n)	(0x1 << (EPT_INITEN_POS_CNT(n)))
 #define EPT_OUTEN_POS_TRG(n)	(20+n)
 #define EPT_OUTEN_MSK_TRG(n)	(0x1 << (EPT_OUTEN_POS_TRG(n)))
@@ -965,7 +949,6 @@ typedef enum{
 ******************************************************************************/
 #define EPT_REGPROT			(0xa55a << 16 | 0xc73a)
 
-
 /******************************************************************************
 * ept IO related
 ******************************************************************************/
@@ -978,8 +961,8 @@ typedef enum
 	EPT_IO_CHBY			=	 	3,	
 	EPT_IO_CHCX			=	 	4,
 	EPT_IO_CHCY			=	 	5,
-	EPT_IO_CHD			=	 	6,
-	EPT_IO_EPI			=	 	7
+	EPT_IO_CHD				=	 	6,
+	EPT_IO_EPI					=	 	7
 }ept_iomd_e;
 
 typedef enum
@@ -1012,21 +995,21 @@ typedef enum
  * 			   
  *  \return none
  */ 
-void EPT_Software_Prg(void);
+void ept_software_reset(void);
 /** \brief EPT start
  * 
  *  \param[in] none
  * 			   
  *  \return none
  */ 
-void EPT_Start(void);
+void ept_start(void);
 /** \brief EPT stop
  * 
  *  \param[in] none
  * 			   
  *  \return none
  */  
-void EPT_Stop(void);
+void ept_stop(void);
 
 /** \brief  EPT IO Config
  * 
@@ -1035,7 +1018,7 @@ void EPT_Stop(void);
  * 
  *  \return none
  */  
-void EPT_IO_SET(ept_iomd_e eIoMd , ept_ionum_e eIoNum);
+void ept_io_configure(ept_iomd_e eIoMd , ept_ionum_e eIoNum);
 /** \brief EPT PWM  Basic Configuration :clk , counter mode, operation  mode  ect.
  * 			
  *  \param[in] eClk : source clk select : PCLK OR SYNCIN3 \ref ept_clksel_e
@@ -1045,17 +1028,17 @@ void EPT_IO_SET(ept_iomd_e eIoMd , ept_ionum_e eIoNum);
  * 			   
  *  \return none
  */  
-void EPT_PWM_Config(ept_clksel_e eClk , ept_cntmd_e eCntMd  , ept_opmd_e eOpMd, U16_T hwPscr);
+void ept_pwm_configure(ept_clksel_e eClk , ept_cntmd_e eCntMd  , ept_opmd_e eOpMd, U16_T hwPscr);
 /** \brief EPT Clock Gate Filter Configuration :Clock Gate source select, filter div ,filter cnt , burst ect.
  * 			
  *  \param[in] eCgsrcSel : Clock Gate source select : DIS/TIN_BT0/TIN_BT1/CHAX/CHBX \ref ept_cgsrc_e
- *  \param[in] bCgfltDiv : Clock Gate Filter DIv Setting, range: 0~0xff 
- *  \param[in] bCgfltCnt : Clock Gate Filter Cnt Setting , range: 0~0x7
+ *  \param[in] byCgfltDiv : Clock Gate Filter DIv Setting, range: 0~0xff 
+ *  \param[in] byCgfltCnt : Clock Gate Filter Cnt Setting , range: 0~0x7
  *  \param[in] eBurst : Burst enable or disable control \ref ept_burst_e
  * 			   
  *  \return none
  */  
-void EPT_CG_gate_Config(ept_cgsrc_e eCgsrcSel , U8_T bCgfltDiv , U8_T bCgfltCnt , ept_burst_e eBurst);
+void ept_clockgate_configure(ept_cgsrc_e eCgsrcSel , U8_T byCgfltDiv , U8_T byCgfltCnt , ept_burst_e eBurst);
 /** \brief EPT Capture Config
  * 			
  *  \param[in] eClk : source clk select : PCLK OR SYNCIN3 \ref ept_clksel_e
@@ -1066,13 +1049,13 @@ void EPT_CG_gate_Config(ept_cgsrc_e eCgsrcSel , U8_T bCgfltDiv , U8_T bCgfltCnt 
  *  \param[in] eLoadCmpb : After cmpb capture load ,counter state control:enable /disable \ref ept_ldxrst_e
  *  \param[in] eLoadCmpc : After cmpc capture load ,counter state control:enable /disable \ref ept_ldxrst_e
  *  \param[in] eLoadCmpc : After cmpc capture load ,counter state control:enable /disable \ref ept_ldxrst_e
- *  \param[in] bStopWrap : In Capture Mode, Capture counter period setting: range: 0~0X3
+ *  \param[in] byStopWrap : In Capture Mode, Capture counter period setting: range: 0~0X3
  *  \param[in] hwPscr : clk division control, range: 0~0XFFFF, :  Fclk=Fpclk/(PSCR+1)
  * 			   
  *  \return none
  */  
-void EPT_Capture_Config(ept_clksel_e eClk, ept_cntmd_e eCntMd , ept_capmd_e eCapMd , ept_capld_e eCapldEn 
-					, ept_ldxrst_e eLoadCmpa, ept_ldxrst_e eLoadCmpb, ept_ldxrst_e eLoadCmpc, ept_ldxrst_e eLoadCmpd,  U8_T bStopWrap , U16_T hwPscr);
+void ept_cap_configure(ept_clksel_e eClk, ept_cntmd_e eCntMd , ept_capmd_e eCapMd , ept_capld_e eCapldEn 
+					, ept_ldxrst_e eLoadCmpa, ept_ldxrst_e eLoadCmpb, ept_ldxrst_e eLoadCmpc, ept_ldxrst_e eLoadCmpd,  U8_T byStopWrap , U16_T hwPscr);
 /** \brief EPT sync0 config
  * 			
  *  \param[in] eSyncMd : Sync Mode select : once or continus \ref ept_syncmd_e
@@ -1083,7 +1066,7 @@ void EPT_Capture_Config(ept_clksel_e eClk, ept_cntmd_e eCntMd , ept_capmd_e eCap
  * 			   
  *  \return none
  */  
-void EPT_SYNCR_Config(ept_syncmd_e eSyncMd , ept_arearm_e eAutoRearm, ept_trgoxsel_e eTrgo0Sel ,ept_trgoxsel_e eTrgo1Sel , ept_syncxen_e eSync0En);
+void ept_syncr_configure(ept_syncmd_e eSyncMd , ept_arearm_e eAutoRearm, ept_trgoxsel_e eTrgo0Sel ,ept_trgoxsel_e eTrgo1Sel , ept_syncxen_e eSync0En);
 /** \brief EPT dedband config
  * 			
  *  \param[in] eDbChSel : Deadband channel select: CHA/CHB/CHC \ref ept_dbsel_e
@@ -1094,7 +1077,7 @@ void EPT_SYNCR_Config(ept_syncmd_e eSyncMd , ept_arearm_e eAutoRearm, ept_trgoxs
  * 			   
  *  \return none
  */  
-void EPT_DBCR_Config(ept_dbsel_e eDbChSel , ept_dbchx_insel_e eDbChxInSel , ept_db_outsel_e eOutSel , ept_db_pol_e ePol , ept_outwrap_e eOutWrap);
+void ept_deadband_configure(ept_dbsel_e eDbChSel , ept_dbchx_insel_e eDbChxInSel , ept_db_outsel_e eOutSel , ept_db_pol_e ePol , ept_outwrap_e eOutWrap);
 /** \brief EPT dedband clk config
  * 			
  *  \param[in] hwDpsc : Deadband clk division control ,range：0~0xffff
@@ -1104,7 +1087,7 @@ void EPT_DBCR_Config(ept_dbsel_e eDbChSel , ept_dbchx_insel_e eDbChxInSel , ept_
  * 			   
  *  \return none
  */  
-void EPT_DB_CLK_Config(U16_T hwDpsc , U16_T hwDtr , U16_T hwDtf);
+void ept_deadband_clk_configure(U16_T hwDpsc , U16_T hwDtr , U16_T hwDtf);
 /** \brief EPT pwm1~4 output control
  * 			
  *  \param[in] ePwmxOut : Choose PWMx  channel to output \ref ept_pwm_out_e
@@ -1120,7 +1103,7 @@ void EPT_DB_CLK_Config(U16_T hwDpsc , U16_T hwDtr , U16_T hwDtf);
  * 
  *  \return none
  */   
-void EPT_PWMX_Output_Control(
+void ept_pwmx_output_control(
 							 ept_pwm_out_e ePwmxOut ,ept_cxsel_e eC1Sel , ept_cxsel_e eC2Sel , ept_pwm_act_e eZeroAct , ept_pwm_act_e ePrdAct , 
 							 ept_pwm_act_e eC1uAct , ept_pwm_act_e eC1dAct ,ept_pwm_act_e eC2uAct , ept_pwm_act_e eC2dAct 
 							 );
@@ -1132,7 +1115,7 @@ void EPT_PWMX_Output_Control(
  * 
  *  \return none
  */    
-void EPT_PHSEN_Config(ept_phsen_e ePhsEn , ept_phsdir_e ePhsDir , U16_T hwPhsr);
+void ept_phase_configure(ept_phsen_e ePhsEn , ept_phsdir_e ePhsDir , U16_T hwPhsr);
 /** \brief EPT PRDR CMPA CMPB CMPC CMPD_Config
  * 			
  *  \param[in] hwPrdr : PRDR val ,range: 0~0xffff
@@ -1143,15 +1126,15 @@ void EPT_PHSEN_Config(ept_phsen_e ePhsEn , ept_phsdir_e ePhsDir , U16_T hwPhsr);
  * 
  *  \return none
  */    
-void EPT_PRDR_CMPA_CMPB_CMPC_CMPD_Config(U16_T hwPrdr , U16_T hwCmpa , U16_T hwCmpb , U16_T hwCmpc , U16_T hwCmpd);
+void ept_prdr_pwmx_configure(U16_T hwPrdr , U16_T hwCmpa , U16_T hwCmpb , U16_T hwCmpc , U16_T hwCmpd);
 
 /** \brief the EPT SYNCR Rearm
  * 			
- *  \param[in] bRearmCh : Input trigger channel select: syncin0~syncin5 ,range :0~5 
+ *  \param[in] byRearmCh : Input trigger channel select: syncin0~syncin5 ,range :0~5 
  * 
  *  \return none
  */   
-void EPT_SYNCR_RearmClr(U8_T bRearmCh );
+void ept_syncr_rearm(U8_T byRearmCh );
 
 /** \brief EPT Caputer Rearm:clear counter， enable CAPLDEN automatic
  * 			
@@ -1159,18 +1142,18 @@ void EPT_SYNCR_RearmClr(U8_T bRearmCh );
  * 
  *  \return none
  */   
-void EPT_Caputure_Rearm(void);
+void ept_capture_rearm(void);
 
 /** \brief  EPT Globle Event Load
  * 			
  *  \param[in] eOneShort: global one short load mode control :enable or disable \ref ept_gld_oneshort_e
  *  \param[in] eGldMd: global load trigger event select \ref ept_gldmd_sel_e
- *  \param[in] hwGldPrd: global load trigger period select,  range: 0~0x7
+ *  \param[in] byGldPrd: global load trigger period select,  range: 0~0x7
  *  \param[in] hwGldCfg:  AQCRx, CMPx, ect  all channels  global load control ,range:0x0~0x3fff
  * 
  *  \return none
  */  
-void EPT_Globle_Eventload_Config(ept_gld_oneshort_e eOneShort , ept_gldmd_sel_e eGldMd , U8_T hwGldPrd , U16_T hwGldCfg);
+void ept_global_event_load_configure(ept_gld_oneshort_e eOneShort , ept_gldmd_sel_e eGldMd , U8_T byGldPrd , U16_T hwGldCfg);
 
 /** \brief  EPT Globle SW Load
  * 			
@@ -1178,28 +1161,28 @@ void EPT_Globle_Eventload_Config(ept_gld_oneshort_e eOneShort , ept_gldmd_sel_e 
  * 
  *  \return none
  */  
-void EPT_Globle_SwLoad_CMD(void);
+void ept_global_software_load(void);
 /** \brief  EPT PRDR Load 
  * 			
  *  \param[in] eLdPrdr: PRDR active register load control \ref ept_ldprdr_e
  * 
  *  \return none
  */  
-void EPT_PRDR_EventLoad_Config(ept_ldprdr_e eLdPrdr);
+void ept_prdr_load_configure(ept_ldprdr_e eLdPrdr);
 /** \brief  EPT CMPX Load Config
  * 			
  *  \param[in] eCmpLdr: CMPX load mode select \ref ept_ldr_e
  * 
  *  \return none
  */  
-void EPT_CMP_EventLoad_Config(ept_ldr_e eCmpLdr);
+void ept_cmp_load_configure(ept_ldr_e eCmpLdr);
 /** \brief  EPT AQCRX Load Config
  * 			
  *  \param[in] eAqcrLdr: AQCRX load mode select \ref ept_ldr_e
  * 
  *  \return none
  */  
-void EPT_AQCR_Eventload_Config(ept_ldr_e eAqcrLdr);
+void ept_aqcr_load_configure(ept_ldr_e eAqcrLdr);
 
 /** \brief   EPT DB Load Config
  * 			
@@ -1207,7 +1190,7 @@ void EPT_AQCR_Eventload_Config(ept_ldr_e eAqcrLdr);
  * 
  *  \return none
  */  
-void EPT_DB_Eventload_Config(ept_ldr_e eDbLdr);
+void ept_deadband_load_configure(ept_ldr_e eDbLdr);
 
 /** \brief   EPT EVTRG Config
  * 			
@@ -1218,74 +1201,61 @@ void EPT_DB_Eventload_Config(ept_ldr_e eDbLdr);
  * 
  *  \return none
  */  
-void EPT_TRGSRCX_Config(ept_trgsrc_e eTrg , ept_trgsrc_e eTrgSrc , ept_trgout_md_e eTrgoutEn );
+void ept_event_trigger_configure(ept_trgsrc_e eTrg , ept_trgsrc_e eTrgSrc , ept_trgout_md_e eTrgoutEn );
 /** \brief   EPT EVTRG software trigger
  * 			
  *  \param[in] eTrg: Trigger event select \ref ept_trg_e
  * 
  *  \return none
  */  
-void EPT_TRGSRCX_SWFTRG(ept_trgsrc_e eTrg);
+void ept_event_software_trigger(ept_trgsrc_e eTrg);
 /** \brief   EPT interrupt enable 
  * 			
  *  \param[in] eInt: type of interrupt \ref ept_int_e
  * 
  *  \return none
  */  
-void EPT_Int_Enable(ept_int_e eInt);
+void ept_int_enable(ept_int_e eInt);
 /** \brief   EPT interrupt disable 
  * 			
  *  \param[in] eInt: type of interrupt \ref ept_int_e
  * 
  *  \return none
  */  
-void EPT_Int_Disable(ept_int_e eInt);
+void ept_int_disable(ept_int_e eInt);
 /** \brief   EPT emergency interrupt enable 
  * 			
  *  \param[in] eEmInt: type of  emergency interrupt \ref ept_emint_e
  * 
  *  \return none
  */  
-void EPT_EMInt_Enable(ept_emint_e eEmInt);
+void ept_emint_enable(ept_emint_e eEmInt);
 /** \brief   EPT emergency interrupt disable 
  * 			
  *  \param[in] eEmInt: type of  emergency interrupt \ref ept_emint_e
  * 
  *  \return none
  */  
-void EPT_EMInt_Disable(ept_emint_e eEmInt);
-/** \brief   EPT INT VECTOR enable
- * 			
- *  \param[in] none
- * 
- *  \return none
- */  
-void EPT_Vector_Int_Enable(void);
-/** \brief   EPT INT VECTOR disable
- * 			
- *  \param[in] none
- * 
- *  \return none
- */  
-void EPT_Vector_Int_Disable(void);
+void ept_emint_disable(ept_emint_e eEmInt);
+
 /** \brief   EPT EP0~EP1 config
  * 			
  *  \param[in] eEpx: EPT emergency port select \ref ept_ep_e
  *  \param[in] eEpInput: epx input select \ref ept_ep_input_e
  *  \param[in] eEpFlt: epx digital filter check period \ref ept_epflt_e
- *  \param[in] bOr0Epx: OR0 input enable or disable control  ,range: 0~0x3f
- *  \param[in] bOr1Epx: OR1input enable or disable control  ,range: 0~0x3f
+ *  \param[in] byOr0Epx: OR0 input enable or disable control  ,range: 0~0x3f
+ *  \param[in] byOr1Epx: OR1input enable or disable control  ,range: 0~0x3f
  * 
  *  \return none
  */  
-void EPT_EPX_Config(ept_ep_e eEpx , ept_ep_input_e eEpInput , ept_epflt_e eEpFlt  , U8_T bOr0Epx , U8_T bOr1Epx);
+void ept_emergency_port_configure(ept_ep_e eEpx , ept_ep_input_e eEpInput , ept_epflt_e eEpFlt  , U8_T byOr0Epx , U8_T byOr1Epx);
 /** \brief   EPT EMPOL config
  * 			
- *  \param[in] bEbiPol: EBIX polarity setting (0:Active high 1:Active low)  ,range: 0~0x3f
+ *  \param[in] byEbiPol: EBIX polarity setting (0:Active high 1:Active low)  ,range: 0~0x3f
  * 
  *  \return none
  */  
-void EPT_EPIX_POL_Config(U8_T bEbiPol);
+void ept_emergency_polarity_configure(U8_T byEbiPol);
 /** \brief   EPT EMECR config
  * 			
  *  \param[in] eLckSrc: ept LKCR source select \ref ept_lkcr_src_e
@@ -1293,7 +1263,7 @@ void EPT_EPIX_POL_Config(U8_T bEbiPol);
  * 
  *  \return none
  */ 
-void EPT_LKCR_TRG_Config(ept_lkcr_src_e eLckSrc , ept_lckcr_e eLckCr);
+void ept_emergency_lock_configure(ept_lkcr_src_e eLckSrc , ept_lckcr_e eLckCr);
 /** \brief   EPT SHLOCK output config
  * 			
  *  \param[in] eOutCh: ept output channel select \ref ept_outch_e
@@ -1301,27 +1271,27 @@ void EPT_LKCR_TRG_Config(ept_lkcr_src_e eLckSrc , ept_lckcr_e eLckCr);
  * 
  *  \return none
  */ 
-void EPT_SHLOCK_OUTPUT_Config(ept_outch_e eOutCh , ept_shlock_e eShLck);
+void ept_emergency_lock_output_set(ept_outch_e eOutCh , ept_shlock_e eShLck);
 /** \brief   EPT software lock clr
  * 			
  *  \param[in] eEmInt: em interrupt : only  EP0 & EP1\ref ept_emint_e
  * 
  *  \return none
  */ 
-void EPT_SLock_CLR(ept_emint_e eEmInt);
+void ept_emergency_software_lock_clear(ept_emint_e eEmInt);
 /** \brief   EPT hardware lock clr
  * 			
  *  \param[in] eEmInt: em interrupt  \ref ept_emint_e
  * 
  *  \return none
  */ 
-void EPT_HLock_CLR(ept_emint_e eEmInt);
+void ept_emergency_hardware_lock_clear(ept_emint_e eEmInt);
 /** \brief   EPT software set lock
  * 			
  *  \param[in] eEmInt: em interrupt : only  EP0 & EP1 \ref ept_emint_e
  * 
  *  \return none
  */ 
-void EPT_SW_Set_lock(ept_emint_e eEmInt);
+void ept_software_trigger_epx(ept_emint_e eEmInt);
 
 #endif   /* EPT_H */

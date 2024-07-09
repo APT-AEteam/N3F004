@@ -58,6 +58,64 @@ void syscon_clo_pin_config(clo_io_e eCloIo)
 	}
 }
 
+/** \brief set ept io as CHAX,CHAY,CHBX,CHBY,CHCX,CHCY,CHD
+ * 
+ *  \param[in] eEptIo: EPT IO \ref ept_io_e
+ *  \return none
+ */ 
+void ept_pin_config(ept_io_e eEptIo)
+{
+	switch (eEptIo)
+	{
+		case (EPT_CHAX_PA07): gpio_init(GPIOA0, 7, PA07_EPT_CHAX); break;
+		case (EPT_CHBX_PB02): gpio_init(GPIOB0, 2, PB02_EPT_CHBX); break;
+		case (EPT_CHCX_PB03): gpio_init(GPIOB0, 3, PB03_EPT_CHCX); break;
+		case (EPT_CHAY_PB03): gpio_init(GPIOB0, 3, PB03_EPT_CHAY); break;
+		case (EPT_CHD_PB03): gpio_init(GPIOB0, 3, PB03_EPT_CHD); break;
+		case (EPT_CHD_PA08): gpio_init(GPIOA0, 8, PA08_EPT_CHD); break;
+		case (EPT_CHBY_PA08): gpio_init(GPIOA0, 8, PA08_EPT_CHBY); break;
+		case (EPT_CHCY_PA09): gpio_init(GPIOA0, 9, PA09_EPT_CHCY); break;
+		case (EPT_CHAX_PA010): gpio_init(GPIOA0,10, PA010_EPT_CHAX); break;
+		case (EPT_CHBX_PA011): gpio_init(GPIOA0, 11, PA011_EPT_CHBX); break;
+		case (EPT_CHAX_PA011): gpio_init(GPIOA0,11 , PA011_EPT_CHAX); break;
+		case (EPT_CHBY_PA05): gpio_init(GPIOA0, 5, PA05_EPT_CHBY); break;
+		case (EPT_CHAY_PA012): gpio_init(GPIOA0, 12, PA012_EPT_CHAY); break;
+		case (EPT_CHCY_PA013): gpio_init(GPIOA0, 13, PA013_EPT_CHCY); break;
+		case (EPT_CHCX_PB00): gpio_init(GPIOB0, 0, PB00_EPT_CHCX); break;
+		case (EPT_CHD_PB01): gpio_init(GPIOB0, 1, PB01_EPT_CHD); break;
+		case (EPT_CHAY_PB01): gpio_init(GPIOB0, 1, PB01_EPT_CHAY); break;
+		case (EPT_CHBX_PA00): gpio_init(GPIOA0, 0, PA00_EPT_CHBX); break;
+		case (EPT_CHCX_PA03): gpio_init(GPIOA0, 3, PA03_EPT_CHCX); break;
+		case (EPT_CHCY_PA04): gpio_init(GPIOA0, 4, PA04_EPT_CHCY); break;
+		case (EPT_EBI0_PA07): gpio_init(GPIOA0, 7, PA07_EBI0); break;
+		case (EPT_EBI1_PA013): gpio_init(GPIOA0, 13, PA013_EBI1); break;
+		case (EPT_EBI2_PB03): gpio_init(GPIOB0, 3, PB03_EBI2); break;
+		case (EPT_EBI3_PB02): gpio_init(GPIOB0, 2, PB02_EBI3); break;
+		default: break;
+	}
+}
+
+
+/** \brief set gpt io as CHA
+ * 
+ *  \param[in] eGptIo: GPT IO \ref gpt_io_e
+ *  \return none
+ */ 
+void gpt_pin_config(gpt_io_e eGptIo)
+{
+	switch (eGptIo)
+	{
+		case (GPTA_CHA_PA06): gpio_init(GPIOA0, 6, PA06_GPTA_CHA); break;
+		case (GPTA_CHA_PA09): gpio_init(GPIOA0, 9,PA09_GPTA_CHA); break;
+		case (GPTA_CHA_PA010): gpio_init(GPIOA0, 10, PA010_GPTA_CHA); break;
+		case (GPTA_CHA_PA011): gpio_init(GPIOA0, 11, PA011_GPTA_CHA); break;
+		case (GPTA_CHA_PB01): gpio_init(GPIOB0, 1, PB01_GPTA_CHA); break;
+		case (GPTA_CHA_PA01): gpio_init(GPIOA0, 1, PA01_GPTA_CHA); break;
+		case (GPTA_CHA_PA03): gpio_init(GPIOA0, 3, PA03_GPTA_CHA); break;
+
+		default: break;
+	}
+}
 
 /** \brief iomap configuration
  * 

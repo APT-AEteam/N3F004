@@ -24,7 +24,7 @@ typedef struct
 	__IOM	U32_T SEED;            /**< Seed Value Register	             */
 	__OM	U32_T DATAIN;          /**< Data in Value Register	             */
 	__IM	U32_T DATAOUT;         /**< Data out Value Register	     */
-} CSP_CRC_T;
+} csp_crc_t;
 
 /******************************************************************************
 ************************* CRC Registers Definition ****************************
@@ -69,20 +69,29 @@ typedef enum
 /******************************************************************************
 *************************   CRC  functions  declare ****************************
 ******************************************************************************/
-/** \brief CRC enable/disable
+/** \brief CRC enable
  * 
- *  \param[in] eStatus:CRC enable or disable control \ref crc_funcen_e
+ *  \param[in] none
  * 			   
  *  \return none
  */ 
-void CRC_CMD(crc_funcen_e eStatus);
+void crc_enable(void);
+
+/** \brief CRC disable
+ * 
+ *  \param[in] none
+ * 			   
+ *  \return none
+ */ 
+void crc_disable(void);
+
 /** \brief CRC software reset
  * 
  *  \param[in] none
  * 			   
  *  \return none
  */ 
-void CRC_Soft_Reset(void);
+void crc_software_reset(void);
 /** \brief CRC CR config
  * 
  *  \param[in] eXorIn : XOR of input data control :enable or disable \ref  crc_funcen_e
@@ -93,7 +102,7 @@ void CRC_Soft_Reset(void);
  *
  *  \return none
  */ 
-void CRC_Configure(crc_funcen_e eXorIn,crc_funcen_e eXorOut,crc_funcen_e eRefIn,crc_funcen_e eRefOut, crc_poly_e ePoly);
+void crc_configure(crc_funcen_e eXorIn,crc_funcen_e eXorOut,crc_funcen_e eRefIn,crc_funcen_e eRefOut, crc_poly_e ePoly);
 
 /** \brief CRC seed write
  * 
@@ -101,7 +110,7 @@ void CRC_Configure(crc_funcen_e eXorIn,crc_funcen_e eXorOut,crc_funcen_e eRefIn,
  *
  *  \return none
  */ 
-void CRC_Seed_Write(U32_T wSeedVal);
+void crc_seed_write(U32_T wSeedVal);
 
 /** \brief CRC seed read
  * 
@@ -109,7 +118,7 @@ void CRC_Seed_Write(U32_T wSeedVal);
  *
  *  \return seed val
  */ 
-U32_T CRC_Seed_Read(void);
+U32_T crc_seed_read(void);
 
 /** \brief CRC input data write
  * 
@@ -117,14 +126,14 @@ U32_T CRC_Seed_Read(void);
  *
  *  \return none
  */ 
-void CRC_Datain(U32_T wDataIn);
+void crc_data_input(U32_T wDataIn);
 /** \brief CRC output data read
  * 
  *  \param[in] none
  *
  *  \return CRC output data
  */ 
-U32_T CRC_Result_Read(void);
+U32_T crc_result_read(void);
 /** \brief CRC calc 32bit input
  * 
  *  \param[in] ptData : pointer of 32bit input data
@@ -132,7 +141,7 @@ U32_T CRC_Result_Read(void);
  *
  *  \return CRC output data
  */ 
-U32_T Chip_CRC_CRC32(U32_T *ptData, U32_T wNum);
+U32_T crc_cal_crc32(U32_T *ptData, U32_T wNum);
 /** \brief CRC calc 16bit input
  * 
  *  \param[in] ptData : pointer of 16bit input data
@@ -140,7 +149,7 @@ U32_T Chip_CRC_CRC32(U32_T *ptData, U32_T wNum);
  *
  *  \return CRC output data
  */ 
-U32_T Chip_CRC_CRC16(U16_T *ptData, U32_T wNum);
+U32_T crc_cal_crc16(U16_T *ptData, U32_T wNum);
 /** \brief CRC calc 8bit input
  * 
  *  \param[in] ptData : pointer of 8bit input data
@@ -148,7 +157,7 @@ U32_T Chip_CRC_CRC16(U16_T *ptData, U32_T wNum);
  *
  *  \return CRC output data
  */ 
-U32_T Chip_CRC_CRC8(U8_T *ptData, U32_T wNum);
+U32_T crc_cal_crc8(U8_T *ptData, U32_T wNum);
 
 
 

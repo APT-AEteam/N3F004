@@ -16,7 +16,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "types_local.h"
 
-/// \struct CSP_BT_T
+/// \struct csp_bt_t
 /// \brief BT reg description      
  typedef struct
  {
@@ -35,7 +35,7 @@
    __IM  U32_T	MISR;  			//0x0030	Mask Interrupt Status
    __OM  U32_T	ICR;    				//0x0034	Interrupt clear
    
-} CSP_BT_T; 
+} csp_bt_t; 
 
 /*****************************************************************************
 ************************** bt Function defined *******************************
@@ -286,7 +286,7 @@ typedef enum
  * 			   
  *  \return none
  */ 
-void BT_DeInit(CSP_BT_T *ptBtBase);
+void bt_deinit(csp_bt_t *ptBtBase);
 
 /** \brief bt start
  * 
@@ -294,7 +294,7 @@ void BT_DeInit(CSP_BT_T *ptBtBase);
  * 			   
  *  \return none
  */ 
-void BT_Start(CSP_BT_T *ptBtBase);
+void bt_start(csp_bt_t *ptBtBase);
 
 /** \brief bt stop
  * 
@@ -302,7 +302,7 @@ void BT_Start(CSP_BT_T *ptBtBase);
  * 			   
  *  \return none
  */ 
-void BT_Stop(CSP_BT_T *ptBtBase);
+void bt_stop(csp_bt_t *ptBtBase);
 
 /** \brief bt stop , BT_OUT stop level - high
  * 
@@ -310,7 +310,7 @@ void BT_Stop(CSP_BT_T *ptBtBase);
  * 			   
  *  \return none
  */ 
-void BT_Stop_High(CSP_BT_T *ptBtBase);
+void bt_stop_high(csp_bt_t *ptBtBase);
 
 /** \brief bt stop , BT_OUT stop level - low
  * 
@@ -318,7 +318,7 @@ void BT_Stop_High(CSP_BT_T *ptBtBase);
  * 			   
  *  \return none
  */ 
-void BT_Stop_Low(CSP_BT_T *ptBtBase);
+void bt_stop_low(csp_bt_t *ptBtBase);
 
 /** \brief bt soft reset
  * 
@@ -326,12 +326,12 @@ void BT_Stop_Low(CSP_BT_T *ptBtBase);
  * 			   
  *  \return none
  */ 
-void BT_Soft_Reset(CSP_BT_T *ptBtBase);
+void bt_soft_reset(csp_bt_t *ptBtBase);
 
 /** \brief bt config 
  * 
  *  \param[in] ptBtBase: pointer of bt register structure
- *  \param[in] eClkEN:  clk of bt enable / disable control \ref bt_clk_e
+ *  \param[in] eClkEn:  clk of bt enable / disable control \ref bt_clk_e
  *  \param[in] HwPscrData: PSCR data setting 
  *  \param[in] eShwdStp: shadow of start bit  enable/disable control  \ref bt_shdw_e
  *  \param[in] eOpm: bt work mode select : once or continus  \ref bt_opm_e
@@ -339,7 +339,7 @@ void BT_Soft_Reset(CSP_BT_T *ptBtBase);
  * 			   
  *  \return none
  */ 
-void BT_Configure(CSP_BT_T *ptBtBase, bt_clk_e eClkEN, U16_T hwPscrData , bt_shdw_e eShwdStp, bt_opm_e eOpm,bt_extckm_e eExtCkm);
+void bt_configure(csp_bt_t *ptBtBase, bt_clk_e eClkEn, U16_T hwPscrData , bt_shdw_e eShwdStp, bt_opm_e eOpm,bt_extckm_e eExtCkm);
 
 /** \brief bt config 
  * 
@@ -354,7 +354,7 @@ void BT_Configure(CSP_BT_T *ptBtBase, bt_clk_e eClkEN, U16_T hwPscrData , bt_shd
  * 			   
  *  \return none
  */ 
-void BT_ControlSet_Configure(CSP_BT_T *ptBtBase, bt_startst_e eStartSt, bt_idlest_e eIdleSt , bt_sync_e eSync0 ,bt_synccmd_e eSyncCmd, bt_ostmd_e eOstMd0 ,bt_arearm_e eAreArm ,bt_cntrld_e eCntRld);
+void bt_sync_configure(csp_bt_t *ptBtBase, bt_startst_e eStartSt, bt_idlest_e eIdleSt , bt_sync_e eSync0 ,bt_synccmd_e eSyncCmd, bt_ostmd_e eOstMd0 ,bt_arearm_e eAreArm ,bt_cntrld_e eCntRld);
 
 /** \brief bt Period & Compare set
  * 
@@ -364,7 +364,7 @@ void BT_ControlSet_Configure(CSP_BT_T *ptBtBase, bt_startst_e eStartSt, bt_idles
  * 			   
  *  \return none
  */ 
-void BT_Period_CMP_Write(CSP_BT_T *ptBtBase, U16_T hwPrdrData, U16_T hwCmpData);
+void bt_period_cmp_write(csp_bt_t *ptBtBase, U16_T hwPrdrData, U16_T hwCmpData);
 
 /** \brief bt  counter set
  * 
@@ -374,7 +374,7 @@ void BT_Period_CMP_Write(CSP_BT_T *ptBtBase, U16_T hwPrdrData, U16_T hwCmpData);
  * 			   
  *  \return none
  */ 
-void BT_CNT_Write(CSP_BT_T *ptBtBase,U16_T hwCntData);
+void bt_cnt_write(csp_bt_t *ptBtBase,U16_T hwCntData);
 
 /** \brief  read bt  prdr val
  * 
@@ -382,7 +382,7 @@ void BT_CNT_Write(CSP_BT_T *ptBtBase,U16_T hwCntData);
  * 			   
  *  \return prdr val
  */ 
-U16_T BT_PRDR_Read(CSP_BT_T *ptBtBase);
+U16_T bt_prdr_write(csp_bt_t *ptBtBase);
 
 /** \brief  read bt  cmp val
  * 
@@ -390,7 +390,7 @@ U16_T BT_PRDR_Read(CSP_BT_T *ptBtBase);
  * 			   
  *  \return cmp val
  */ 
-U16_T BT_CMP_Read(CSP_BT_T *ptBtBase);
+U16_T bt_cmp_read(csp_bt_t *ptBtBase);
 
 /** \brief  read bt  cnt val
  * 
@@ -398,7 +398,7 @@ U16_T BT_CMP_Read(CSP_BT_T *ptBtBase);
  * 			   
  *  \return cnt val
  */ 
-U16_T BT_CNT_Read(CSP_BT_T *ptBtBase);
+U16_T bt_cnt_read(csp_bt_t *ptBtBase);
 
 /** \brief  bt  trigger init
  * 
@@ -410,25 +410,25 @@ U16_T BT_CNT_Read(CSP_BT_T *ptBtBase);
  * 			   
  *  \return none
  */ 
-void BT_Trigger_Configure(CSP_BT_T *ptBtBase,bt_evtrg_src_e eEvTrg0,bt_evtrg_src_e eEvTrg1,bt_trgoe_e eTrgOe0 ,bt_trgoe_e eTrgOe1);
+void bt_trigger_configure(csp_bt_t *ptBtBase,bt_evtrg_src_e eEvTrg0,bt_evtrg_src_e eEvTrg1,bt_trgoe_e eTrgOe0 ,bt_trgoe_e eTrgOe1);
 
 /** \brief  bt  trigger_event0 counter period configure to trigger stop 
  * 
  *  \param[in] ptBtBase: pointer of bt register structure
- *  \param[in] bPrd:  TRGEV0 counter period ,  trigger BT STOP
+ *  \param[in] byPrd:  TRGEV0 counter period ,  trigger BT STOP
  * 			   
  *  \return none
  */ 
- void  BT_TRGEV0_Stop_Configure(CSP_BT_T *ptBtBase, U8_T bPrd);
+ void  bt_trgev0_stop_configure(csp_bt_t *ptBtBase, U8_T byPrd);
  
   /** \brief  bt  trigger_event1 counter period configure to trigger stop 
  * 
  *  \param[in] ptBtBase: pointer of bt register structure
- *  \param[in] bPrd:  TRGEV1 counter period ,  trigger BT STOP
+ *  \param[in] byPrd:  TRGEV1 counter period ,  trigger BT STOP
  * 			   
  *  \return none
  */ 
- void  BT_TRGEV1_Stop_Configure(CSP_BT_T *ptBtBase, U8_T bPrd);
+ void  bt_trgev1_stop_configure(csp_bt_t *ptBtBase, U8_T byPrd);
  
   /** \brief  read TRGEV0_Counter
  * 
@@ -436,7 +436,7 @@ void BT_Trigger_Configure(CSP_BT_T *ptBtBase,bt_evtrg_src_e eEvTrg0,bt_evtrg_src
  * 			   
  *  \return TRGEV0_Counter
  */ 
- U8_T  BT_TRGEV0_Counter(CSP_BT_T *ptBtBase);
+ U8_T  bt_trgev0_counter(csp_bt_t *ptBtBase);
  
   /** \brief  read TRGEV1_Counter
  * 
@@ -444,15 +444,18 @@ void BT_Trigger_Configure(CSP_BT_T *ptBtBase,bt_evtrg_src_e eEvTrg0,bt_evtrg_src
  * 			   
  *  \return TRGEV1_Counter
  */ 
- U8_T  BT_TRGEV1_Counter(CSP_BT_T *ptBtBase);
+ U8_T  bt_trgev1_counter(csp_bt_t *ptBtBase);
  
-   /** \brief  bt RPRD configure
+  /** \brief  bt RPRD configure
  * 
  *  \param[in] ptBtBase: pointer of bt register structure
- * 			   
+ *  \param[in] eRmode: continous period  counter control :enable or disable \ref bt_rmode_e
+ *  \param[in] eCrossMd: continous period counter cross enable or disable  \ref  bt_crossmd_e
+ *  \param[in] byRprd: continous period counter val ,range: 0~0x7			   
+ * 
  *  \return none
  */ 
- void  BT_RPRD_Configure(CSP_BT_T *ptBtBase, bt_rmode_e eRmode, bt_crossmd_e  eCrossMd, U8_T bRprd);
+ void  bt_rprd_configure(csp_bt_t *ptBtBase, bt_rmode_e eRmode, bt_crossmd_e  eCrossMd, U8_T byRprd);
  
   /** \brief  read R_Counter
  * 
@@ -460,7 +463,7 @@ void BT_Trigger_Configure(CSP_BT_T *ptBtBase,bt_evtrg_src_e eEvTrg0,bt_evtrg_src
  * 			   
  *  \return R_Counter
  */ 
- U8_T  BT_RCounter(CSP_BT_T *ptBtBase);
+ U8_T  bt_rcounter(csp_bt_t *ptBtBase);
  
  /** \brief  bt  trigger_event0 soft trigger
  * 
@@ -468,7 +471,7 @@ void BT_Trigger_Configure(CSP_BT_T *ptBtBase,bt_evtrg_src_e eEvTrg0,bt_evtrg_src
  * 			   
  *  \return none
  */ 
-void BT_TRGEV0_Soft_Triggle(CSP_BT_T *ptBtBase);
+void bt_trgev0_soft_trigger(csp_bt_t *ptBtBase);
 
 /** \brief  bt  trigger_event1 soft trigger
  * 
@@ -476,50 +479,15 @@ void BT_TRGEV0_Soft_Triggle(CSP_BT_T *ptBtBase);
  * 			   
  *  \return none
  */ 
-void BT_TRGEV1_Soft_Triggle(CSP_BT_T *ptBtBase);
+void bt_trgev1_soft_trigger(csp_bt_t *ptBtBase);
 
-/** \brief  bt  interrupt config
+/** \brief  bt  interrupt enable
  * 
  *  \param[in] ptBtBase: pointer of bt register structure
- *  \param[in] eState:  interrupt enable/disable control \ref FunctionalStatus
  *  \param[in] eImcr:  interrupt select \ref bt_int_e
  * 			   
  *  \return none
  */ 
-void BT_ConfigInterrupt_CMD(CSP_BT_T *ptBtBase,FunctionalStatus eState,bt_int_e eImcr);
-
-/** \brief  bt0  interrupt enable
- * 
- *  \param[in] none
- * 			   
- *  \return none
- */ 
-void BT0_INT_ENABLE(void);
-
-/** \brief  bt0  interrupt disable
- * 
- *  \param[in] none
- * 			   
- *  \return none
- */ 
-void BT0_INT_DISABLE(void);
-
-/** \brief  bt1  interrupt enable
- * 
- *  \param[in] none
- * 			   
- *  \return none
- */ 
-void BT1_INT_ENABLE(void);
-
-/** \brief  bt1  interrupt disable
- * 
- *  \param[in] none
- * 			   
- *  \return none
- */ 
-void BT1_INT_DISABLE(void);
-
-
+void bt_int_enable(csp_bt_t *ptBtBase,bt_int_e eImcr);
 
 #endif

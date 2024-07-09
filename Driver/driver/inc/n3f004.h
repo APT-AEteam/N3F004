@@ -26,7 +26,7 @@
 #include "ept.h"
 #include "etcb.h"
 #include "gpio.h"
-//#include "gpt.h"
+#include "gpt.h"
 //#include "i2c.h"
 #include "ifc.h"
 //#include "spi.h"
@@ -55,11 +55,11 @@ extern csp_igrp_t	*GPIOGRP  ;
 //extern CSP_UART_T 	*UART1    ;
 //extern CSP_SSP_T  	*SPI0     ;
 //extern CSP_I2C_T  	*I2C0     ;
-//extern CSP_GPT_T 	*GPT0     ;
-extern CSP_EPT_T 	*EPT0     ;
-extern CSP_BT_T  	*BT0      ;
-extern CSP_BT_T  	*BT1      ;
-extern CSP_CRC_T 	*CRC      ;
+extern csp_gpta_t 	*GPT0     ;
+extern csp_ept_t 	*EPT0     ;
+extern csp_bt_t  	*BT0      ;
+extern csp_bt_t  	*BT1      ;
+extern csp_crc_t 	*CRC      ;
 
 
 

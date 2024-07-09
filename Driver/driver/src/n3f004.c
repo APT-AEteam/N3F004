@@ -35,13 +35,13 @@ csp_igrp_t  	*GPIOGRP  = (csp_igrp_t *)APB_IGRPBASE;
 //
 //CSP_CA_T    	*CA0      = (CSP_CA_T    *)APB_CNTABASE ;
 //
-//CSP_GPT_T		*GPT0	  =	(CSP_GPT_T *)APB_GPT0BASE;
-//CSP_EPT_T   	*EPT0     = (CSP_EPT_T  *)APB_EPT0BASE ;
+csp_gpta_t		*GPT0	  =	(csp_gpta_t *)APB_GPT0BASE;
+csp_ept_t   	*EPT0     = (csp_ept_t  *)APB_EPT0BASE ;
 csp_etcb_t  	*ETCB     = (csp_etcb_t *)APB_ETCBBASE ;
 //
-CSP_BT_T    	*BT0      = (CSP_BT_T   *)APB_BT0BASE ;
-CSP_BT_T    	*BT1      = (CSP_BT_T   *)APB_BT1BASE ;
-CSP_CRC_T   	*CRC      = (CSP_CRC_T  *)AHB_CRCBASE ;
+csp_bt_t    	*BT0      = (csp_bt_t   *)APB_BT0BASE ;
+csp_bt_t    	*BT1      = (csp_bt_t   *)APB_BT1BASE ;
+csp_crc_t   	*CRC      = (csp_crc_t  *)AHB_CRCBASE ;
 
 /* Private variablesr---------------------------------------------------------*/
 /* defines -------------------------------------------------------------------*/

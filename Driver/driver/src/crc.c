@@ -19,22 +19,26 @@
 /* defines -------------------------------------------------------------------*/
 
 
-/** \brief CRC enable/disable
+/** \brief CRC enable
  * 
- *  \param[in] eStatus:CRC enable or disable control \ref crc_funcen_e
+ *  \param[in] none
  * 			   
  *  \return none
  */ 
-void CRC_CMD(crc_funcen_e eStatus)
+void crc_enable(void)
 {
-	if (eStatus != DISABLE)
-	{
-		CRC->CEDR  =CRC_CLKEN;						//SET
-	}
-	else
-	{
-		CRC->CEDR  =~CRC_CLKEN;						//CLR
-	}
+	CRC->CEDR  =CRC_CLKEN;					
+}
+
+/** \brief CRC disable
+ * 
+ *  \param[in] none
+ * 			   
+ *  \return none
+ */ 
+void crc_disable(void)
+{
+	CRC->CEDR  =~CRC_CLKEN;						
 }
 
 /** \brief CRC software reset
@@ -43,13 +47,13 @@ void CRC_CMD(crc_funcen_e eStatus)
  * 			   
  *  \return none
  */ 
-void CRC_Soft_Reset(void)
+void crc_software_reset(void)
 {
 	CRC->SRR = CRC_SWRST;
 }
 
 
-/** \brief CRC CR config
+/** \brief CRC  config
  * 
  *  \param[in] eXorIn : XOR of input data control :enable or disable \ref  crc_funcen_e
  * \param[in] eXorOut : XOR of output data control :enable or disable \ref  crc_funcen_e
@@ -59,7 +63,7 @@ void CRC_Soft_Reset(void)
  *
  *  \return none
  */ 
-void CRC_Configure(crc_funcen_e eXorIn,crc_funcen_e eXorOut,crc_funcen_e eRefIn,crc_funcen_e eRefOut, crc_poly_e ePoly)
+void crc_configure(crc_funcen_e eXorIn,crc_funcen_e eXorOut,crc_funcen_e eRefIn,crc_funcen_e eRefOut, crc_poly_e ePoly)
 {
 	CRC->CR = (eXorIn<< CRC_XORIN_POS)|(eXorOut<<CRC_XOROUT_POS) |(eRefIn<<CRC_REFIN_POS) |(eRefOut<<CRC_REFOUT_POS)| (ePoly<<CRC_POLY_POS);
 }
@@ -71,7 +75,7 @@ void CRC_Configure(crc_funcen_e eXorIn,crc_funcen_e eXorOut,crc_funcen_e eRefIn,
  *
  *  \return none
  */ 
-void CRC_Seed_Write(U32_T wSeedVal)
+void crc_seed_write(U32_T wSeedVal)
 {
 	CRC->SEED = wSeedVal;
 }
@@ -82,7 +86,7 @@ void CRC_Seed_Write(U32_T wSeedVal)
  *
  *  \return seed val
  */ 
-U32_T CRC_Seed_Read(void)
+U32_T crc_seed_read(void)
 {
 	return CRC->SEED;
 }
@@ -93,7 +97,7 @@ U32_T CRC_Seed_Read(void)
  *
  *  \return none
  */ 
-void CRC_Datain(U32_T wDataIn)
+void crc_data_input(U32_T wDataIn)
 {
 	CRC->DATAIN=wDataIn;
 }
@@ -104,7 +108,7 @@ void CRC_Datain(U32_T wDataIn)
  *
  *  \return CRC output data
  */ 
-U32_T CRC_Result_Read(void)
+U32_T crc_result_read(void)
 {
 	return CRC->DATAOUT;
 }
@@ -116,14 +120,14 @@ U32_T CRC_Result_Read(void)
  *
  *  \return CRC output data
  */ 
-U32_T Chip_CRC_CRC32(U32_T *ptData, U32_T wNum)
+U32_T crc_cal_crc32(U32_T *ptData, U32_T wNum)
 {
 	while (wNum > 0) {
-		CRC_Datain(*ptData);
+		crc_data_input(*ptData);
 		ptData++;
 		wNum--;
 	}
-	return CRC_Result_Read();
+	return crc_result_read();
 }
 
 /** \brief CRC calc 16bit input
@@ -133,7 +137,7 @@ U32_T Chip_CRC_CRC32(U32_T *ptData, U32_T wNum)
  *
  *  \return CRC output data
  */ 
-U32_T Chip_CRC_CRC16(U16_T *ptData, U32_T wNum)
+U32_T crc_cal_crc16(U16_T *ptData, U32_T wNum)
 {
 	U32_T i,j;
 	U8_T data_temp;
@@ -143,11 +147,11 @@ U32_T Chip_CRC_CRC16(U16_T *ptData, U32_T wNum)
 		{
 			if(j==0)data_temp=*ptData>>8;
 			if(j==1)data_temp=*ptData&0xff;
-			*(U8_T *)(AHB_CRCBase + 0x14 + (i%4)) = data_temp;
+			*(U8_T *)(AHB_CRCBASE + 0x14 + (i%4)) = data_temp;
 		}
 		ptData++;
 	}
-	return CRC_Result_Read();
+	return crc_result_read();
 }
 
 /** \brief CRC calc 8bit input
@@ -157,14 +161,14 @@ U32_T Chip_CRC_CRC16(U16_T *ptData, U32_T wNum)
  *
  *  \return CRC output data
  */ 
-U32_T Chip_CRC_CRC8(U8_T *ptData, U32_T wNum)
+U32_T crc_cal_crc8(U8_T *ptData, U32_T wNum)
 {
 	U32_T i;
 	for (i=0; i<wNum; i++)
 	{
-		*(U8_T *)(AHB_CRCBase + 0x14 + (i%4)) = *ptData;
+		*(U8_T *)(AHB_CRCBASE + 0x14 + (i%4)) = *ptData;
 		ptData++;
 	}
-	return CRC_Result_Read();
+	return crc_result_read();
 }
 

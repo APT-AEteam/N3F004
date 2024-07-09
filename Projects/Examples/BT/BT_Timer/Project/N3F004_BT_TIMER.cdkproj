@@ -70,6 +70,9 @@
       <File Name="../../../../../Driver/driver/src/crc.c">
         <FileOption/>
       </File>
+      <File Name="../../../../../Driver/driver/src/gpt.c">
+        <FileOption/>
+      </File>
     </VirtualDirectory>
     <VirtualDirectory Name="inc">
       <File Name="../../../../../Driver/driver/inc/bt.h">
@@ -105,6 +108,7 @@
       <File Name="../../../../../Driver/driver/inc/crc.h">
         <FileOption/>
       </File>
+      <File Name="../../../../../Driver/driver/inc/gpt.h"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <BuildConfigs>
