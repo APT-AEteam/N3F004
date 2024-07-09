@@ -32,12 +32,12 @@ extern void my_printf(const char *fmt, ...);
 /*************************************************************/
 int main(void) 
 {
-	delay_nms(1000);
-	APT32F102_init();
+//	delay_nms(1000);
+//	APT32F102_init();
 
     while(1)
 	{
-		SYSCON_IWDCNT_Reload();  
+		syscon_iwdtcnt_reload();  
 		//......
     }
 }

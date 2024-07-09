@@ -21,12 +21,12 @@
 
 
 
-/** \brief Deinitializes GPIO registers to their default reset
+/** \brief Deinitialize GPIO registers to their reset status
  * 
  *  \param[in] none
  *  \return none
  */ 
-void GPIO_DeInit(void)
+void gpio_deinit(void)
 {
     GPIOA0->CONLR &= 0xFF000000;                     
     GPIOA0->CONHR = GPIO_RESET_VALUE;
@@ -38,10 +38,6 @@ void GPIO_DeInit(void)
     GPIOB0->SODR  = GPIO_RESET_VALUE;
     GPIOA0->CODR  = GPIO_RESET_VALUE; 
     GPIOB0->CODR  = GPIO_RESET_VALUE;
-	GPIOA0->ODSR  =	GPIO_RESET_VALUE;
-	GPIOB0->ODSR  =	GPIO_RESET_VALUE;
-	GPIOA0->PSDR  =	GPIO_RESET_VALUE;
-	GPIOB0->PSDR  =	GPIO_RESET_VALUE;
 	GPIOA0->FLTEN = 0xffff;
 	GPIOB0->FLTEN = 0x3f;
     GPIOA0->PUDR  = GPIO_RESET_VALUE; 
@@ -60,452 +56,380 @@ void GPIO_DeInit(void)
 
 /** \brief port initialization to GPIO input/output or AF functions
  *  The operation changes all the 8 ports simutaneously
- *  \param[in] GPIOx: GPIOA/GPIOB...
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] eByte: either lower 8 pins or higher 8 pins \ref gpio_byte_e
  * 	\param[in] val: 0x00000000 ~ 0xffffffff, refer to chapter2 Pin Configruation in datasheet for AF assignment
  *  \return none
  */  
-void GPIO_Init2(CSP_GPIO_T *GPIOx,GPIO_byte_TypeDef byte,uint32_t val)
+void gpio_init2(csp_gpio_t *ptGpioBase,gpio_byte_e eByte,U32_T wValue)
 {
-    if (byte==0)
+    if (eByte==0)
     {
-        (GPIOx)->CONLR=val;
+        (ptGpioBase)->CONLR = wValue;
     }
-    else if(byte==1)
+    else if(eByte==1)
     {
-        (GPIOx)->CONHR=val;
+        (ptGpioBase)->CONHR = wValue;
     }
 }
 
-/** \brief GPIO initialization to either input or output
+
+
+/** \brief Set a specific pin to either input or output
  * 
- *  \param[in] GPIOx: GPIOA/GPIOB...
- *  \param[in] PinNum: 0~15
- * 	\param[in] Dir: 0  output
- * 					1  input
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] byPinNum: 0~15
+ * 	\param[in] eIoMux: GPIO input/output/AFs \ref io_mux_e
  *  \return none
  */ 
-void GPIO_Init(CSP_GPIO_T *GPIOx,uint8_t PinNum,GPIO_Dir_TypeDef Dir)
+void gpio_init(csp_gpio_t *ptGpioBase,uint8_t byPinNum,io_mux_e eIoMux)
 {
-    uint32_t data_temp;
-    uint8_t GPIO_Pin;
-    if(PinNum<8)
-    {
-    switch (PinNum)
-    {
-        case 0:data_temp=0xfffffff0;GPIO_Pin=0;break;
-        case 1:data_temp=0xffffff0f;GPIO_Pin=4;break;
-        case 2:data_temp=0xfffff0ff;GPIO_Pin=8;break;
-        case 3:data_temp=0xffff0fff;GPIO_Pin=12;break;
-        case 4:data_temp=0xfff0ffff;GPIO_Pin=16;break;
-        case 5:data_temp=0xff0fffff;GPIO_Pin=20;break;
-        case 6:data_temp=0xf0ffffff;GPIO_Pin=24;break;
-        case 7:data_temp=0x0fffffff;GPIO_Pin=28;break;
+    U32_T wPinMsk;
+    uint8_t byPin;
+	
+	
+	
+    if(byPinNum<8)
+    {    
+        wPinMsk = (0xf << (byPinNum * 4)); 
+		(ptGpioBase)->CONLR &= ~(wPinMsk) | (eIoMux << (byPinNum * 4)); 
     }
-        if (Dir)
-        {
-          (GPIOx)->CONLR =((GPIOx)->CONLR & data_temp) | 1<<GPIO_Pin;
-        }
-        else
-        {
-         (GPIOx)->CONLR = ((GPIOx)->CONLR & data_temp) | 2<<GPIO_Pin; 
-        }
-    }
-    else if (PinNum<16)
+    else if (byPinNum<16)
     {
-        switch (PinNum)
-    {
-        case 8:data_temp=0xfffffff0;GPIO_Pin=0;break;
-        case 9:data_temp=0xffffff0f;GPIO_Pin=4;break;
-        case 10:data_temp=0xfffff0ff;GPIO_Pin=8;break;
-        case 11:data_temp=0xffff0fff;GPIO_Pin=12;break;
-        case 12:data_temp=0xfff0ffff;GPIO_Pin=16;break;
-        case 13:data_temp=0xff0fffff;GPIO_Pin=20;break;
-        case 14:data_temp=0xf0ffffff;GPIO_Pin=24;break;
-        case 15:data_temp=0x0fffffff;GPIO_Pin=28;break;
-    } 
-      if (Dir)
-        {
-        (GPIOx)->CONHR = ((GPIOx)->CONHR & data_temp) | 1<<GPIO_Pin;  
-        }
-        else
-        {
-         (GPIOx)->CONHR = ((GPIOx)->CONHR & data_temp) | 2<<GPIO_Pin;    
-        }
+		wPinMsk = (0xf << ((byPinNum - 8) * 4)); 
+		(ptGpioBase)->CONHR &= ~(wPinMsk) | (eIoMux << (byPinNum * 4));  
+		
     }
 }
 
 /** \brief Set a specific pin to GPD(GPIO Disable) mode
  * 
- *  \param[in] GPIOx: GPIOA/GPIOB...
- *  \param[in] PinNum: 0~15
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] byPinNum: 0~15
  * 	\param[in] Dir: 0  output
  * 					1  input
  *  \return none
  */ 
-void GPIO_InPutOutPut_Disable(CSP_GPIO_T *GPIOx,uint8_t PinNum)
+void gpio_inputoutput_disable(csp_gpio_t *ptGpioBase,uint8_t byPinNum)
 {
-    uint32_t data_temp;
-    if(PinNum<8)
+    U32_T data_temp;
+    if(byPinNum<8)
     {
-    switch (PinNum)
-    {
-        case 0:data_temp=0xfffffff0;break;
-        case 1:data_temp=0xffffff0f;break;
-        case 2:data_temp=0xfffff0ff;break;
-        case 3:data_temp=0xffff0fff;break;
-        case 4:data_temp=0xfff0ffff;break;
-        case 5:data_temp=0xff0fffff;break;
-        case 6:data_temp=0xf0ffffff;break;
-        case 7:data_temp=0x0fffffff;break;
+		(ptGpioBase)->CONLR = (ptGpioBase)->CONLR & (~PIN_MSK << ((byPinNum)<<2));
     }
-         (GPIOx)->CONLR = (GPIOx)->CONLR & data_temp;
-    }
-    else if (PinNum<16)
+    else if (byPinNum<16)
     {
-        switch (PinNum)
-    {
-        case 8:data_temp=0xfffffff0;break;
-        case 9:data_temp=0xffffff0f;break;
-        case 10:data_temp=0xfffff0ff;break;
-        case 11:data_temp=0xffff0fff;break;
-        case 12:data_temp=0xfff0ffff;break;
-        case 13:data_temp=0xff0fffff;break;
-        case 14:data_temp=0xf0ffffff;break;
-        case 15:data_temp=0x0fffffff;break;
-    } 
-         (GPIOx)->CONHR = (GPIOx)->CONHR & data_temp;    
-    }
+       (ptGpioBase)->CONLR = (ptGpioBase)->CONLR & (~PIN_MSK << ((byPinNum-8)<<2));
+	}
 }
 
 
 /** \brief port mode configuration
  * 	The operation changes all the 8 ports simutaneously
- *  \param[in] GPIOx: GPIOA/GPIOB...
- *  \param[in] IO_MODE: PUDR(IO PULL UP/DOWN Configuration)
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] eMode:   PUDR(IO PULL UP/DOWN Configuration)
 						DSCR(IO DRIVE STRENGHT Configuration)
 						OMCR(OUTPUT MODE Configuration)
 						IECR(IO INT ENABLE/DISABLE)
- * 	\param[in] val: 0x00000000 ~ 0xffffffff, refer to Chapter GPIO in user maunal for Mode definition
+ * 	\param[in] wValue: 0x00000000 ~ 0xffffffff, refer to Chapter GPIO in user maunal for Mode definition
  *  \return none
  */ 
-void GPIO_MODE_Init(CSP_GPIO_T *GPIOx,GPIO_Mode_TypeDef IO_MODE,uint32_t val)
+void gpio_mode_init(csp_gpio_t *ptGpioBase,gpio_mode_e eMode,U32_T wValue)
 {
-        switch (IO_MODE)
+        switch (eMode)
         {
-            case PUDR:(GPIOx)->PUDR  = val;break;               
-            case DSCR:(GPIOx)->DSCR  = val;break;
-            case OMCR:(GPIOx)->OMCR  = val;break;
-            case IECR:(GPIOx)->IECR  = val;break;
+            case PUDR:(ptGpioBase)->PUDR  = wValue;break;               
+            case DSCR:(ptGpioBase)->DSCR  = wValue;break;
+            case OMCR:(ptGpioBase)->OMCR  = wValue;break;
+            case IECR:(ptGpioBase)->IECR  = wValue;break;
         }
 }
 
 
-/** \brief Set a specific pin to pull-up/pull down
+/** \brief Enable pull-up Resistor of a specific pin
  * 
- *  \param[in] GPIOx: GPIOA/GPIOB...
- *  \param[in] PinNum: 0~15
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] byPinNum: 0~15
  *  \return none
  */ 
-
-void GPIO_PullHigh_Init(CSP_GPIO_T *GPIOx,uint8_t bit)
+void gpio_pullhigh_init(csp_gpio_t *ptGpioBase,uint8_t byPinNum)
 {
-	(GPIOx)->PUDR  = (((GPIOx)->PUDR) & ~(0x03<<(bit*2))) | (0x01<<(bit*2));
-}
-void GPIO_PullLow_Init(CSP_GPIO_T *GPIOx,uint8_t bit)
-{
-	(GPIOx)->PUDR  = (((GPIOx)->PUDR) & ~(0x03<<(bit*2))) | (0x02<<(bit*2));
-}
-void GPIO_PullHighLow_DIS(CSP_GPIO_T *GPIOx,uint8_t bit)
-{
-	(GPIOx)->PUDR  = ((GPIOx)->PUDR) & ~(0x03<<(bit*2));
-}
-/*************************************************************/
-//Write GPIO open drain init
-//EntryParameter:GPIOx,uint8_t bit
-//GPIOx:GPIOA0,GPIOB0
-//bit:0~15
-//ReturnValue:VALUE
-/*************************************************************/
-void GPIO_OpenDrain_EN(CSP_GPIO_T *GPIOx,uint8_t bit)
-{
-	(GPIOx)->OMCR  = ((GPIOx)->OMCR) | (0x01<<bit);
-}
-void GPIO_OpenDrain_DIS(CSP_GPIO_T *GPIOx,uint8_t bit)
-{
-	(GPIOx)->OMCR  = ((GPIOx)->OMCR) & ~(0x01<<bit);
+	(ptGpioBase)->PUDR  = (((ptGpioBase)->PUDR) & ~(0x03<<(byPinNum*2))) | (0x01<<(byPinNum*2));
 }
 
-/*************************************************************/
-//Write GPIO open drain init
-//EntryParameter:GPIOx,uint8_t bit,INPUT_MODE_SETECTED_X
-//GPIOx:GPIOA0,GPIOB0
-//bit:0~15
-//INPUT_MODE_SETECTED_X:INPUT_MODE_TTL1,INPUT_MODE_SETECTED_TTL2,INPUT_MODE_SETECTED_CMOSS
-//ReturnValue:VALUE
-/*************************************************************/
-//默认cmos口
-void GPIO_TTL_COSM_Selecte(CSP_GPIO_T *GPIOx,uint8_t bit,INPUT_MODE_SETECTED_TypeDef INPUT_MODE_SETECTED_X)
+/** \brief Disable pull-down Resistor of a specific pin
+ * 
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] byPinNum: 0~15
+ *  \return none
+ */ 
+void gpio_pulllow_init(csp_gpio_t *ptGpioBase,uint8_t byPinNum)
 {
-	if(INPUT_MODE_SETECTED_X==INPUT_MODE_SETECTED_CMOS)
+	(ptGpioBase)->PUDR  = (((ptGpioBase)->PUDR) & ~(0x03<<(byPinNum*2))) | (0x02<<(byPinNum*2));
+}
+
+/** \brief Disable pull-down/up Resistor of a specific pin
+ * 
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] byPinNum: 0~15
+ *  \return none
+ */
+void gpio_pull_disable(csp_gpio_t *ptGpioBase,uint8_t byPinNum)
+{
+	(ptGpioBase)->PUDR  = ((ptGpioBase)->PUDR) & ~(0x03<<(byPinNum*2));
+}
+
+/** \brief Enable open-drain of a specific pin
+ * 
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] byPinNum: 0~15
+ *  \return none
+ */ 
+void gpio_opendrain_enable(csp_gpio_t *ptGpioBase,uint8_t byPinNum)
+{
+	(ptGpioBase)->OMCR  = ((ptGpioBase)->OMCR) | (0x01<<byPinNum);
+}
+
+/** \brief Disable open-drain of a specific pin
+ * 
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] byPinNum: 0~15
+ *  \return none
+ */ 
+void gpio_opendrain_disable(csp_gpio_t *ptGpioBase,uint8_t byPinNum)
+{
+	(ptGpioBase)->OMCR  = ((ptGpioBase)->OMCR) & ~(0x01<<byPinNum);
+}
+
+
+/** \brief Config a specific input pin to TTL or CMOS mode
+ * 
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] byPinNum: 0~15
+ *  \param[in] eInputMode: \ref gpio_input_mode_e
+ *  \return none
+ */ 
+void gpio_ttl_cmos_select(csp_gpio_t *ptGpioBase,uint8_t byPinNum,gpio_input_mode_e eInputMode)
+{
+	if(eInputMode==INPUT_MODE_SETECTED_CMOS)
 	{
-		(GPIOx)->DSCR  = ((GPIOx)->DSCR) & ~(0x01<<(bit*2+1));
+		(ptGpioBase)->DSCR  = ((ptGpioBase)->DSCR) & ~(0x01<<(byPinNum*2+1));
 	}
 	else
 	{
-		(GPIOx)->DSCR  = ((GPIOx)->DSCR) | (0x01<<(bit*2+1));
-		if(INPUT_MODE_SETECTED_X==INPUT_MODE_SETECTED_TTL1)
+		(ptGpioBase)->DSCR  = ((ptGpioBase)->DSCR) | (0x01<<(byPinNum*2+1));
+		if(eInputMode==INPUT_MODE_SETECTED_TTL1)
 		{
-			(GPIOx)->OMCR  = ((GPIOx)->OMCR) | (0x01<<(bit+16));
+			(ptGpioBase)->OMCR  = ((ptGpioBase)->OMCR) | (0x01<<(byPinNum+16));
 		}
-		else if(INPUT_MODE_SETECTED_X==INPUT_MODE_SETECTED_TTL2)
+		else if(eInputMode==INPUT_MODE_SETECTED_TTL2)
 		{
-			(GPIOx)->OMCR  = ((GPIOx)->OMCR) & ~(0x01<<(bit+16));
-		}
-	}
-}
-/*************************************************************/
-//Write GPIO Drive Strength init
-//EntryParameter:GPIOx,uint8_t bit
-//GPIOx:GPIOA0,GPIOB0
-//bit:0~15
-//ReturnValue:VALUE
-/*************************************************************/
-void GPIO_DriveStrength_EN(CSP_GPIO_T *GPIOx,uint8_t bit)
-{
-	(GPIOx)->DSCR  = ((GPIOx)->DSCR) | (0x01<<(bit*2));
-}
-void GPIO_DriveStrength_DIS(CSP_GPIO_T *GPIOx,uint8_t bit)
-{
-	(GPIOx)->DSCR  = ((GPIOx)->DSCR) & ~(0x01<<(bit*2));
-}
-/*************************************************************/
-//IO OUTPUT INPUT SET
-//EntryParameter:
-//IO_MODE:IGRP(IO INT GROUP)
-//PinNumï¼0~15
-//SYSCON_EXIPIN_TypeDef:EXI_PIN0~EXI_PIN19
-//EXI0~EXI15:GPIOA0,GPIOB0
-//EXI16~EXI17:GPIOA0.0~GPIOA0.7
-//EXI18~EXI19:GPIOB0.0~GPIOB0.3
-//ReturnValue:NONE
-/*************************************************************/  
-void GPIO_IntGroup_Set(GPIO_Group_TypeDef IO_MODE , uint8_t PinNum , GPIO_EXIPIN_TypeDef Selete_EXI_x)
-{
-	volatile unsigned int  R_data_temp;
-    volatile unsigned char R_GPIO_Pin;
-	if(Selete_EXI_x<16)
-	{
-		if((Selete_EXI_x==0)||(Selete_EXI_x==8))
-		{
-			R_data_temp=0xfffffff0;
-			R_GPIO_Pin=0;
-		}
-		else if((Selete_EXI_x==1)||(Selete_EXI_x==9))
-		{
-			R_data_temp=0xffffff0f;
-			R_GPIO_Pin=4;
-		}
-		else if((Selete_EXI_x==2)||(Selete_EXI_x==10))
-		{
-			R_data_temp=0xfffff0ff;
-			R_GPIO_Pin=8;
-		}
-		else if((Selete_EXI_x==3)||(Selete_EXI_x==11))
-		{
-			R_data_temp=0xffff0fff;
-			R_GPIO_Pin=12;
-		}
-		else if((Selete_EXI_x==4)||(Selete_EXI_x==12))
-		{
-			R_data_temp=0xfff0ffff;
-			R_GPIO_Pin=16;
-		}
-		else if((Selete_EXI_x==5)||(Selete_EXI_x==13))
-		{
-			R_data_temp=0xff0fffff;
-			R_GPIO_Pin=20;
-		}
-		else if((Selete_EXI_x==6)||(Selete_EXI_x==14))
-		{
-			R_data_temp=0xf0ffffff;
-			R_GPIO_Pin=24;
-		}
-		else if((Selete_EXI_x==7)||(Selete_EXI_x==15))
-		{
-			R_data_temp=0x0fffffff;
-			R_GPIO_Pin=28;
-		}
-		if(Selete_EXI_x<8)
-		{
-			GPIOGRP->IGRPL =(GPIOGRP->IGRPL & R_data_temp) | (IO_MODE<<R_GPIO_Pin);
-		}
-		else if((Selete_EXI_x<16)&&(Selete_EXI_x>=8))
-		{
-			GPIOGRP->IGRPH =(GPIOGRP->IGRPH & R_data_temp) | (IO_MODE<<R_GPIO_Pin);    
-		}
-	}
-	else if(Selete_EXI_x<20)
-	{
-		if((IO_MODE==0)&&((Selete_EXI_x==16)||((Selete_EXI_x==17))))						//PA0.0~PA0.7
-		{
-			if(Selete_EXI_x==16)
-			{
-				GPIOGRP->IGREX =(GPIOGRP->IGREX)|PinNum;
-			}
-			else if(Selete_EXI_x==17)
-			{
-				GPIOGRP->IGREX=(GPIOGRP->IGREX)|(PinNum<<4);
-			}
-		}
-		else if((IO_MODE==2)&&((Selete_EXI_x==18)||(Selete_EXI_x==19)))					//PB0.0~PB0.3
-		{
-			if(Selete_EXI_x==18)
-			{
-				GPIOGRP->IGREX=(GPIOGRP->IGREX)|(PinNum<<8);
-			}
-			else if(Selete_EXI_x==19)
-			{
-				GPIOGRP->IGREX=(GPIOGRP->IGREX)|(PinNum<<12);
-			}
+			(ptGpioBase)->OMCR  = ((ptGpioBase)->OMCR) & ~(0x01<<(byPinNum+16));
 		}
 	}
 }
-/*************************************************************/
-//IO EXI SET 
-//EntryParameter:EXI_IO(EXI0~EXI13)
-//ReturnValue:NONE
-/*************************************************************/  
-void GPIOA0_EXI_Init(GPIO_EXI_TypeDef EXI_IO)
+
+/** \brief Set a specific output pin to strong driving ability
+ * 
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] byPinNum: 0~15
+ *  \return none
+ */ 
+void gpio_drive_strength_enable(csp_gpio_t *ptGpioBase,uint8_t byPinNum)
 {
-    switch (EXI_IO)
+	(ptGpioBase)->DSCR  = ((ptGpioBase)->DSCR) | (0x01<<(byPinNum*2));
+}
+
+/** \brief Set a specific output pin to normal driving ability
+ * 
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] byPinNum: 0~15
+ *  \return none
+ */ 
+void gpio_drive_strength_disable(csp_gpio_t *ptGpioBase,uint8_t byPinNum)
+{
+	(ptGpioBase)->DSCR  = ((ptGpioBase)->DSCR) & ~(0x01<<(byPinNum*2));
+}
+
+
+/** \brief IO Group configuration
+ *  There are 20 possible groups seperately connecting to EXI0~19 in SYSCON 
+ *  This function assigns a specific input pin to one of EXI0~19 where:
+ * 	- EXI0 could be PA0.0/PB0.0
+ *  - ...
+ *  - EXI15 could be PA0.15/PB0.15
+ *  - EXI16/17 could be PA0.0~ PA0.7
+ *  - EXI18/19 could be PB0.0~PB0.3
+ *  \param[in] eGroup: GPIOA/GPIOB... \ref gpio_group_e
+ *  \param[in] byPinNum: 0~15
+ *  \param[in] eExiGroup: SELECT_EXI_GROUP0~19 \ref exipin_e
+ *  \return err_status_e
+ */ 
+err_status_e gpio_igroup_set(gpio_group_e eGroup , uint8_t byPinNum , exi_group_e eExiGroup)
+{	
+	U32_T byMaskShift,byMask;
+	if (eExiGroup < 16) {
+		if ((uint8_t)eExiGroup != byPinNum)
+			return ERROR;
+		
+		if(byPinNum < 8)
+		{
+			byMaskShift = (byPinNum << 2);
+			byMask = ~(0x0Ful << byMaskShift);
+			GPIOGRP->IGRPL = ((GPIOGRP->IGRPL) & byMask) | (eGroup << byMaskShift);
+		}
+		else if(byPinNum < 16)
+		{
+			byMaskShift = ((byPinNum-8) << 2);
+			byMask = ~(0x0Ful << byMaskShift);
+			GPIOGRP->IGRPH = ((GPIOGRP->IGRPH) & byMask) | (eGroup << byMaskShift);
+		}
+		else
+			return ERROR;
+	}
+	else {
+		switch(eExiGroup)
+		{
+			case (SELECT_EXI_GROUP16): 
+			case (SELECT_EXI_GROUP17): if ((eGroup != GPIOA) || (eGroup == GPIOA && (byPinNum>7)))
+															return ERROR;
+														break;
+			case (SELECT_EXI_GROUP18): 
+			case (SELECT_EXI_GROUP19): if ((eGroup != GPIOB) || (eGroup == GPIOB && (byPinNum>3)))
+															return ERROR;
+			default: return ERROR; break;
+		}
+		
+		byMaskShift = (eExiGroup - SELECT_EXI_GROUP15) << 2;
+		byMask = ~(0x0Ful << byMaskShift);
+		GPIOGRP->IGREX = ((GPIOGRP->IGREX) & byMask) | (byPinNum << byMaskShift);
+	} 
+		
+	return SUCCESS;
+	
+}
+
+
+
+/** \brief Enable a specific gpio group signal output to SYSCON module
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] eExiPin: EXI0~EXI15 \ref exi_e
+ *  \return none
+ */ 
+void gpio_exi_enable(csp_gpio_t *ptGpioBase,exi_e eExiPin)
+{
+    (ptGpioBase)->IECR  |= 1<<eExiPin;
+}
+
+
+/** \brief simultaneouly external interrupt enable, disable control in GPIO
+ *  \param[in] wExiMsk: EXI pin mask, 0'b  for disable, 1'b for enable
+ *  \return none
+ */
+void gpio_exi_interrupt_cmd(csp_gpio_t * ptGpioBase,U32_T wExiMsk)
+{
+	ptGpioBase ->IECR = wExiMsk;
+}
+
+
+
+
+/** \brief Set/Clear a specific output pin
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] byPinNum: 0~15
+ *  \return none
+ */ 
+void gpio_write_high(csp_gpio_t *ptGpioBase,uint8_t byPinNum)
+{
+        (ptGpioBase)->SODR = (1ul<<byPinNum);
+}
+void gpio_write_low(csp_gpio_t *ptGpioBase,uint8_t byPinNum)
+{
+        (ptGpioBase)->CODR = (1ul<<byPinNum);
+}
+
+
+
+/** \brief Set a specific output pin to a specific level
+ * 
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] byPinNum: 0~15
+ *  \param[in] bValue: 0 or 1
+ *  \return none
+ */ 
+void gpio_set_value(csp_gpio_t *ptGpioBase,uint8_t byPinNum, bool bValue)
+{
+    if (bValue == (bool)1)
     {
-        case 0:GPIOA0->CONLR = (GPIOA0->CONLR&0XFFFFFFF0) | 0X00000001;break;
-        case 1:GPIOA0->CONLR = (GPIOA0->CONLR&0XFFFFFF0F) | 0X00000010;break;
-        case 2:GPIOA0->CONLR = (GPIOA0->CONLR&0XFFFFF0FF) | 0X00000100;break;
-        case 3:GPIOA0->CONLR = (GPIOA0->CONLR&0XFFFF0FFF) | 0X00001000;break;
-        case 4:GPIOA0->CONLR = (GPIOA0->CONLR&0XFFF0FFFF) | 0X00010000;break;
-        case 5:GPIOA0->CONLR = (GPIOA0->CONLR&0XFF0FFFFF) | 0X00100000;break;
-        case 6:GPIOA0->CONLR = (GPIOA0->CONLR&0XF0FFFFFF) | 0X01000000;break;
-        case 7:GPIOA0->CONLR = (GPIOA0->CONLR&0X0FFFFFFF) | 0X10000000;break;
-        case 8:GPIOA0->CONHR = (GPIOA0->CONHR&0XFFFFFFF0) | 0X00000001;break;
-        case 9:GPIOA0->CONHR = (GPIOA0->CONHR&0XFFFFFF0F) | 0X00000010;break;
-        case 10:GPIOA0->CONHR = (GPIOA0->CONHR&0XFFFFF0FF) | 0X00000100;break;
-        case 11:GPIOA0->CONHR = (GPIOA0->CONHR&0XFFFF0FFF) | 0X00001000;break;
-        case 12:GPIOA0->CONHR = (GPIOA0->CONHR&0XFFF0FFFF) | 0X00010000;break;
-        case 13:GPIOA0->CONHR = (GPIOA0->CONHR&0XFF0FFFFF) | 0X00100000;break;
-		case 14:GPIOA0->CONHR = (GPIOA0->CONHR&0XF0FFFFFF) | 0X01000000;break;
-		case 15:GPIOA0->CONHR = (GPIOA0->CONHR&0X0FFFFFFF) | 0X10000000;break;
+        (ptGpioBase)->SODR = (1ul<<byPinNum);
+    }
+    else 
+    {
+        (ptGpioBase)->CODR = (1ul<<byPinNum);
     }
 }
-void GPIOB0_EXI_Init(GPIO_EXI_TypeDef EXI_IO)
+
+
+/** \brief Toggle a specific output pin
+ * 
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] byPinNum: 0~15
+ *  \return none
+ */ 
+void gpio_reverse(csp_gpio_t *ptGpioBase,uint8_t byPinNum)
 {
-    switch (EXI_IO)
-    {
-        case 0:GPIOB0->CONLR = (GPIOB0->CONLR&0XFFFFFFF0) | 0X00000001;break;
-        case 1:GPIOB0->CONLR = (GPIOB0->CONLR&0XFFFFFF0F) | 0X00000010;break;
-        case 2:GPIOB0->CONLR = (GPIOB0->CONLR&0XFFFFF0FF) | 0X00000100;break;
-        case 3:GPIOB0->CONLR = (GPIOB0->CONLR&0XFFFF0FFF) | 0X00001000;break;
-		case 4:GPIOB0->CONLR = (GPIOB0->CONLR&0XFFF0FFFF) | 0X00010000;break;
-		case 5:GPIOB0->CONLR = (GPIOB0->CONLR&0XFF0FFFFF) | 0X00100000;break;
-        default:break;
-    }
-}
-void GPIO_EXI_EN(CSP_GPIO_T *GPIOx,GPIO_EXI_TypeDef EXI_IO)
-{
-    (GPIOx)->IECR  |= 1<<EXI_IO;
-}
-/*************************************************************/
-//Write GPIO 
-//EntryParameter:GPIOx,uint8_t bit
-//GPIOx:GPIOA0,GPIOB0
-//bit:0~15
-//ReturnValue:VALUE
-/*************************************************************/
-void GPIO_Write_High(CSP_GPIO_T *GPIOx,uint8_t bit)
-{
-        (GPIOx)->SODR = (1ul<<bit);
-}
-void GPIO_Write_Low(CSP_GPIO_T *GPIOx,uint8_t bit)
-{
-        (GPIOx)->CODR = (1ul<<bit);
-}
-/*************************************************************/
-//Write GPIO 
-//EntryParameter:GPIOx,uint8_t bitposi bitval
-//GPIOx:GPIOA0,GPIOB0
-//bitposi:0~15 bitval:0~1 0=low 1=high
-//ReturnValue:VALUE
-/*************************************************************/
-void GPIO_Set_Value(CSP_GPIO_T *GPIOx,uint8_t bitposi,uint8_t bitval)
-{
-    if (bitval==1)
-    {
-        (GPIOx)->SODR = (1ul<<bitposi);
-    }
-    else if ((bitval==0))
-    {
-        (GPIOx)->CODR = (1ul<<bitposi);
-    }
-}
-/*************************************************************/
-//Write GPIO reverse
-//EntryParameter:GPIOx,uint8_t bit
-//GPIOx:GPIOA0,GPIOB0
-//bit:0~15
-//ReturnValue:VALUE
-/*************************************************************/
-void GPIO_Reverse(CSP_GPIO_T *GPIOx,uint8_t bit)
-{
-     uint32_t dat = 0;
-     dat=((GPIOx)->ODSR>>bit)&1ul;
+     U32_T dat = 0;
+     dat=((ptGpioBase)->ODSR>>byPinNum)&1ul;
      {
        if (dat==1)  
        {
-           (GPIOx)->CODR = (1ul<<bit);
+           (ptGpioBase)->CODR = (1ul<<byPinNum);
            return;
        }
        if (dat==0)
        {
-           (GPIOx)->SODR = (1ul<<bit);
+           (ptGpioBase)->SODR = (1ul<<byPinNum);
            return;
        }
      }
 }
-/*************************************************************/
-//READ PA IO STATUS
-//EntryParameter:GPIOx,uint8_t bit
-//GPIOx:GPIOA0,GPIOB0
-//bit:0~15
-//ReturnValue:VALUE
-/*************************************************************/
-uint8_t GPIO_Read_Status(CSP_GPIO_T *GPIOx,uint8_t bit)
+
+
+/** \brief Read port status info from a specific pin
+ *  this pin does not have to be an output pin
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] byPinNum: 0~15
+ *  \return byValue: 
+ */ 
+uint8_t gpio_read_status(csp_gpio_t *ptGpioBase,uint8_t byPinNum)
 {
-    uint8_t value = 0;
-    uint32_t dat = 0;
-    dat=((GPIOx)->PSDR)&(1<<bit);
-    if (dat == (1<<bit))								
+    uint8_t byValue = 0;
+    U32_T wData = 0;
+    wData=((ptGpioBase)->PSDR)&(1<<byPinNum);
+    if (wData == (1<<byPinNum))								
 	{
-	    value = 1;
+	    byValue = 1;
 	} 
-    return value;
+    return byValue;
 }
-/*************************************************************/
-//READ PA OUTPUT STATUS
-//EntryParameter:GPIOx,uint8_t bit
-//GPIOx:GPIOA0,GPIOB0
-//bit:0~15
-//ReturnValue:VALUE
-/*************************************************************/
-uint8_t GPIO_Read_Output(CSP_GPIO_T *GPIOx,uint8_t bit)
+
+
+/** \brief Read output status info from a specific pin
+ *  The real level measured on this pin does not neccessarily be the same as output status
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] byPinNum: 0~15
+ *  \return none
+ */ 
+uint8_t gpio_read_output(csp_gpio_t *ptGpioBase,uint8_t byPinNum)
 {
-    uint8_t value = 0;
-    uint32_t dat = 0;
-    dat=((GPIOx)->ODSR)&(1<<bit);
-    if (dat == (1<<bit))								
+    uint8_t byValue = 0;
+    U32_T wData = 0;
+    wData=((ptGpioBase)->ODSR)&(1<<byPinNum);
+    if (wData == (1<<byPinNum))								
 	{
-	    value = 1;
+	    byValue = 1;
 	} 
-    return value;
+    return byValue;
 }
 
 /******************* (C) COPYRIGHT 2024 APT Chip *****END OF FILE****/

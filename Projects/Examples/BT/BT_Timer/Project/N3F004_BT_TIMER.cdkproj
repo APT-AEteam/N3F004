@@ -58,6 +58,12 @@
       <File Name="../../../../../Driver/driver/src/syscon.c">
         <FileOption/>
       </File>
+      <File Name="../../../../../Driver/driver/src/etcb.c">
+        <FileOption/>
+      </File>
+      <File Name="../../../../../Driver/driver/src/iomux.c">
+        <FileOption/>
+      </File>
     </VirtualDirectory>
     <VirtualDirectory Name="inc">
       <File Name="../../../../../Driver/driver/inc/bt.h">
@@ -81,19 +87,14 @@
       <File Name="../../../../../Driver/driver/inc/types_local.h">
         <FileOption/>
       </File>
+      <File Name="../../../../../Driver/driver/inc/etcb.h">
+        <FileOption/>
+      </File>
+      <File Name="../../../../../Driver/driver/inc/n3f004_top.h">
+        <FileOption/>
+      </File>
     </VirtualDirectory>
   </VirtualDirectory>
-  <DebugSessions>
-    <watchExpressions/>
-    <memoryExpressions>;;;</memoryExpressions>
-    <statistics>;;MHZ</statistics>
-    <peripheralTabs/>
-    <WatchDisplayFormat/>
-    <LocalDisplayFormat/>
-    <debugLayout/>
-    <memoryTabColSizeExpressions/>
-    <QuickWatchDisplayFormat/>
-  </DebugSessions>
   <BuildConfigs>
     <BuildConfig Name="BuildSet">
       <Target>
@@ -246,7 +247,7 @@
         <AfterResetFile/>
         <Dumpcore>no</Dumpcore>
         <DumpcoreText/>
-        <SVCFile>$(ProjectPath)/../../../../../../apt32f102a.svc</SVCFile>
+        <SVCFile>$(ProjectPath)/../../../../../apt32f102a.svc</SVCFile>
         <ConfigICE>
           <IP>localhost</IP>
           <PORT>1025</PORT>
@@ -316,4 +317,15 @@
       </Flash>
     </BuildConfig>
   </BuildConfigs>
+  <DebugSessions>
+    <watchExpressions/>
+    <memoryExpressions>;;;</memoryExpressions>
+    <statistics>;;MHZ</statistics>
+    <peripheralTabs/>
+    <WatchDisplayFormat/>
+    <LocalDisplayFormat/>
+    <debugLayout/>
+    <memoryTabColSizeExpressions/>
+    <QuickWatchDisplayFormat/>
+  </DebugSessions>
 </Project>

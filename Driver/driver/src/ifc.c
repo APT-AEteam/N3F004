@@ -234,7 +234,7 @@ void ReadDataArry_U32(unsigned int RdStartAdd,unsigned int DataLength,volatile U
 //IFC_INT_x:ERS_END_INT,RGM_END_INT,PEP_END_INT,PROT_ERR_INT,UDEF_ERR_INT,ADDR_ERR_INT,OVW_ERR_INT
 //ReturnValue:NONE
 *************************************************************/
-void IFC_interrupt_CMD(FunctionalStatus NewState ,IFC_INT_TypeDef IFC_INT_x)
+void IFC_interrupt_CMD(functional_status_e NewState ,IFC_INT_TypeDef IFC_INT_x)
 {
 	if(NewState != DISABLE)
 	{

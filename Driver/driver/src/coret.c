@@ -20,7 +20,7 @@
 /* defines -------------------------------------------------------------------*/
 
 
-/** \brief Deinitializes coret registers to their default reset
+/** \brief Deinitializes coret registers to their reset status
  * 
  *  \param[in] none
  *  \return none

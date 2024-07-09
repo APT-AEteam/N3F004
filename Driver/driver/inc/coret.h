@@ -16,12 +16,12 @@
 /* Includes ------------------------------------------------------------------*/
 
 /******************************************************************************
-************************* syscon Registers Definition *************************
+************************* coret Registers Definition *************************
 ******************************************************************************/
-#define CORET_CSR_RST     	((CSP_REGISTER_T)0x00000004)
-#define CORET_RVR_RST     	((CSP_REGISTER_T)0x00000000)
-#define CORET_CVR_RST     	((CSP_REGISTER_T)0x00000000)
-#define CORET_CALIB_RST     ((CSP_REGISTER_T)0x00000000)
+#define CORET_CSR_RST     	(0x00000004)
+#define CORET_RVR_RST     	(0x00000000)
+#define CORET_CVR_RST     	(0x00000000)
+#define CORET_CALIB_RST     (0x00000000)
 
 
 

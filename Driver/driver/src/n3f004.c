@@ -18,32 +18,32 @@
 /* private function-----------------------------------------------------------*/
 /* global variablesr----------------------------------------------------------*/
 
-CSP_IFC_T   	*IFC     = (CSP_IFC_T    *)APB_IFCBase ;
-CSP_SYSCON_T 	*SYSCON = (CSP_SYSCON_T *)APB_SYSCONBase ;
+CSP_IFC_T   	*IFC     = (CSP_IFC_T    *)APB_IFCBASE ;
+csp_syscon_t 	*SYSCON = (csp_syscon_t *)APB_SYSCONBASE ;
 
-//CSP_TKEY_T  	*TKEY    = (CSP_TKEY_T  *)APB_TKEYBase ;
-//CSP_TKEYBUF_T   *TKEYBUF = (CSP_TKEYBUF_T  *)APB_TKEYBUFBase;
-//CSP_ADC12_T 	*ADC0    = (CSP_ADC12_T  *)APB_ADC0Base ;
+//CSP_TKEY_T  	*TKEY    = (CSP_TKEY_T  *)APB_TKEYBASE ;
+//CSP_TKEYBUF_T   *TKEYBUF = (CSP_TKEYBUF_T  *)APB_TKEYBUFBASE;
+//CSP_ADC12_T 	*ADC0    = (CSP_ADC12_T  *)APB_ADC0BASE ;
 
-CSP_GPIO_T  	*GPIOA0   = (CSP_GPIO_T  *)APB_GPIOA0Base ; // A0
-CSP_GPIO_T  	*GPIOB0   = (CSP_GPIO_T  *)APB_GPIOB0Base ; // B0
-CSP_IGRP_T  	*GPIOGRP  = (CSP_IGRP_T *)APB_IGRPBase;
+csp_gpio_t  	*GPIOA0   = (csp_gpio_t  *)APB_GPIOA0BASE ; // A0
+csp_gpio_t  	*GPIOB0   = (csp_gpio_t  *)APB_GPIOB0BASE ; // B0
+csp_igrp_t  	*GPIOGRP  = (csp_igrp_t *)APB_IGRPBASE;
 
-//CSP_UART_T  	*UART0    = (CSP_UART_T  *)APB_UART0Base ;
-//CSP_UART_T  	*UART1    = (CSP_UART_T  *)APB_UART1Base ;
+//CSP_UART_T  	*UART0    = (CSP_UART_T  *)APB_UART0BASE ;
+//CSP_UART_T  	*UART1    = (CSP_UART_T  *)APB_UART1BASE ;
 //
-//CSP_SSP_T   	*SPI0     = (CSP_SSP_T   *)APB_SPI0Base ;
-//CSP_I2C_T   	*I2C0     = (CSP_I2C_T   *)APB_I2C0Base ;
+//CSP_SSP_T   	*SPI0     = (CSP_SSP_T   *)APB_SPI0BASE ;
+//CSP_I2C_T   	*I2C0     = (CSP_I2C_T   *)APB_I2C0BASE ;
 //
-//CSP_CA_T    	*CA0      = (CSP_CA_T    *)APB_CNTABase ;
+//CSP_CA_T    	*CA0      = (CSP_CA_T    *)APB_CNTABASE ;
 //
-//CSP_GPT_T		*GPT0	  =	(CSP_GPT_T *)APB_GPT0Base;
-//CSP_EPT_T   	*EPT0     = (CSP_EPT_T  *)APB_EPT0Base ;
-//CSP_ETCB_T  	*ETCB     = (CSP_ETCB_T *)APB_ETCBBase ;
+//CSP_GPT_T		*GPT0	  =	(CSP_GPT_T *)APB_GPT0BASE;
+//CSP_EPT_T   	*EPT0     = (CSP_EPT_T  *)APB_EPT0BASE ;
+csp_etcb_t  	*ETCB     = (csp_etcb_t *)APB_ETCBBASE ;
 //
-CSP_BT_T    	*BT0      = (CSP_BT_T   *)APB_BT0Base ;
-CSP_BT_T    	*BT1      = (CSP_BT_T   *)APB_BT1Base ;
-//CSP_CRC_T   	*CRC      = (CSP_CRC_T  *)AHB_CRCBase ;
+CSP_BT_T    	*BT0      = (CSP_BT_T   *)APB_BT0BASE ;
+CSP_BT_T    	*BT1      = (CSP_BT_T   *)APB_BT1BASE ;
+//CSP_CRC_T   	*CRC      = (CSP_CRC_T  *)AHB_CRCBASE ;
 
 /* Private variablesr---------------------------------------------------------*/
 /* defines -------------------------------------------------------------------*/

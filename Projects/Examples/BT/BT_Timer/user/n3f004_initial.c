@@ -14,6 +14,7 @@
 *****************************************************/
 #include "n3f004.h"
 
+#if 0
 /* define --------------------------------------------------------------------*/
 	
 /* externs--------------------------------------------------------------------*/
@@ -49,7 +50,7 @@ void delay_nus(unsigned int t)
 /*************************************************************/	
 void GPIO_CONFIG(void)
 {
-//	GPIO_Init(GPIOA0,13,0);
+//	gpio_init(GPIOA0,13,0);
 }
 /*************************************************************/
 //CORET Functions
@@ -243,8 +244,9 @@ void TK_CONFIG(void)
 /*************************************************************/
 void SYSCON_CONFIG(void)
 {
+		
 //------SYSTEM CLK AND PCLK FUNTION---------------------------/
-	SYSCON_RST_VALUE();                                                         //SYSCON all register clr
+	SYSCON_deinit();                                                         //SYSCON all register clr
 	SYSCON_General_CMD(ENABLE,ENDIS_ISOSC);										//SYSCON enable/disable clock source
 						//0X0a //0X07
 	//EMOSC_OSTR_Config(0XAD,0X1f,EM_LFSEL_EN,EM_FLEN_EN,EM_FLSEL_10ns);		//EM_CNT=0X3FF,0xAD(36K),EM_GM=0,Low F modedisable,EM filter disable,if enable,cont set 5ns
@@ -279,6 +281,9 @@ void SYSCON_CONFIG(void)
 /*********************************************************************************/
 void APT32F102_init(void) 
 {
+	VIC->ISER[0U] = (0xffffffff);									// 使能VIC层所有的中断，如果要响应IP的中断处理函数，还有另外两个使能开关
+																	// 1) 使能IP层中断：如 xx_IMER
+																	// 2) 使能总中断： CK_CPU_ENALLNORMALIRQ
 //------------------------------------------------------------/
 //Peripheral clock enable and disable
 //EntryParameter:NONE
@@ -317,4 +322,6 @@ void APT32F102_init(void)
 	//ADC12_CONFIG();                                               //ADC initial 
 	//TK_CONFIG();													//Touch Key initial
 }
+
+#endif
 /******************* (C) COPYRIGHT 2024 APT Chip *****END OF FILE****/

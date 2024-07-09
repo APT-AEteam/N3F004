@@ -1,6 +1,6 @@
 /***********************************************************************//** 
  * \file  syscon.h
- * \brief  syscon description and static inline functions at register level 
+ * \brief  syscon description and static inline functions at Registerister level 
  * \copyright Copyright (C) 2015-2024 @ APTCHIP
  * <table>
  * <tr><th> Date  <th>Version  <th>Author  <th>Description
@@ -16,79 +16,72 @@
 /* Includes ------------------------------------------------------------------*/
 #include "gpio.h"
 
-/**
-@brief SYSCON bits Structure
-*/
-typedef volatile struct {                   			/*!< SYSCON Structure                         */
-	volatile unsigned int IDCCR;                        /*!< 0x000: Identification & System Controller Clock Control Register */
-	volatile unsigned int GCER;                         /*!< 0x004: System Controller General Control Enable Register */
-	volatile unsigned int GCDR;                         /*!< 0x008: System Controller General Control Disable Register */
-	volatile unsigned int GCSR;                         /*!< 0x00C: System Controller General Control Status Register */
-	volatile unsigned int CKST;                         /*!< 0x010*/
-	volatile unsigned int RAMCHK;                       /*!< 0x014*/
-	volatile unsigned int EFLCHK;                       	/*!< 0x018*/
-	volatile unsigned int SCLKCR;                       /*!< 0x01C: System Controller System Clock Selection & Division Register */
-	volatile unsigned int PCLKCR;                       /*!< 0x020: System Controller Peripheral Clock Selection & Division Register */
-	volatile unsigned int _RSVD0;                       /*!< 0x024*/
-	volatile unsigned int PCER0;                        /*!< 0x028: System Controller Peripheral Clock Enable Register */
-	volatile unsigned int PCDR0;                        /*!< 0x02C: System Controller Peripheral Clock Disable Register */
-	volatile unsigned int PCSR0;                        /*!< 0x030: System Controller Peripheral Clock Status Register */
-	volatile unsigned int PCER1;                        /*!< 0x034: System Controller Peripheral Clock Enable Register */
-	volatile unsigned int PCDR1;                        /*!< 0x038: System Controller Peripheral Clock Disable Register */
-	volatile unsigned int PCSR1;                        /*!< 0x03C: System Controller Peripheral Clock Status Register */
-	volatile unsigned int OSTR;                         /*!< 0x040: System Controller External OSC Stable Time Control Register */
-	volatile unsigned int _RSVD1;                       /*!< 0x044: System Controller PLL Stable Time Control Register */
-	volatile unsigned int _RSVD2;                       /*!< 0x048: System Controller PLL PMS Value Control Register */
-	volatile unsigned int LVDCR;                        /*!< 0x04C: System Controller LVD Control Register */
-	volatile unsigned int CLCR;                         /*!< 0x050: System Controller IMOSC Fine Adjustment Register*/
-	volatile unsigned int PWRCR;                        /*!< 0x054: System Controller Power Control Register */
-	volatile unsigned int PWRKEY;                       /*!< 0x058: System Controller Power Control Register */
-	volatile unsigned int _RSVD3;                       /*!< 0x05C: */
-	volatile unsigned int _RSVD4;                       /*!< 0x060: */
-	volatile unsigned int OPT1;                         /*!< 0x064: System Controller OSC Trim Control Register */
-	volatile unsigned int OPT0;                         /*!< 0x068: System Controller Protection Control Register */
-	volatile unsigned int WKCR;                         /*!< 0x06C: System Controller Clock Quality Check Control Register */
-	volatile unsigned int _RSVD5;                       /*!< 0x070: System Controller Clock Quality Check Control Register */
-	volatile unsigned int IMER;                         /*!< 0x074: System Controller Interrupt Enable Register */
-	volatile unsigned int IMDR;                         /*!< 0x078: System Controller Interrupt Disable Register */
-	volatile unsigned int IMCR;                         /*!< 0x07C: System Controller Interrupt Mask Register */
-	volatile unsigned int IAR;                          /*!< 0x080: System Controller Interrupt Active Register */
-	volatile unsigned int ICR;                          /*!< 0x084: System Controller Clear Status Register */
-	volatile unsigned int RISR;                         /*!< 0x088: System Controller Raw Interrupt Status Register */
-	volatile unsigned int MISR;                          /*!< 0x08C: System Controller Raw Interrupt Status Register */
-	volatile unsigned int RSR;                          /*!< 0x090: System Controller Raw Interrupt Status Register */
-	volatile unsigned int EXIRT;                        /*!< 0x094: System Controller Reset Status Register */
-	volatile unsigned int EXIFT;                        /*!< 0x098: System Controller External Interrupt Mode 1 (Positive Edge) Register */
-	volatile unsigned int EXIER;                        /*!< 0x09C: System Controller External Interrupt Mode 2 (Negative Edge) Register */
-	volatile unsigned int EXIDR;                        /*!< 0x0A0: System Controller External Interrupt Enable Register */
-	volatile unsigned int EXIMR;                        /*!< 0x0A4: System Controller External Interrupt Disable Register */
-	volatile unsigned int EXIAR;                        /*!< 0x0A8: System Controller External Interrupt Mask Register */
-	volatile unsigned int EXICR;                        /*!< 0x0AC: System Controller External Interrupt Active Register */
-	volatile unsigned int EXIRS;                        /*!< 0x0B0: System Controller External Interrupt Clear Status Register */
-	volatile unsigned int IWDCR;                        /*!< 0x0B4: System Controller Independent Watchdog Control Register */
-	volatile unsigned int IWDCNT;                       /*!< 0x0B8: SystCem Controller Independent Watchdog Counter Value Register */
-	volatile unsigned int IWDEDR;                       /*!< 0x0BC: System Controller Independent Watchdog Enable/disable Register*/
-	volatile unsigned int IOMAP0;                        /*!< 0x0C0: Customer Information Content mirror of 1st byte*/
-	volatile unsigned int IOMAP1;                        /*!< 0x0C4: Customer Information Content mirror of 1st byte*/
-	volatile unsigned int CINF0;                        /*!< 0x0C8: Customer Information Content mirror of 1st byte*/
-	volatile unsigned int CINF1;                        /*!< 0x0CC: Customer Information Content mirror of 1st byte*/
-	volatile unsigned int FINF0;                        /*!< 0x0D0: Customer Information Content mirror of 1st byte*/
-	volatile unsigned int FINF1;                        /*!< 0x0D4: Customer Information Content mirror of 1st byte*/
-	volatile unsigned int FINF2;                        /*!< 0x0D8: Customer Information Content mirror of 1st byte*/
-	volatile unsigned int _RSVD6;                        /*!< 0x0DC: Customer Information Content mirror of 1st byte*/
-	volatile unsigned int ERRINF;                       /*!< 0x0E0:*/
-	volatile unsigned int UID0 ;                        /*!< 0x0E4: Customer Information Content mirror of 1st byte*/
-	volatile unsigned int UID1 ;                        /*!< 0x0E8: Customer Information Content mirror of 1st byte*/
-	volatile unsigned int UID2 ;                        /*!< 0x0EC: Customer Information Content mirror of 1st byte*/
-	volatile unsigned int PWROPT;                       /*!< 0x0F0: Power recovery timmming control */
-	volatile unsigned int EVTRG;                       /*!< 0x0F4: Trigger gen                                    */
-	volatile unsigned int EVPS;                       /*!< 0x0F8: Trigger prs                                    */
-	volatile unsigned int EVSWF;                       /*!< 0x0FC: Trigger software force                         */
-	volatile unsigned int UREG0;                       /*!< 0x100: User defined reg0                              */
-	volatile unsigned int UREG1;                       /*!< 0x104: User defined reg1                              */
-	volatile unsigned int UREG2;                       /*!< 0x108: User defined reg0                              */
-	volatile unsigned int UREG3;                       /*!< 0x10C: User defined reg1                              */
-} CSP_SYSCON_T; 
+/// \struct csp_syscon_t
+/// \brief SYSCON Register description
+typedef volatile struct {                   	  /*!< SYSCON Structure                         */
+	__IOM U32_T	IDCCR;                        /*!< 0x000: Identification & System Controller Clock Control Register */
+	__OM  U32_T	GCER;                         /*!< 0x004: System Controller General Control Enable Register */
+	__OM  U32_T	GCDR;                         /*!< 0x008: System Controller General Control Disable Register */
+	__IM  U32_T	GCSR;                         /*!< 0x00C: System Controller General Control Status Register */
+	__IM  U32_T	CKST;                         /*!< 0x010*/
+	__IM U32_T	RSVD0[2];                     /*!< 0x014 ~ 0x018*/
+	__IOM U32_T	SCLKCR;                       /*!< 0x01C: System Controller System Clock Selection & Division Register */
+	__IOM  U32_T	PCLKCR;                       /*!< 0x020: System Controller Peripheral Clock Selection & Division Register */
+	__IM  U32_T	RSVD1;                        /*!< 0x024*/
+	__OM  U32_T	PCER0;                        /*!< 0x028: System Controller Peripheral Clock Enable Register */
+	__OM  U32_T	PCDR0;                        /*!< 0x02C: System Controller Peripheral Clock Disable Register */
+	__IM  U32_T	PCSR0;                        /*!< 0x030: System Controller Peripheral Clock Status Register */
+	__OM  U32_T	PCER1;                        /*!< 0x034: System Controller Peripheral Clock Enable Register */
+	__OM  U32_T	PCDR1;                        /*!< 0x038: System Controller Peripheral Clock Disable Register */
+	__IM  U32_T	PCSR1;                        /*!< 0x03C: System Controller Peripheral Clock Status Register */
+	__IOM U32_T	OSTR;                         /*!< 0x040: System Controller External OSC Stable Time Control Register */
+	__IOM U32_T	PLLCR;                        /*!< 0x044: System Controller PLL Stable Time Control Register */
+	__IM  U32_T	RSVD2;                        /*!< 0x048: System Controller PLL PMS Value Control Register */
+	__IOM U32_T	LVDCR;                        /*!< 0x04C: System Controller LVD Control Register */
+	__IOM U32_T	CLCR;                         /*!< 0x050: System Controller IMOSC Fine Adjustment Register*/
+	__IOM U32_T	PWRCR;                        /*!< 0x054: System Controller Power Control Register */
+	__IOM U32_T	PWRKEY;                       /*!< 0x058: System Controller Power Control Register */
+	__IM  U32_T	RSVD3[2];                     /*!< 0x05C ~0x060: */
+	__IOM U32_T	OPT1;                         /*!< 0x064: System Controller OSC Trim Control Register */
+	__IM  U32_T	OPT0;                         /*!< 0x068: System Controller Protection Control Register */
+	__IOM U32_T	WKCR;                         /*!< 0x06C: System Controller Clock Quality Check Control Register */
+	__IM  U32_T	RSVD4;                        /*!< 0x070: System Controller Clock Quality Check Control Register */
+	__OM  U32_T	IMER;                         /*!< 0x074: System Controller Interrupt Enable Register */
+	__OM  U32_T	IMDR;                         /*!< 0x078: System Controller Interrupt Disable Register */
+	__IOM U32_T	IMCR;                         /*!< 0x07C: System Controller Interrupt Mask Register */
+	__OM  U32_T	IAR;                          /*!< 0x080: System Controller Interrupt Active Register */
+	__OM  U32_T	ICR;                          /*!< 0x084: System Controller Clear Status Register */
+	__IM  U32_T	RISR;                         /*!< 0x088: System Controller Raw Interrupt Status Register */
+	__IM  U32_T	MISR;                         /*!< 0x08C: System Controller Raw Interrupt Status Register */
+	__IOM U32_T	RSR;                          /*!< 0x090: System Controller Raw Interrupt Status Register */
+	__IOM U32_T	EXIRT;                        /*!< 0x094: System Controller Reset Status Register */
+	__IOM U32_T	EXIFT;                        /*!< 0x098: System Controller External Interrupt Mode 1 (Positive Edge) Register */
+	__OM  U32_T	EXIER;                        /*!< 0x09C: System Controller External Interrupt Mode 2 (Negative Edge) Register */
+	__OM  U32_T	EXIDR;                        /*!< 0x0A0: System Controller External Interrupt Enable Register */
+	__IM  U32_T	EXIMR;                        /*!< 0x0A4: System Controller External Interrupt Disable Register */
+	__IOM U32_T	EXIAR;                        /*!< 0x0A8: System Controller External Interrupt Mask Register */
+	__IOM U32_T	EXICR;                        /*!< 0x0AC: System Controller External Interrupt Active Register */
+	__IOM U32_T	EXIRS;                        /*!< 0x0B0: System Controller External Interrupt Clear Status Register */
+	__IOM U32_T	IWDCR;                        /*!< 0x0B4: System Controller Independent Watchdog Control Register */
+	__IOM U32_T	IWDCNT;                       /*!< 0x0B8: SystCem Controller Independent Watchdog Counter Value Register */
+	__IOM U32_T	IWDEDR;                       /*!< 0x0BC: System Controller Independent Watchdog Enable/disable Register*/
+	__IM  U32_T	RSVD5;                        /*!< 0x0C0: */
+	__IOM U32_T	IOMAP1;                       /*!< 0x0C4: Customer Information Content mirror of 1st byte*/
+	__IM  U32_T	RSVD6[7];                     /*!< 0x0C8 ~ 0x0E0: */
+	__IM  U32_T	UID0 ;                        /*!< 0x0E4: Customer Information Content mirror of 1st byte*/
+	__IM  U32_T	UID1 ;                        /*!< 0x0E8: Customer Information Content mirror of 1st byte*/
+	__IM  U32_T	UID2 ;                        /*!< 0x0EC: Customer Information Content mirror of 1st byte*/
+	__IOM U32_T	PWROPT;                       /*!< 0x0F0: Power recovery timmming Control */
+	__IOM U32_T	EVTRG;                        /*!< 0x0F4: Trigger gen                                    */
+	__IOM U32_T	EVPS;                      	  /*!< 0x0F8: Trigger prs                                    */
+	__OM  U32_T	EVSWF;                        /*!< 0x0FC: Trigger software force                         */
+	__IOM U32_T	UREG0;                        /*!< 0x100: User defined Register0                              */
+	__IOM U32_T	UREG1;                        /*!< 0x104: User defined Register1                              */
+	__IOM U32_T	UREG2;                        /*!< 0x108: User defined Register0                              */
+	__IOM U32_T	UREG3;                        /*!< 0x10C: User defined Register0                              */
+	__IM  U32_T	RSVD7[6];                     /*!< 0x110 ~ 0x124: */
+	__IOM U32_T	DBGCR;						  /*!< 0x128: Debug Control Register			   */
+} csp_syscon_t; 
 
 /******************************************************************************
 ************************* syscon Registers Definition *************************
@@ -97,497 +90,755 @@ typedef volatile struct {                   			/*!< SYSCON Structure            
   * @{
   */
 
-#define SYSCON_IDCCR_RST     	((CSP_REGISTER_T)0x00000001)
-#define SYSCON_GCER_RST     	((CSP_REGISTER_T)0x00000000)
-#define SYSCON_GCDR_RST     	((CSP_REGISTER_T)0x00000000)
-#define SYSCON_GCSR_RST     	((CSP_REGISTER_T)0x00081103)
-#define SYSCON_CKST_RST			((CSP_REGISTER_T)0x00000103)
-#define SYSCON_RAMCHK_RST		((CSP_REGISTER_T)0x0000ffff)
-#define SYSCON_EFLCHK_RST		((CSP_REGISTER_T)(0X0<<24)|0xffffff)
-#define SYSCON_SCLKCR_RST      	((CSP_REGISTER_T)0xD22Dul<<16)
-#define SYSCON_PCLKCR_RST     	((CSP_REGISTER_T)0x00000100)
-#define SYSCON_PCER0_RST   		((CSP_REGISTER_T)0x00000000)
-#define SYSCON_PCDR0_RST  		((CSP_REGISTER_T)0x00000000)
-#define SYSCON_PCSR0_RST  		((CSP_REGISTER_T)0x005107d1)
-#define SYSCON_PCER1_RST     	((CSP_REGISTER_T)0x00000000)
-#define SYSCON_PCDR1_RST     	((CSP_REGISTER_T)0x00000000)
-#define SYSCON_PCSR1_RST 		((CSP_REGISTER_T)0x3023f80)
-#define SYSCON_OSTR_RST  		((CSP_REGISTER_T)0x70ff3bff)
-#define SYSCON_LVDCR_RST  		((CSP_REGISTER_T)0x0000000a)
-#define	SYSCON_CLCR_RST			((CSP_REGISTER_T)0x00000100)
-#define	SYSCON_PWRCR_RST		((CSP_REGISTER_T)0x141f1f00)
-#define	SYSCON_IMER_RST			((CSP_REGISTER_T)0x00000000)
-#define	SYSCON_IMDR_RST			((CSP_REGISTER_T)0x00000000)
-#define	SYSCON_IMCR_RST			((CSP_REGISTER_T)0x00000000)
-#define	SYSCON_IAR_RST			((CSP_REGISTER_T)0x00000000)
-#define	SYSCON_ICR_RST			((CSP_REGISTER_T)0x00000000)
-#define	SYSCON_RISR_RST			((CSP_REGISTER_T)0x00000000)
-#define	SYSCON_MISR_RST			((CSP_REGISTER_T)0x00000000)
-#define	SYSCON_EXIRT_RST		((CSP_REGISTER_T)0x00000000)
-#define	SYSCON_EXIFT_RST		((CSP_REGISTER_T)0x00000000)
-#define	SYSCON_EXIER_RST		((CSP_REGISTER_T)0x00000000)
-#define	SYSCON_EXIDR_RST		((CSP_REGISTER_T)0x00000000)
-#define	SYSCON_EXIMR_RST		((CSP_REGISTER_T)0x00000000)
-#define	SYSCON_EXIAR_RST		((CSP_REGISTER_T)0x00000000)
-#define	SYSCON_EXICR_RST		((CSP_REGISTER_T)0x00000000)
-#define	SYSCON_EXIRS_RST		((CSP_REGISTER_T)0x00000000)
-#define	SYSCON_IWDCR_RST		((CSP_REGISTER_T)0x0000070C)
-#define	SYSCON_IWDCNT_RST		((CSP_REGISTER_T)0x000003fe)
-#define	SYSCON_PWROPT_RST		((CSP_REGISTER_T)0x00004040)
-#define	SYSCON_EVTRG_RST		((CSP_REGISTER_T)0x00000000)
-#define	SYSCON_EVPS_RST			((CSP_REGISTER_T)0x00000000)
-#define	SYSCON_EVSWF_RST		((CSP_REGISTER_T)0x00000000)
-#define	SYSCON_UREG0_RST		((CSP_REGISTER_T)0x00000000)
-#define	SYSCON_UREG1_RST		((CSP_REGISTER_T)0x00000000)
-#define	SYSCON_UREG2_RST		((CSP_REGISTER_T)0x00000000)
-#define	SYSCON_UREG3_RST		((CSP_REGISTER_T)0x00000000)
 
-//SCLKCR
-#define SYSCLK_KEY 		(0xD22Dul<<16)
 
-//PCLK CONTROL
-#define PCLK_KEY 	 	(0xC33Cul<<16)
+#define SYSCON_SCLKCR_RST      	(0xD22Dul<<16)
+#define SYSCON_PCLKCR_RST     	(0x00000100)
 
-//IDCCR 
-#define	CLKEN			(0X01ul)
-#define	CPUFTRST_EN		(0X00<<1)
-#define	CPUFTRST_DIS	(0XA<<1)
-#define	SWRST			(0X01ul<<7)
-#define IDCCR_KEY 		(0xE11Eul<<16)
+#define SYSCON_OSTR_RST  		(0x70ff3bff)
+#define SYSCON_PLLCR_RST  		(0x00000000)
+#define SYSCON_LVDCR_RST  		(0x0000000a)
+#define	SYSCON_CLCR_RST			(0x00000100)
+#define	SYSCON_PWRCR_RST		(0x141f1f00)
+#define	SYSCON_OPT1_RST			(0x00000000)
+#define	SYSCON_WKCR_RST			(0x00000000)
+#define	SYSCON_IMCR_RST			(0x00000000)
 
-//LVDCR		
-#define	LVDFLAG			(0x01ul<<15)					//0: VDD is higher than LVD threshold selected with INTDET_LVL bits.   1: VDD is lower than LVD threshold selected with INTDET_LVL bits
-#define LVD_KEY 		(0xB44Bul<<16)
+#define	SYSCON_RSR_RST			(0x00000000)
+#define	SYSCON_EXIRT_RST		(0x00000000)
+#define	SYSCON_EXIFT_RST		(0x00000000)
 
-//IECR IEDR IAR ICR IMSR RISR ISR
-//Interrupt Enable/Disable/Active/Clear Control Register
-//Interrupt Masking/Raw Interrupt/Masked Status Register
-#define ISOSC_ST 		(0x01ul)
-#define IMOSC_ST 		(0x01ul<<1)
-#define ESOSC_ST 		(0x01ul<<2)
-#define EMOSC_ST 		(0x01ul<<3)
-#define HFOSC_ST 		(0x01ul<<4)
-#define SYSCLK_ST 		(0x01ul<<7)
-#define	IWDT_INT_ST 	(0x01ul<<8)
-#define	WKI_INT_ST		(0x01ul<<9)
-#define RAMERRINT_ST	(0X01ul<<10)
-#define	LVD_INT_ST 		(0x01ul<<11)
-#define HWD_ERR_ST			(0X01ul<<12)
-#define EFL_ERR_ST		(0X01ul<<13)
-#define OPTERR_INT		(0X01ul<<14)
-#define	EM_CMLST_ST 	(0x01ul<<18)
-#define	EM_EVTRG0_ST 	(0x01ul<<19)
-#define	EM_EVTRG1_ST 	(0x01ul<<20)
-#define	EM_EVTRG2_ST 	(0x01ul<<21)
-#define	EM_EVTRG3_ST 	(0x01ul<<22)
-#define	CMD_ERR_ST		(0x01ul<<29)
+#define	SYSCON_EXIMR_RST		(0x00000000)
+#define	SYSCON_EXIAR_RST		(0xffffffff)
+#define	SYSCON_EXICR_RST		(0x00000000)
+#define	SYSCON_EXIRS_RST		(0x00000000)
+#define	SYSCON_IWDCR_RST		(0x0000070C)
+#define	SYSCON_IWDCNT_RST		(0x000003fe)
+#define	SYSCON_PWROPT_RST		(0x00004040)
+#define	SYSCON_EVTRG_RST		(0x00000000)
+#define	SYSCON_EVPS_RST			(0x00000000)
 
-//RSR
-//SYSCON Reset Status Register
-#define	PORST			(0X01ul)
-#define	LVRRST			(0X01ul<<1)
-#define	EXTRST			(0X01ul<<2)
-#define	ALVRST			(0X01ul<<3)
-#define	IWDRST			(0X01ul<<4)
-#define	EMCMRST			(0X01ul<<6)
-#define	CPURSTREQ		(0X01ul<<7)
-#define	SWRST_RSR		(0X01ul<<8)
-#define	CPUFAULT_RSR	(0X01ul<<9)
-#define	SRAM_RSR		(0X01ul<<11)
-#define	EFL_ERR			(0X01ul<<12)
-#define WWDTRST			(0X01ul<<13)
 
-//IWDCR
-#define	Check_IWDT_BUSY			(0x01ul<<12)					//Indicates the independent watchdog operation
-#define IWDT_KEY 				(0x8778ul<<16)
+/******************************************************************************
+*IDCCR : CHIP ID/SYSCON Control Register
+******************************************************************************/
+#define SYSCON_SWRST_POS 		(7)
+#define SYSCON_IDCCR_KEY_POS	(16)	
+#define	SWRST					(0x01ul<<SYSCON_SWRST_POS)
+#define IDCCR_KEY 				(0xE11Eul<<SYSCON_IDCCR_KEY_POS)
+#define	SYSCON_CLKEN			(0x01ul)
+#define	CPUFTRST_EN				(0x00<<1)
+#define	CPUFTRST_DIS			(0xA<<1)
 
-//IWDCNT
-#define	CLR_IWDT				(0x5aul<<24)
 
-//IWDEDR
-#define	Enable_IWDT				(0x0)
-#define	Disable_IWDT			(0x55aa)
-#define IWDTEDR_KEY 			(0x7887ul<<16)
-
-#define CORET_IRQ   0
-#define SYSCON_IRQ  1
-#define IFC_IRQ     2
-#define ADC_IRQ     3
-#define EPT0_IRQ    4
-#define WWDT_IRQ    6
-#define EXI0_IRQ    7
-#define EXI1_IRQ    8
-#define GPT0_IRQ    9 
-#define RTC_IRQ     12
-#define UART0_IRQ   13
-#define UART1_IRQ   14
-#define UART2_IRQ   15
-#define I2C_IRQ     17
-#define SPI_IRQ     19
-#define SIO_IRQ     20
-#define EXI2_IRQ    21
-#define EXI3_IRQ    22
-#define EXI4_IRQ    23
-#define CA_IRQ      24
-#define TKEY_IRQ    25
-#define LPT_IRQ     26
-#define BT0_IRQ     28
-#define BT1_IRQ     29
-
-/**
-  * @brief  SYSCON General Control
-  */
+/******************************************************************************
+*GCER/GCER/GCSR : Gerneral enable/disbale Control/status Register
+******************************************************************************/
 typedef enum
 {
-	ENDIS_ISOSC			=	 	(CSP_REGISTER_T)(0x01ul),
-	ENDIS_IMOSC 		=		(CSP_REGISTER_T)(0x01ul<<1),
-	ENDIS_EMOSC 		=		(CSP_REGISTER_T)(0x01ul<<3),
-	ENDIS_HFOSC 		=		(CSP_REGISTER_T)(0x01ul<<4),
-	ENDIS_IDLE_PCLK 	=		(CSP_REGISTER_T)(0x01ul<<8),
-	ENDIS_SYSTICK 		=		(CSP_REGISTER_T)(0x01ul<<11)
-}SYSCON_General_CMD_TypeDef;
+	ENDIS_ISOSC			=	 	(0x01 << 0),
+	ENDIS_IMOSC 		=		(0x01 << 1),
+	ENDIS_EMOSC 		=		(0x01 << 3),
+	ENDIS_PLL 		=		(0x01 << 5),
 
-/**
-  * @brief  Selected SYSCON CLK
-  */
-typedef enum
-{
-	SYSCLK_IMOSC	=		(CSP_REGISTER_T)0x0ul,				//IMOSC  selected
-	SYSCLK_EMOSC	=		(CSP_REGISTER_T)0x1ul,				//EMOSC  selected
-	SYSCLK_HFOSC	=		(CSP_REGISTER_T)0x2ul,				//HFOSC  selected
-	SYSCLK_ISOSC 	=		(CSP_REGISTER_T)0x4ul				//ISOSC	 selected
-}SystemCLK_TypeDef;
-/**
-  * @brief  SYSCON CLK Div
-  */
-typedef enum
-{
-	HCLK_DIV_1   =		(CSP_REGISTER_T)(0x1ul<<8),				
-	HCLK_DIV_2   =		(CSP_REGISTER_T)(0x2ul<<8),
-	HCLK_DIV_3   =		(CSP_REGISTER_T)(0x3ul<<8),
-	HCLK_DIV_4   =		(CSP_REGISTER_T)(0x4ul<<8),
-	HCLK_DIV_5   =		(CSP_REGISTER_T)(0x5ul<<8),
-	HCLK_DIV_6   =		(CSP_REGISTER_T)(0x6ul<<8),
-	HCLK_DIV_7   =		(CSP_REGISTER_T)(0x7ul<<8),
-	HCLK_DIV_8   =		(CSP_REGISTER_T)(0x8ul<<8),
-	HCLK_DIV_12  =		(CSP_REGISTER_T)(0x9ul<<8),
-	HCLK_DIV_16  =		(CSP_REGISTER_T)(0xAul<<8),
-	HCLK_DIV_24  =		(CSP_REGISTER_T)(0xBul<<8),
-	HCLK_DIV_32  =		(CSP_REGISTER_T)(0xCul<<8),
-	HCLK_DIV_64  =		(CSP_REGISTER_T)(0xDul<<8),
-	HCLK_DIV_128 =		(CSP_REGISTER_T)(0xEul<<8),
-	HCLK_DIV_256 =		(CSP_REGISTER_T)(0xFul<<8)
-}SystemCLK_Div_TypeDef;
+//	ENDIS_IDLE_PCLK 	=		(8),
+//	ENDIS_SYSTICK 		=		(11)
+}osc_enable_e;
 
-/**
-  * @brief  PCLK Div
-  */
-typedef enum
-{
-	PCLK_DIV_1   =		(CSP_REGISTER_T)(0x00ul<<8),				
-	PCLK_DIV_2   =		(CSP_REGISTER_T)(0x01ul<<8),
-	PCLK_DIV_4   =		(CSP_REGISTER_T)(0x02ul<<8),
-	PCLK_DIV_8   =		(CSP_REGISTER_T)(0x04ul<<8),
-	PCLK_DIV_16  =		(CSP_REGISTER_T)(0x08ul<<8)
-}PCLK_Div_TypeDef;
-  
-/**
-  * @brief  LVD enable and disable
-  */
-typedef enum
-{
-	ENABLE_LVDEN		=		(CSP_REGISTER_T)0x00,			//Power down LVD module
-	DISABLE_LVDEN		=		(CSP_REGISTER_T)0x0a			//Power down LVD module
-}X_LVDEN_TypeDef;
+typedef enum{
+	PCLK_IDLE = (0x01<< 8),
+	HCLK_IDLE = (0x01<< 9),
+	ISOSC_STP = (0x01<< 12), 
+	IMOSC_STP = (0x01 << 13),
+	ESOSC_STP = (0x01 << 14),
+	EMOSC_STP = (0x01 << 15),
+}clk_pm_e;
 
-/**
-  * @brief  Detection voltage level to trigger the LVD interrupt
-  */
-typedef enum
-{
-	INTDET_LVL_2_4V		=	(CSP_REGISTER_T)(0X00ul<<8),					//2.4V	
-	INTDET_LVL_2_1V		=	(CSP_REGISTER_T)(0X01ul<<8),					//2.1V
-	INTDET_LVL_2_7V		=	(CSP_REGISTER_T)(0X02ul<<8),					//2.7V
-	INTDET_LVL_3_0V		=	(CSP_REGISTER_T)(0X03ul<<8),					//3.0V
-	INTDET_LVL_3_3V		=	(CSP_REGISTER_T)(0X04ul<<8),					//3.3V
-	INTDET_LVL_3_6V		=	(CSP_REGISTER_T)(0X05ul<<8),					//3.6V
-	INTDET_LVL_3_9V		=	(CSP_REGISTER_T)(0X06ul<<8),					//3.9V
-}INTDET_LVL_X_TypeDef;
+#define ES_CM_EN 	(0x01ul<<16)
+#define ES_CMRST 	(0x01ul<<17)
 
-/**
-  * @brief  Detection voltage level to generate reset
-  */
-typedef enum
-{
-	RSTDET_LVL_1_9V		=		(CSP_REGISTER_T)(0X00ul<<12),			//1.9V
-	RSTDET_LVL_2_2V		=		(CSP_REGISTER_T)(0X01ul<<12),			//2.2V
-    RSTDET_LVL_2_5V		=		(CSP_REGISTER_T)(0X02ul<<12),			//2.5V
-	RSTDET_LVL_2_8V		=		(CSP_REGISTER_T)(0X03ul<<12),			//2.8V
-	RSTDET_LVL_3_1V		=		(CSP_REGISTER_T)(0X04ul<<12),			//3.1V
-	RSTDET_LVL_3_4V		=		(CSP_REGISTER_T)(0X05ul<<12),			//3.4V
-	RSTDET_LVL_3_7V		=		(CSP_REGISTER_T)(0X06ul<<12),			//3.7V
-	RSTDET_LVL_4_0V		=		(CSP_REGISTER_T)(0X07ul<<12)			//4.0V
-}RSTDET_LVL_X_TypeDef;
+#define EM_CM_EN 	(0x01ul<<18)
+#define EM_CMRST 	(0x01ul<<19)
 
-/**
-  * @brief  Detection voltage level to trigger the LVD interrupt
-  */
+/******************************************************************************
+*CKST : clock Status Registerister
+******************************************************************************/
+#define SYSCLK_STABLE		(0x01ul << 8)
+
+
+/******************************************************************************
+*SCLKCR : system clock Control Register
+******************************************************************************/
+#define SCLKCR_KEY_POS	(16)
+#define SCLKCR_KEY 		(0xD22Dul<<SCLKCR_KEY_POS)
+
+#define SCLK_SEL_POS	 8
 typedef enum
 {
-	ENABLE_LVD_INT		=		(CSP_REGISTER_T)(0X01ul<<11),			//ENABLE LVD INT
-	DISABLE_LVD_INT		=		(CSP_REGISTER_T)(0X00ul<<11)			//DISABLE LVD INT
-}X_LVD_INT_TypeDef;
+	SYSCLK_IMOSC	=		0x0ul<<SCLK_SEL_POS,				
+	SYSCLK_EMOSC	=		0x1ul<<SCLK_SEL_POS,				
+	SYSCLK_PLL		=		0x3ul<<SCLK_SEL_POS,				  
+	SYSCLK_ISOSC 	=		0x4ul<<SCLK_SEL_POS				
+}sycclk_sel_e;
+
+#define HCLK_DIV_POS	 8
+typedef enum
+{
+	HCLK_DIV_1   =		(0x1ul<<HCLK_DIV_POS),				
+	HCLK_DIV_2   =		(0x2ul<<HCLK_DIV_POS),
+	HCLK_DIV_3   =		(0x3ul<<HCLK_DIV_POS),
+	HCLK_DIV_4   =		(0x4ul<<HCLK_DIV_POS),
+	HCLK_DIV_5   =		(0x5ul<<HCLK_DIV_POS),
+	HCLK_DIV_6   =		(0x6ul<<HCLK_DIV_POS),
+	HCLK_DIV_7   =		(0x7ul<<HCLK_DIV_POS),
+	HCLK_DIV_8   =		(0x8ul<<HCLK_DIV_POS),
+	HCLK_DIV_12  =		(0x9ul<<HCLK_DIV_POS),
+	HCLK_DIV_16  =		(0xAul<<HCLK_DIV_POS),
+	HCLK_DIV_24  =		(0xBul<<HCLK_DIV_POS),
+	HCLK_DIV_32  =		(0xCul<<HCLK_DIV_POS),
+	HCLK_DIV_64  =		(0xDul<<HCLK_DIV_POS),
+	HCLK_DIV_128 =		(0xEul<<HCLK_DIV_POS),
+	HCLK_DIV_256 =		(0xFul<<HCLK_DIV_POS)
+}hclk_div_e;
+
+typedef enum
+{
+	F_0_8MHz = 0,
+	F_8_16MHz,
+	F_16_24MHz,
+	F_24_48MHz
+}sysclk_freq_e;
+
+/******************************************************************************
+*PCLKCR : peripheral clock Control Register
+******************************************************************************/
+#define PCLKCR_KEY_POS	(16)
+#define PCLKCR_KEY 	 	(0xC33Cul<<PCLKCR_KEY_POS)
+#define PCLK_DIV_POS	 8
+typedef enum
+{
+	PCLK_DIV_1   =		(0x00ul<<PCLK_DIV_POS),				
+	PCLK_DIV_2   =		(0x01ul<<PCLK_DIV_POS),
+	PCLK_DIV_4   =		(0x02ul<<PCLK_DIV_POS),
+	PCLK_DIV_8   =		(0x04ul<<PCLK_DIV_POS),
+	PCLK_DIV_16  =		(0x08ul<<PCLK_DIV_POS)
+}pclk_div_e;
+
+
+/******************************************************************************
+*OSTR : EMOSC Control Register
+******************************************************************************/
+#define EM_FLTSEL_POS	26
+#define EM_FLTSEL_MSK	(0x3<<EM_FLTSEL_POS)
+typedef enum
+{
+	EM_FLSEL_5NS	=	(0x0ul),
+	EM_FLSEL_10NS	=	(0x1ul),
+	EM_FLSEL_15NS	=	(0x2ul),
+	EM_FLSEL_20NS	=	(0x3ul)
+}em_fltsel_e;
+
+#define EM_FLT_EN_POS	25
+#define EM_GMCTL_POS	11
+#define EM_GMCTL_MSK	(0x1f <<EM_GMCTL_POS)
+#define EM_LFSEL_POS	10
+#define EM_LFSEL_MSK	(0x1 << EM_LFSEL_POS)
+typedef enum
+{
+	EM_HIGHF	=	0,
+	EM_LOWF		=	1
+}em_lfsel_e;
+#define EM_CNT_POS	0
+#define EM_CNT_MSK	(0x3ff << EM_CNT_POS)
+
+/******************************************************************************
+*PLLCR : PLL Control Register
+******************************************************************************/
+#define PLL_SRC_POS		0x0
+#define PLL_SRC_MSL		(0x3<<PLL_SRC_POS)
+typedef enum
+{
+	PLL_SRC_IMOSC = 1,
+	PLL_SRC_EMOSC = 3,
+}pll_src_e;
+
+#define PLL_UNLOCK_RST_EN_POS 15
+#define PLL_UNLOCK_RST_EN_MSK (0x1<<15)
+
+#define PLL_TYPE_POS	16
+#define PLL_TYPE_MSK	(0x1 << PLL_TYPE_MSK)
+typedef enum
+{
+	PLL_TYPE_ANA = 0,
+	PLL_TYPE_DIG = 1,
+}pll_type_e;
+
+
+/******************************************************************************
+*WKCR : Wakeup Source Control Register
+******************************************************************************/
+typedef enum {
+	WKUP_IWDT = 8,
+	WKUP_RTC,
+	WKUP_LPT,
+	WKUP_LVD
+}wakeup_src_e;
+
+
+
+/******************************************************************************
+* IECR : Interrupt Enable
+* IEDR : Interrupt Disable
+* IAR  : Interrupt Active 
+* ICR  : Interrupt Clear
+* IMER : Interrupt Mask Enable Status
+* IMDR : Interrupt Mask Disable Status
+* RISR : Raw Interrupt Status
+* MISR : Masked Interrupt Status
+******************************************************************************/
+typedef enum{
+	ISOSC_INT 		= (0x1<<0),
+	IMOSC_INT 		= (0x1<<1),
+	EMOSC_INT 		= (0x1<<3),
+	PLL_INT	    	= (0x1<<5),
+	SYSTICK_INT 	= (0x1<<7),
+	IWDT_INT 		= (0x1<<8),
+	LVD_INT 		= (0x1<<11),
+	OPL_ERR_INT 	= (0x1<<14),
+	PLL_UNLOCK_INT 	= (0x1<<15),
+	EMFAIL_INT 		= (0x1<<18),
+	EV0TRG_INT 		= (0x1<<19),
+	EV1TRG_INT 		= (0x1<<20),
+	EV2TRG_INT 		= (0x1<<21),
+	EV3TRG_INT 		= (0x1<<22),
+	CMD_INT_ERR		= (0x1<<29),
+	SYSCON_INT_ALL  = ISOSC_INT | IMOSC_INT | EMOSC_INT | PLL_INT | SYSTICK_INT | IWDT_INT | LVD_INT | OPL_ERR_INT | PLL_UNLOCK_INT | EMFAIL_INT | EV0TRG_INT | EV1TRG_INT |EV2TRG_INT |EV3TRG_INT |CMD_INT_ERR,
+}syscon_int_e;
+
+
+/******************************************************************************
+* Exernal Interrupt Related: 
+* EXIRT: Rising Edge Enable/Disable
+* EXIFT: Falling Edge Enable/Disable
+* EXIER: External Interrupt Enable
+* EXIDR: External Interrupt Disable
+* EXIMR: External Interrupt Enable Status
+******************************************************************************/
+#define SYSCON_EXI_POS(n)	(n)
+#define SYSCON_EXI_MSK(n)	(0x1 << SYSCON_EXI_POS(n))
+typedef enum
+{
+	EXI_EDGE_R	= 0,
+	EXI_EDGE_F	= 1,	
+	EXI_EDGE_BOTH	= 2
+}exi_trigger_e;
+
+typedef enum
+{
+	EXI_IGRP0		= (0),						
+	EXI_IGRP1		= (1),
+	EXI_IGRP2		= (2),
+	EXI_IGRP3		= (3),
+	EXI_IGRP4		= (4),
+	EXI_IGRP5		= (5),
+	EXI_IGRP6		= (6),
+	EXI_IGRP7		= (7),
+	EXI_IGRP8		= (8),
+	EXI_IGRP9		= (9),
+	EXI_IGRP10		= (10),
+	EXI_IGRP11		= (11),
+	EXI_IGRP12		= (12),
+	EXI_IGRP13		= (13),
+	EXI_IGRP14		= (14),
+	EXI_IGRP15		= (15),
+	EXI_IGRP16		= (16),
+	EXI_IGRP17		= (17),
+	EXI_IGRP18		= (18),
+	EXI_IGRP19		= (19)
+}exi_igrp_e;
+
+
+/******************************************************************************
+*RSR : Reset Source Register
+******************************************************************************/
+#define RSR_MSK		(0xffff)
+typedef enum{
+	POR_RST			= (0x1ul <<0),
+	LVR_RST			= (0x1ul <<1),
+	EXT_RST			= (0x1ul <<2),
+	IWDT_RST		= (0x1ul <<4),
+	EMCM_RST 		= (0x1ul <<6),
+	CPU_RST			= (0x1ul <<7),
+	SW_RST			= (0x1ul <<8),
+	CPUFAULT_RST	= (0x1ul <<9),
+	PLLUNLOCKRST	= (0x1ul <<10),
+	ALL_RST 		= 0xFFFF
+}rst_st_e;
+
+
+/******************************************************************************
+*IWDCR : IWDT Control Register
+******************************************************************************/
+#define IWDCR_KEY_POS 	(16)
+#define IWDCR_KEY 		(0x8778ul << IWDCR_KEY_POS)
+
+#define IWDT_INTV_POS	(2)
+#define IWDT_INTV_MSK 	(0x3f << IWDT_INTV_POS)
+
+typedef enum{
+	IWDT_INTW_7_8 = 0,
+	IWDT_INTW_6_8,
+	IWDT_INTW_5_8, 
+	IWDT_INTW_4_8, 
+	IWDT_INTW_3_8, 
+	IWDT_INTW_2_8, 
+	IWDT_INTW_1_8
+}iwdt_intv_e;
+
+#define IWDT_OVT_POS	(8)
+#define IWDT_OVT_MSK 	(0x7 << IWDT_OVT_POS)
+typedef enum{
+	IWDT_TIME_0128 = 0x0,
+	IWDT_TIME_0256,
+	IWDT_TIME_0512,
+	IWDT_TIME_1000,
+	IWDT_TIME_2000,
+	IWDT_TIME_3100,
+	IWDT_TIME_4100,
+	IWDT_TIME_8200
+}iwdt_ovt_e;
+
+#define IWDT_DBGEN_POS (11)
+#define IWDT_DBGEN_MSK (0x1 << IWDT_DBGEN_POS)
+#define IWDT_BUSY_POS (12)
+#define IWDT_BUSY	(0x1 << IWDT_BUSY_POS)
+
+
+/******************************************************************************
+*IWDCNT : IWDT Count Register
+******************************************************************************/
+#define IWDT_CLR_POS		(24)
+#define IWDT_CLR_BUSY		(0x1<<IWDT_CLR_POS)
+#define IWDT_CLR			(0x5a)
+#define	CLR_IWDT			(IWDT_CLR<<IWDT_CLR_POS)
+#define IWDT_CNT_MSK		(0xfff)
+
+/******************************************************************************
+*IWDEDR: IWDT enable Control Register
+******************************************************************************/
+#define IWDEDR_KEY_POS		(16)
+#define IWDEDR_KEY			(0x7887 << IWDEDR_KEY_POS)
+#define IWDT_EN_POS			(0)
+#define DIS_IWDT			(0x55aa << IWDT_EN_POS)
+#define EN_IWDT				(0x0 << IWDT_EN_POS)
+
+/******************************************************************************
+*LVDCR: LVD Control Register
+******************************************************************************/
+#define LVD_KEY 			(0xB44Bul<<16)
+#define LVDEN_MSK 			(0xf)
+#define LVD_DIS				(0xa)
+#define LVD_EN 				(0x0ul<<0)
+#define LVDINT_POL_POS 		(0x6)
+#define LVDINT_POL_MSK 		(0x3 << LVDINT_POL_POS)
+#define LVDINT_DET_POL(r) 	((r&0x3) << LVDINT_POL_POS)
+#define LVD_FLAG_POS		(5)
+#define LVD_FLAG    		(0x1 << LVD_FLAG_POS)
+
+typedef enum {
+	LVDINT_F = 1,
+	LVDINT_R,
+	LVDINT_BOTH	
+}lvdint_pol_e;
+
+#define LVD_LV_POS 	(0x8)
+#define LVD_LV_MSK  (0x7 << LVD_LV_POS)
+typedef enum{
+	LVD21 = 0,
+	LVD24,
+	LVD27,
+	LVD30,
+	LVD33,
+	LVD36,
+	LVD39,
+	LVDIN10	
+}lvd_level_e;
+
+#define LVR_SRT_POS	(4)
+#define LVR_SRT_MSK	(0x01ul << LVR_SRT_POS)
+
+#define LVR_LV_POS	(12)
+#define LVR_LV_MSK  (0x7 << LVR_LV_POS)
+
+typedef enum {
+	LVR19 = 0,
+	LVR22,
+	LVR25,
+	LVR28,
+	LVR31,
+	LVR34,
+	LVR37,
+	LVR40
+}lvr_level_e;
+
+
+
+
 
 /**
   * @brief  EXI PIN
   */
 typedef enum
 {
-	EXI_PIN0		=		(CSP_REGISTER_T)(0X01ul),						
-	EXI_PIN1		=		(CSP_REGISTER_T)(0X01ul<<1),
-	EXI_PIN2		=		(CSP_REGISTER_T)(0X01ul<<2),
-	EXI_PIN3		=		(CSP_REGISTER_T)(0X01ul<<3),
-	EXI_PIN4		=		(CSP_REGISTER_T)(0X01ul<<4),
-	EXI_PIN5		=		(CSP_REGISTER_T)(0X01ul<<5),
-	EXI_PIN6		=		(CSP_REGISTER_T)(0X01ul<<6),
-	EXI_PIN7		=		(CSP_REGISTER_T)(0X01ul<<7),
-	EXI_PIN8		=		(CSP_REGISTER_T)(0X01ul<<8),
-	EXI_PIN9		=		(CSP_REGISTER_T)(0X01ul<<9),
-	EXI_PIN10		=		(CSP_REGISTER_T)(0X01ul<<10),
-	EXI_PIN11		=		(CSP_REGISTER_T)(0X01ul<<11),
-	EXI_PIN12		=		(CSP_REGISTER_T)(0X01ul<<12),
-	EXI_PIN13		=		(CSP_REGISTER_T)(0X01ul<<13),
-	EXI_PIN14		=		(CSP_REGISTER_T)(0X01ul<<14),
-	EXI_PIN15		=		(CSP_REGISTER_T)(0X01ul<<15),
-	EXI_PIN16		=		(CSP_REGISTER_T)(0X01ul<<16),
-	EXI_PIN17		=		(CSP_REGISTER_T)(0X01ul<<17),
-	EXI_PIN18		=		(CSP_REGISTER_T)(0X01ul<<18),
-	EXI_PIN19		=		(CSP_REGISTER_T)(0X01ul<<19),
+	EXI_PIN0		=		(0x01ul),						
+	EXI_PIN1		=		(0x01ul<<1),
+	EXI_PIN2		=		(0x01ul<<2),
+	EXI_PIN3		=		(0x01ul<<3),
+	EXI_PIN4		=		(0x01ul<<4),
+	EXI_PIN5		=		(0x01ul<<5),
+	EXI_PIN6		=		(0x01ul<<6),
+	EXI_PIN7		=		(0x01ul<<7),
+	EXI_PIN8		=		(0x01ul<<8),
+	EXI_PIN9		=		(0x01ul<<9),
+	EXI_PIN10		=		(0x01ul<<10),
+	EXI_PIN11		=		(0x01ul<<11),
+	EXI_PIN12		=		(0x01ul<<12),
+	EXI_PIN13		=		(0x01ul<<13),
+	EXI_PIN14		=		(0x01ul<<14),
+	EXI_PIN15		=		(0x01ul<<15),
+	EXI_PIN16		=		(0x01ul<<16),
+	EXI_PIN17		=		(0x01ul<<17),
+	EXI_PIN18		=		(0x01ul<<18),
+	EXI_PIN19		=		(0x01ul<<19),
 }SYSCON_EXIPIN_TypeDef;
 
-/**
-  * @brief  EXT register
-  */
-typedef enum
-{
-	_EXIRT		=		0,
-	_EXIFT		=		1,	
-}EXI_tringer_mode_TypeDef;
 
 
-/**
-  * @brief  SYSON IWDT TIME SET
-  */
-typedef enum
-{
-	IWDT_TIME_125MS		=	(CSP_REGISTER_T)(0x00ul<<8),						//IWDT_TIME      0x00fff			
-	IWDT_TIME_250MS		=	(CSP_REGISTER_T)(0x01ul<<8),						//IWDT_TIME      0x01fff
-	IWDT_TIME_500MS		=	(CSP_REGISTER_T)(0x02ul<<8),						//IWDT_TIME      0x03fff	
-	IWDT_TIME_1S		=	(CSP_REGISTER_T)(0x03ul<<8),						//IWDT_TIME      0x07fff
-	IWDT_TIME_2S		=	(CSP_REGISTER_T)(0x04ul<<8),						//IWDT_TIME      0x0ffff			//2M ISOSC  2sec
-	IWDT_TIME_3S		=	(CSP_REGISTER_T)(0x05ul<<8),						//IWDT_TIME      0x16fff
-	IWDT_TIME_4S		=	(CSP_REGISTER_T)(0x06ul<<8),						//IWDT_TIME      0x1ffff
-	IWDT_TIME_8S		=	(CSP_REGISTER_T)(0x07ul<<8)							//IWDT_TIME      0x3ffff
-}IWDT_TIME_TypeDef;  
-
-/**
-  * @brief  SYSON IWDT TIME DIV SET
-  */
-typedef enum
-{
-	IWDT_INTW_DIV_1		=	(0x00ul<<2),						//1/8 of IWDT_TIME
-	IWDT_INTW_DIV_2		=	(0x01ul<<2),						//2/8 of IWDT_TIME	
-	IWDT_INTW_DIV_3		=	(0x02ul<<2),						//3/8 of IWDT_TIME
-	IWDT_INTW_DIV_4		=	(0x03ul<<2),						//4/8 of IWDT_TIME
-	IWDT_INTW_DIV_5		=	(0x04ul<<2),						//5/8 of IWDT_TIME
-	IWDT_INTW_DIV_6		=	(0x05ul<<2),						//6/8 of IWDT_TIME
-	IWDT_INTW_DIV_7		=	(0x06ul<<2)							//7/8 of IWDT_TIME
-}IWDT_TIMEDIV_TypeDef;
-
-/**
-  * @brief  IMOSC SELECTE SET
-  */
-typedef enum
-{
-	IMOSC_SELECTE_5556K	=	(0x00ul<<0),
-	IMOSC_SELECTE_4194K	=	(0x01ul<<0),
-	IMOSC_SELECTE_2097K	=	(0x02ul<<0),
-	IMOSC_SELECTE_131K	=	(0x03ul<<0)
-}IMOSC_SELECTE_TypeDef;
-
-/**
-  * @brief  HFOSC SELECTE SET
-  */
-typedef enum
-{
-	HFOSC_SELECTE_48M	=	(0x0ul<<4),
-	HFOSC_SELECTE_24M	=	(0x1ul<<4),
-	HFOSC_SELECTE_12M	=	(0x2ul<<4),
-	HFOSC_SELECTE_6M	=	(0x3ul<<4)
-}HFOSC_SELECTE_TypeDef;
-
-/**
-  * @brief  EM Filter set
-  */
-typedef enum
-{
-	EM_FLSEL_5ns	=	(0x0ul<<26),
-	EM_FLSEL_10ns	=	(0x1ul<<26),
-	EM_FLSEL_15ns	=	(0x2ul<<26),
-	EM_FLSEL_20ns	=	(0x3ul<<26)
-}EM_Filter_TypeDef;
-/**
-  * @brief  EM Filter CMD
-  */
-typedef enum
-{
-	EM_FLEN_DIS	=	(0x0ul<<25),
-	EM_FLEN_EN	=	(0x1ul<<25)
-}EM_Filter_CMD_TypeDef;
-/**
-  * @brief  EM LFSEL BIT
-  */
-typedef enum
-{
-	EM_LFSEL_DIS	=	(0x0ul<<10),
-	EM_LFSEL_EN		=	(0x1ul<<10)
-}EM_LFSEL_TypeDef;
-/**
-  * @brief  EM Systemclk data
-  */
-typedef enum
-{
-	EMOSC_24M		=	0,
-	EMOSC_16M		=	1,
-	EMOSC_12M		=	2,
-	EMOSC_8M		=	3,
-	EMOSC_4M		=	4,
-	EMOSC_36K		=	5,
-	IMOSC			=	6,
-	ISOSC			=	7,
-	HFOSC_48M		=	8,
-	HFOSC_24M		=	9,
-	HFOSC_12M		=	10,
-	HFOSC_6M		=	11
-}SystemClk_data_TypeDef;
-typedef enum
-{
-	CLO_PA02		=	0,						//PA0.0 as clo
-	CLO_PA08		=	1,						//PA0.8 as clo	
-}CLO_IO_TypeDef;
 
 typedef enum
 {
-	INTDET_POL_fall				=	(1<<6),						//fall Trigger
-	INTDET_POL_X_rise			=	(2<<6),						//rise Trigger
-	INTDET_POL_X_riseORfall		=	(3<<6),						//fall or rise Trigger
-}INTDET_POL_X_TypeDef;
-
-typedef enum
-{
-	//IOMAP0
-	PIN_I2C_SCL				=	0X00,						//
-	PIN_I2C_SDA				=	0X01,						//
-	PIN_GPT_CHA				=	0X02,						//
-	PIN_GPT_CHB				=	0X03,						//
-	PIN_SPI_MOSI			=	0X04,						//
-	PIN_SPI_MISO			=	0X05,						//
-	PIN_SPI_SCK				=	0X06,						//
-	PIN_SPI_NSS				=	0X07,						//
 	//IOMAP1
-	PIN_UART0_RX			=	0X10,						//
-	PIN_UART0_TX			=	0X11,						//
-	PIN_EPT_CHAX			=	0X12,						//
-	PIN_EPT_CHBX			=	0X13,						//
-	PIN_EPT_CHCX			=	0X14,						//
-	PIN_EPT_CHAY			=	0X15,						//
-	PIN_EPT_CHBY			=	0X16,						//
-	PIN_EPT_CHCY			=	0X17,						//
+	PIN_DISABLE			=	0x10,						//
+	PIN_EPT_CHD			=	0x11,						//
+	PIN_EPT_CHAX		=	0x12,						//
+	PIN_EPT_CHBX		=	0x13,						//
+	PIN_EPT_CHCX		=	0x14,						//
+	PIN_EPT_CHAY		=	0x15,						//
+	PIN_EPT_CHBY		=	0x16,						//
+	PIN_EPT_CHCY		=	0x17,						//
 }IOMAP_DIR_TypeDef;
 
-/**
-  * @brief  CLOMX Systemclk data
-  */
+
+
+/******************************************************************************
+*OPT1: clo/osc freq/Flash LP mode/EXI filter/EM clock monitoring config
+******************************************************************************/
+#define CLO_SRC_POS (8)
+#define CLO_SRC_MSK (0xful << CLO_SRC_POS)
 typedef enum
 {
 	CLO_ISCLK		=	0,
 	CLO_IMCLK		=	1,
 	CLO_EMCLK		=	3,
-	CLO_HFCLK		=	4,
-	CLO_RTCCLK		=	6,
+	CLO_PLLCLK		=	4,
 	CLO_PCLK		=	7,
 	CLO_HCLK		=	8,
 	CLO_IWDTCLK		=	9,
-	CLO_SYSCLK		=	0X0D,
-}SystemClk_CLOMX_TypeDef;
+	CLO_SYSCLK		=	0x0D,
+}clo_src_e;
 
-/**
-  * @brief  CLOMX Systemclk data
-  */
+#define CLO_DIV_MSK 	(0x7ul << CLO_DIV_POS)
+#define CLO_DIV_POS 	(12)
 typedef enum
 {
-	CLO_DIV0			=	1,
 	CLO_DIV4			=	0,
+	CLO_DIV0			=	1,
 	CLO_DIV2			=	2,
 	CLO_DIV8			=	4,
 	CLO_DIV16		    =	5,
-}SystemClk_CLODIV_TypeDef;
+}clo_div_e;
 
-/** @addtogroup SYSCON_Exported_functions
-  * @{
-  */	
-extern void SYSCON_RST_VALUE(void); 
-extern void SYSCON_General_CMD(FunctionalStatus NewState, SYSCON_General_CMD_TypeDef ENDIS_X );
-extern void EMOSC_OSTR_Config(U16_T EM_CNT, U8_T EM_GM,EM_LFSEL_TypeDef EM_LFSEL_X, EM_Filter_CMD_TypeDef EM_FLEN_X, EM_Filter_TypeDef EM_FLSEL_X);
-extern void SystemCLK_HCLKDIV_PCLKDIV_Config(SystemCLK_TypeDef SYSCLK_X , SystemCLK_Div_TypeDef HCLK_DIV_X , PCLK_Div_TypeDef PCLK_DIV_X , SystemClk_data_TypeDef SystemClk_data_x );
-extern void SYSCON_WDT_CMD(FunctionalStatus NewState);
-extern void SYSCON_IWDCNT_Reload(void);
-extern void SYSCON_IWDCNT_Config(IWDT_TIME_TypeDef IWDT_TIME_X , IWDT_TIMEDIV_TypeDef IWDT_INTW_DIV_X );
-extern void SYSCON_LVD_Config(X_LVDEN_TypeDef X_LVDEN , INTDET_LVL_X_TypeDef INTDET_LVL_X , RSTDET_LVL_X_TypeDef RSTDET_LVL_X , X_LVD_INT_TypeDef X_LVD_INT , INTDET_POL_X_TypeDef INTDET_POL_X);
-extern void EXTI_trigger_CMD(FunctionalStatus NewState , SYSCON_EXIPIN_TypeDef  EXIPIN , EXI_tringer_mode_TypeDef EXI_tringer_mode);
-extern void EXTI_interrupt_CMD(FunctionalStatus NewState , SYSCON_EXIPIN_TypeDef  EXIPIN);
-extern void SYSCON_CLO_CONFIG(CLO_IO_TypeDef clo_io);
-extern U32_T SYSCON_Read_CINF0(void);
-extern U32_T SYSCON_Read_CINF1(void);
-extern void SYSCON_INT_Priority(void);
-extern void EXI0_Int_Enable(void);
-extern void EXI0_Int_Disable(void);
-extern void EXI1_Int_Enable(void);
-extern void EXI1_Int_Disable(void);
-extern void EXI2_Int_Enable(void);
-extern void EXI2_Int_Disable(void);
-extern void EXI3_Int_Enable(void);
-extern void EXI3_Int_Disable(void);
-extern void EXI4_Int_Enable(void);
-extern void EXI4_Int_Disable(void);
-extern void SYSCON_Int_Enable(void);
-extern void SYSCON_Int_Disable(void);
-extern void PCLK_goto_idle_mode(void);
-extern void PCLK_goto_deepsleep_mode(void);
-extern void LVD_Int_Enable(void);
-extern void LVD_Int_Disable(void);
-extern void IWDT_Int_Enable(void);
-extern void IWDT_Int_Disable(void);
-extern void EXI0_WakeUp_Enable(void);
-extern void EXI0_WakeUp_Disable(void);
-extern void EXI1_WakeUp_Enable(void);
-extern void EXI1_WakeUp_Disable(void);
-extern void EXI2_WakeUp_Enable(void);
-extern void EXI2_WakeUp_Disable(void);
-extern void EXI3_WakeUp_Enable(void);
-extern void EXI3_WakeUp_Disable(void);
-extern void EXI4_WakeUp_Enable(void);
-extern void EXI4_WakeUp_Disable(void);
-extern void SYSCON_WakeUp_Enable(void);
-extern void SYSCON_WakeUp_Disable(void);
-extern void GPIO_EXTI_interrupt(CSP_GPIO_T * GPIOX,U32_T GPIO_IECR_VALUE);   
-extern void SYSCON_Software_Reset(void);   
-extern void SYSCON_HFOSC_SELECTE(HFOSC_SELECTE_TypeDef HFOSC_SELECTE_X);
-extern void SYSCON_IMOSC_SELECTE(IMOSC_SELECTE_TypeDef IMOSC_SELECTE_X);
-extern void SystemCLK_Clear(void);
-extern void GPIO_Remap(CSP_GPIO_T *GPIOx,uint8_t bit,IOMAP_DIR_TypeDef iomap_data);
-extern void SYSCON_CLO_SRC_SET(SystemClk_CLOMX_TypeDef clomxr,SystemClk_CLODIV_TypeDef clodivr);
-extern void Set_INT_Priority(U8_T int_name,U8_T int_level);
-#endif   /**< apt32f102_syscon_H */
+/******************************************************************************
+*IOMAP1: IOMAP1 configuration
+******************************************************************************/
+#define IOMAP_MSK_POS(n)	(n*4)
+#define IOMAP_MSK(n)		(0xf << (IOMAP_MSK_POS(n)))
+
+
+/******************************************************************************
+*UREGx: User Register Operation, only reset after POR
+******************************************************************************/
+typedef enum{
+	USER_REG0			= 0,
+	USER_REG1,
+	USER_REG2,
+	USER_REG3,
+}user_reg_e;
+
+/******************************************************************************
+*DBGCR: Debug Port Control Register, only reset by power on reset
+******************************************************************************/
+#define SWD_LOCK			0
+#define SWD_UNLOCK			0x5a
+
+
+
+
+
+
+
+/***********************************************************************
+ 
+ * SYSCON related Function Declaration
+ * 
+ * *********************************************************************/
+
+/** \brief Deinitializes SYSCON registers to their reset status
+ * 
+ *  \param[in] none
+ *  \return none
+ */   
+void syscon_deinit(void);
+
+ 
+/** \brief EMOSC configuration: workmode/filter/gain/stablization counter
+ * 
+ *  \param[in] hwEMCnt: 0~0x3FF, the bigger the num, the slower the stablization time
+ *  \param[in] byEMGain: 0~0x1F, the faster the Femosc, the larger the gain
+ *  \param[in] eEmWkMd: EM_HIGHF/EM_LOWF \ref em_lfsel_e
+ *  \param[in] eEMFltEnable: ENABLE/DISABLE \ref functional_status_e
+ *  \param[in] eEMFlt: EM_FLSEL_5NS~EM_FLSEL_20NS \ref em_fltsel_e
+ *  \return none
+ */ 
+void emosc_ostr_config(U16_T hwEmCnt, U8_T byEmGain ,em_lfsel_e eEmWkMd, functional_status_e eEmFltEnable, em_fltsel_e eEMFlt);
+
+
+/** \brief Enable/Disable OSC
+ * 
+ *  \param[in] eNewState: ENABLE/DISABLE \ref functional_status_e
+ *  \param[in] eOscEnable:ENDIS_ISOSC/ENDIS_IMOSC/ENDIS_EMOSC/ENDIS_PLL \ref osc_enable_e
+ *  \return none
+ */
+void syscon_general_cmd(functional_status_e eNewState, osc_enable_e eOscEnable );
+
+
+
+/** \brief PLL configuration
+ *  \param[in] eType: PLL_TYPE_ANA/PLL_TYPE_DIG \ref pll_type_e
+ *  \param[in] eSrc: PLL_SRC_IMOSC/PLL_SRC_EMOSC \ref pll_src_e
+ *  \param[in] eOscEnable:ENDIS_ISOSC/ENDIS_IMOSC/ENDIS_EMOSC \ref osc_enable_e
+ *  \return none
+ */
+void pll_config(pll_type_e eType, pll_src_e eSrc, functional_status_e eUnlockRst);
+
+
+/** \brief PLL configuration
+ *  WARNING: This function can only be safely called when changing hclk frequence from low to high.
+ * 			 Call systemclk_clear() first when change hclk frequence from high to low
+ *  \param[in] eSysclk: select system clock srouce \ref sycclk_sel_e
+ *  \param[in] eHclkDiv: select HCLK DIV. HCLK = systemclock/eHclkDiv \ref hclk_div_e
+ *  \param[in] ePclkDiv: select PCLK DIV. PCLK = HCLK/eHclkDiv \ref pclk_div_e
+ *  \param[in] eFreq:  HCLK clock frequence range \ref sysclk_freq_e
+ *  \return none
+ */
+void sysclk_hclk_pclk_config(sycclk_sel_e eSysclk , hclk_div_e eHclkDiv , pclk_div_e ePclkDiv , sysclk_freq_e eFreq);
+
+
+/** \brief Set sysclk to a lower frequence: HCLK = IMOSC/3 = 8MHz
+ * 	 Call this function first when change hclk frequence from high to low
+ *  \return none
+ */
+void systemclk_clear(void);
+
+
+
+
+/** \brief IWDT enable and disable 
+ *  \param[in] eNewState: ENABLE,DISABLE
+ *  \return none
+ */
+void syscon_iwdt_cmd(functional_status_e eNewState);
+
+
+
+/** \brief IWDT reload， feed IWDT
+ *  \param[in]none
+ *  \return none
+ */
+void syscon_iwdtcnt_reload(void);
+
+
+
+/** \brief config IWDT interval time and overtime time 
+ *  \param[in] eOvTime: overtime(reset) time \ref iwdt_ovt_e
+ * 	\param[in] eIntvTime: interval(interrupt) time \ref iwdt_intv_e
+ *  \return none
+ */
+
+void syscon_iwdt_Config(iwdt_ovt_e eOvTime , iwdt_intv_e eIntvTime );
+
+
+/** \brief LVR confiuration
+ *  \param[in] eLvdEnable: LVD IP enable/disable \ref functional_status_e
+ * 	\param[in] eLvd: LVD interrupt level \ref lvd_level_e
+ *  \param[in] eLvr: LVR reset level  \ref 	lvr_level_e
+ *  \param[in] ePol: interrupt polarity \ref lvdint_pol_e
+ *  \return none
+ */
+void SYSCON_LVD_Config(functional_status_e eLvdEnable , lvd_level_e eLvd , lvr_level_e eLvr, lvdint_pol_e ePol);
+
+
+
+/** \brief LVD interrupt enable
+ *  \param[in] none
+ *  \return none
+ */
+
+void lvd_int_enable(void);
+
+
+/** \brief LVD interrupt disable
+ *  \param[in] none
+ *  \return none
+ */
+void lvd_int_disable(void);
+
+
+/** \brief IWDT interrupt enable
+ *  \param[in] none
+ *  \return none
+ */
+void iwdt_int_enable(void);
+
+
+/** \brief IWDT interrupt disable
+ *  \param[in] none
+ *  \return none
+ */
+void iwdt_int_disable(void);
+
+
+/** \brief read reset status
+ *  \param[in] none
+ *  \return reset source
+ */
+U32_T read_reset_status(void);
+
+
+
+/** \brief external interrupt configuration
+ *  \param[in] eNewState: ENABLE/DISABLE
+ *  \param[in] byExiGrpNum: EXI group number \ref exi_igrp_e
+ *  \param[in] eMode: falling/rising/both falling and risiing \ref exi_trigger_e
+ *  \return none
+ */
+void exi_trigger_cmd(functional_status_e eNewState , exi_igrp_e eExiGrpNum , exi_trigger_e eMode);
+
+
+
+/** \brief external interrupt enable, disable control
+ *  \param[in] eNewState: ENABLE/DISABLE
+ *  \param[in] byExiGrpNum: EXI group number \ref exi_igrp_e
+ *  \return none
+ */
+
+void exi_interrupt_cmd(functional_status_e eNewState , exi_igrp_e eExiGrpNum);
+
+
+
+
+/** \brief chip enter idle mode: CPU clock shuts down
+ *  \param[in] none
+ *  \return none
+ */
+void pm_goto_idle_mode(void); 
+
+/** \brief chip enter deepsleep(stop) mode: CPU clock shuts down && PCLK shuts down exception for some specific wakeup source IPs
+ *  \param[in] none
+ *  \return none
+ */
+void pm_goto_deepsleep_mode(void);
+
+/**
+  \brief     Config the wakeup source
+   * 		 EXI always exists as wakeup sources, no need to config here
+  \param[in] eNewState: ENABLE/DISABLE
+  \param[in] eWkupSrc: a specific wakeup source
+  \return    none
+*/
+void pm_set_wakeup_src(functional_status_e eNewState, wakeup_src_e eWkupSrc);
+
+
+/**
+  \brief     CLO configuration
+  \param[in] eSrc: clock source of CLO \ref clo_src_e
+  \param[in] eDiv: CLO output div \ref clo_div_e
+  \return    none
+*/
+void syscon_clo_src_set(clo_src_e eSrc,clo_div_e eDiv);
+
+
+
+/**
+  \brief     system reset
+  \param[in] none
+  \return    none
+*/
+void syscon_software_reset(void);
+
+/**
+  \brief     set all interrupt priority to lowest level)
+  \param[in] none
+  \return    none
+*/
+void SYSCON_INT_Priority(void);
+
+#define SET_INT_PRIORITY csi_vic_set_prio
+
+
+/**
+  \brief     Config IO Remap
+  \param[in] none
+  \return    none
+*/
+void syscon_ioremap(U8_T byIndex, ioremap_e eCfgVal);
+
+
+/** \brief Write User Registers
+ *   UREG0~1 : 32bit
+ *   UREG2~3 ：16bit
+ *  \param[in] eUreg: UREG0~3
+ *  \param[in] wValue: value to be written
+ *  \return error code
+ */
+void syscon_ureg_write(user_reg_e eUreg, U32_T wValue);
+/** \brief Read User Registers
+ * 
+ *  \param[in] eUreg: UREG0~2
+ *  \return value being read out
+ */
+U32_T syscon_ureg_read(user_reg_e eUreg);
+
+/** \brief SWD Lock
+ * 
+ *  \param[in]  none
+ *  \return  none
+ */
+void syscon_swd_lock(void);
+
+/** \brief SWD Unlock
+ * 
+ *  \param[in]  none
+ *  \return  none
+ */
+void syscon_swd_unlock(void);
+
+
+
+
+/******************* (C) COPYRIGHT 2024 APT Chip *****END OF FILE****/
+
+
+#endif   /**< _SYSCON_H */
 
 /******************* (C) COPYRIGHT 2024 APT Chip *****END OF FILE****/

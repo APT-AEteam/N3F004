@@ -201,7 +201,7 @@ extern U16_T BT_CMP_Read(CSP_BT_T *BTx);
 extern U16_T BT_CNT_Read(CSP_BT_T *BTx);
 extern void BT_Trigger_Configure(CSP_BT_T *BTx,BT_TRGSRC_TypeDef BTTRG,BT_TRGOE_TypeDef BTTRGOE);
 extern void BT_Soft_Tigger(CSP_BT_T *BTx);
-extern void BT_ConfigInterrupt_CMD(CSP_BT_T *BTx,FunctionalStatus NewState,BT_IMSCR_TypeDef BT_IMSCR_X);
+extern void BT_ConfigInterrupt_CMD(CSP_BT_T *BTx,functional_status_e NewState,BT_IMSCR_TypeDef BT_IMSCR_X);
 extern void BT0_INT_ENABLE(void);
 extern void BT0_INT_DISABLE(void);
 extern void BT1_INT_ENABLE(void);

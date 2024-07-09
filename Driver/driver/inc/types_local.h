@@ -12,6 +12,24 @@
 #ifndef _TYPES_LOCAL_H
 #define _TYPES_LOCAL_H
 /**************************************************************************/
+#include <stdint.h>
+#include <stdbool.h>
+/**************************************************************************
+IO definitions (access restrictions to peripheral registers)
+**************************************************************************/
+#ifdef __cplusplus
+#define     __I      volatile             /*!< Defines 'read only' permissions */
+#else
+#define     __I      volatile const       /*!< Defines 'read only' permissions */
+#endif
+#define     __O      volatile             /*!< Defines 'write only' permissions */
+#define     __IO     volatile             /*!< Defines 'read / write' permissions */
+
+/* following defines should be used for structure members */
+#define     __IM     volatile const       /*! Defines 'read only' structure member permissions */
+#define     __OM     volatile             /*! Defines 'write only' structure member permissions */
+#define     __IOM    volatile             /*! Defines 'read / write' structure member permissions */
+
 
 /**************************************************************************
 STANDARD DEFINES
@@ -91,9 +109,9 @@ typedef U8_T            B_T;
 #define NULL  0
 #endif
 
-typedef enum {ENABLE = 1, DISABLE = !ENABLE} ClockStatus, FunctionalStatus;
-typedef enum {ERROR = 0, SUCCESS = !ERROR} ErrorStatus;
-typedef enum {RESET = 0, SET = !RESET} FlagStatus, ITStatus;
+typedef enum {ENABLE = 1, DISABLE = !ENABLE} clk_status_e, functional_status_e;
+typedef enum {ERROR = 0, SUCCESS = !ERROR} err_status_e;
+typedef enum {RESET = 0, SET = !RESET} flag_status_e, int_status_e;
 
 /******************************************************************************
 * Peripherals Type

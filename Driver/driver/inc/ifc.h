@@ -14,6 +14,11 @@
 #define _IFC_H
 
 /* Includes ------------------------------------------------------------------*/
+#define PFLASH_PAGESIZE		128	
+#define DFLASH_PAGESIZE		128	
+
+
+
 
 /**
 @brief IFC bits Structure
@@ -414,21 +419,10 @@ typedef enum
 }IFC_INT_TypeDef;
 
 
-extern void ChipErase(void);
-extern void PageErase(IFC_ROMSELETED_TypeDef XROM_PageAd);
-extern void IFC_interrupt_CMD(FunctionalStatus NewState ,IFC_INT_TypeDef IFC_INT_x);
-extern void IFC_Int_Enable(void);
-extern void IFC_Int_Disable(void);
-extern void Page_ProgramData(unsigned int FlashAdd,unsigned int DataSize,volatile unsigned char *BufArry);
-extern void Page_ProgramData_int(unsigned int FlashAdd,unsigned int DataSize,volatile unsigned char *BufArry);
-extern void ReadDataArry(unsigned int RdStartAdd,unsigned int DataLength,volatile unsigned char *DataArryPoint);
-extern void ReadDataArry_U8(unsigned int RdStartAdd,unsigned int DataLength,volatile unsigned char *DataArryPoint);
 extern volatile unsigned int R_INT_FlashAdd;
 extern volatile unsigned char f_Drom_write_complete;
 extern volatile unsigned char f_Drom_writing;
 extern volatile unsigned char ifc_step;
-extern void Page_ProgramData_U32(unsigned int FlashAdd,unsigned int DataSize,volatile U32_T *BufArry);
-extern void ReadDataArry_U32(unsigned int RdStartAdd,unsigned int DataLength,volatile U32_T *DataArryPoint);
-#endif   /**< apt32f102_ifc_H */
+#endif   /**< IFC_H */
 
 /******************* (C) COPYRIGHT 2024 APT Chip *****END OF FILE****/

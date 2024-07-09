@@ -15,80 +15,66 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "types_local.h"
-#include <stdint.h>
+#include "n3f004_top.h"
 
-/**
-@brief GPIOX   bits Structure
-*/   
- typedef volatile struct
- {
-    volatile unsigned int  CONLR;                /**< Control Low  Register                */
-    volatile unsigned int  CONHR;                /**< Control High Register                */
-    volatile unsigned int  WODR;                 /**< Write Output Data Register           */              
-    volatile unsigned int  SODR;                 /**< Set Output Data (bit-wise) Register  */
-    volatile unsigned int  CODR;                 /**< Clear Output Data (bit-wise) Register*/
-    volatile unsigned int  ODSR;                 /**< Output Data Status Register          */
-    volatile unsigned int  PSDR;                 /**< Pin Data Status Register             */              
-    volatile unsigned int  FLTEN;         
-    volatile unsigned int  PUDR;                 /**< IO Pullup_Pulldown Register          */
-    volatile unsigned int  DSCR;                 /**< Output Driving Strength Register     */
-    volatile unsigned int  OMCR;                 /**< Slew-rate, Open-Drain Control        */  
-    volatile unsigned int  IECR;                 /**< EXI enable control                   */  
-	volatile unsigned int  IEER;
-	volatile unsigned int  IEDR;
- } CSP_GPIO_T, *CSP_GPIO_PTR; 
 
- typedef volatile struct
- {
-	volatile unsigned int  IGRPL;                	/**< EXI group control                   */
-    volatile unsigned int  IGRPH;	                /**< EXI group control               */
-	volatile unsigned int  IGREX;
-    volatile unsigned int  IO_CLKEN;	
- } CSP_IGRP_T, *CSP_IGRP_PTR;    
+/// \struct csp_gpio_t
+/// \brief GPIO Reg Description
+typedef struct
+{
+	__IOM  U32_T  CONLR;		//0x0000	Control Low Register                
+    __IOM  U32_T  CONHR;     //0x0004	Control High Register                
+    __OM   U32_T  WODR;      //0x0008	Write Output Data Register                         
+    __OM   U32_T  SODR;      //0x000C	Set Output Data (bit-wise) Register  
+    __OM   U32_T  CODR;      //0x0010	Clear Output Data (bit-wise) Register
+    __IM   U32_T  ODSR;      //0x0014	Output Data Status Register          
+    __IM   U32_T  PSDR;      //0x0018	Pin Data Status Register                           
+    __OM   U32_T  FLTEN;     //0x001C    Filtering Enable Control Register
+    __IOM  U32_T  PUDR;      //0x0020	IO Pullup_Pulldown Register          
+    __IOM  U32_T  DSCR;      //0x0024	Output Driving Strength Register     
+    __IOM  U32_T  OMCR;      //0x0028	Slew-rate, Open-Drain Control          
+    __IOM  U32_T  IECR;      //0x002C	EXI Enable Control Register                     
+	__OM   U32_T  IEER;		//0x0030	EXI Enable Eet Register    
+	__OM   U32_T  IEDR;		//0x0034	EXI Enable Clear Register
+} csp_gpio_t; 
+
+
+typedef volatile struct
+{
+	__IOM  U32_T  IGRPL;     //0x0000 	EXI Group Config Register L                  
+    __IOM  U32_T  IGRPH;	    //0x0004	EXI Group Config Register H                   
+	__IOM  U32_T  IGREX;		//0x0008	EXI Group Expand Config Register  
+    __IOM  U32_T  IO_CLKEN;	//0x000C 	Gpio Group Clk Enable Control Register
+} csp_igrp_t;    
  
 
 #define GPIO_RESET_VALUE  (0x00000000)
+
 //--------------------------------------------------------------------------------
 //-----------------------------GPIO  value enum define--------------------------
 //--------------------------------------------------------------------------------
-/**
-  * @brief  GPIO pin numbner
-  */
-typedef enum
-{
-  PIN_0    = 0,  	/*!< Pin 0 selected */
-  PIN_1    = 4,  	/*!< Pin 1 selected */
-  PIN_2    = 8,  	/*!< Pin 2 selected */
-  PIN_3    = 12,   	/*!< Pin 3 selected */
-  PIN_4    = 16,  	/*!< Pin 4 selected */
-  PIN_5    = 20,  	/*!< Pin 5 selected */
-  PIN_6    = 24,  	/*!< Pin 6 selected */
-  PIN_7    = 28,  	/*!< Pin 7 selected */
-  PIN_8    = 0,  	/*!< Pin 8 selected */
-  PIN_9    = 4,  	/*!< Pin 9 selected */
-  PIN_10   = 8,  	/*!< Pin 10 selected */
-  PIN_11   = 12,   	/*!< Pin 11 selected */
-  PIN_12   = 16,  	/*!< Pin 12 selected */
-  PIN_13   = 20,  	/*!< Pin 13 selected */
-  PIN_14   = 24,  	/*!< Pin 13 selected */
-  PIN_15   = 28,  	/*!< Pin 13 selected */
-}GPIO_Pin_TypeDef;
+
+#define PIN_MSK	(0xff)
+
+
 /**
   * @brief  GPIO  high/low register
   */
 typedef enum
 {
-    LowByte = 0,
-    HighByte = 1,
-}GPIO_byte_TypeDef;
+    LOWBYTE = 0,
+    HIGHBYTE = 1,
+}gpio_byte_e;
 /**
   * @brief  GPIO  IO status
   */
 typedef enum
 {
-    Intput = 1,
-    Output = 0,
-}GPIO_Dir_TypeDef;
+    GPIO_INPUT = 1,
+    GPIO_OUTPUT = 2,
+}gpio_dir_e;
+
+
 /**
   * @brief  GPIO  IO mode
   */
@@ -98,7 +84,7 @@ typedef enum
     DSCR =1,                        //drive strenth
     OMCR =2,                        //open drain
     IECR =3,                        //int
-}GPIO_Mode_TypeDef;
+}gpio_mode_e;
 /**
   * @brief  GPIO  IO Group
   */
@@ -108,7 +94,8 @@ typedef enum
     PB0 = 2,
     GPIOA = 0,
     GPIOB = 2,
-}GPIO_Group_TypeDef;
+}gpio_group_e;
+
 /**
   * @brief  GPIO  exi number
   */
@@ -130,34 +117,34 @@ typedef enum
     EXI13 = 13,
 	EXI14 = 14,
 	EXI15 = 15,
-}GPIO_EXI_TypeDef;
+}exi_e;
 
 /**
   * @brief  EXI PIN
   */
 typedef enum
 {
-	Selete_EXI_PIN0		=		(CSP_REGISTER_T)(0),						
-	Selete_EXI_PIN1		=		(CSP_REGISTER_T)(1),
-	Selete_EXI_PIN2		=		(CSP_REGISTER_T)(2),
-	Selete_EXI_PIN3		=		(CSP_REGISTER_T)(3),
-	Selete_EXI_PIN4		=		(CSP_REGISTER_T)(4),
-	Selete_EXI_PIN5		=		(CSP_REGISTER_T)(5),
-	Selete_EXI_PIN6		=		(CSP_REGISTER_T)(6),
-	Selete_EXI_PIN7		=		(CSP_REGISTER_T)(7),
-	Selete_EXI_PIN8		=		(CSP_REGISTER_T)(8),
-	Selete_EXI_PIN9		=		(CSP_REGISTER_T)(9),
-	Selete_EXI_PIN10		=		(CSP_REGISTER_T)(10),
-	Selete_EXI_PIN11		=		(CSP_REGISTER_T)(11),
-	Selete_EXI_PIN12		=		(CSP_REGISTER_T)(12),
-	Selete_EXI_PIN13		=		(CSP_REGISTER_T)(13),
-	Selete_EXI_PIN14		=		(CSP_REGISTER_T)(14),
-	Selete_EXI_PIN15		=		(CSP_REGISTER_T)(15),
-	Selete_EXI_PIN16		=		(CSP_REGISTER_T)(16),
-	Selete_EXI_PIN17		=		(CSP_REGISTER_T)(17),
-	Selete_EXI_PIN18		=		(CSP_REGISTER_T)(18),
-	Selete_EXI_PIN19		=		(CSP_REGISTER_T)(19)
-}GPIO_EXIPIN_TypeDef;
+	SELECT_EXI_GROUP0		=		(0),						
+	SELECT_EXI_GROUP1		=		(1),
+	SELECT_EXI_GROUP2		=		(2),
+	SELECT_EXI_GROUP3		=		(3),
+	SELECT_EXI_GROUP4		=		(4),
+	SELECT_EXI_GROUP5		=		(5),
+	SELECT_EXI_GROUP6		=		(6),
+	SELECT_EXI_GROUP7		=		(7),
+	SELECT_EXI_GROUP8		=		(8),
+	SELECT_EXI_GROUP9		=		(9),
+	SELECT_EXI_GROUP10	=		(10),
+	SELECT_EXI_GROUP11	=		(11),
+	SELECT_EXI_GROUP12	=		(12),
+	SELECT_EXI_GROUP13	=		(13),
+	SELECT_EXI_GROUP14	=		(14),
+	SELECT_EXI_GROUP15	=		(15),
+	SELECT_EXI_GROUP16	=		(16),
+	SELECT_EXI_GROUP17	=		(17),
+	SELECT_EXI_GROUP18	=		(18),
+	SELECT_EXI_GROUP19	=		(19)
+}exi_group_e;
 
 
 /**
@@ -168,78 +155,236 @@ typedef enum
 	INPUT_MODE_SETECTED_CMOS			=		0,
 	INPUT_MODE_SETECTED_TTL1			=		1,
 	INPUT_MODE_SETECTED_TTL2			=		2
-}INPUT_MODE_SETECTED_TypeDef;
-
-#define nop      asm ("nop")
-
-#define SetPA0(n)   (GPIOA0->SODR = (1ul<<n))
-#define ClrPA0(n)   (GPIOA0->CODR = (1ul<<n))
-
-#define SetPB0(n)   (GPIOB0->SODR = (1ul<<n))
-#define ClrPB0(n)   (GPIOB0->CODR = (1ul<<n))
-
-#define PA0in(n)    (((GPIOA0->PSDR)>>n) & 1ul)
-#define PB0in(n)    (((GPIOB0->PSDR)>>n) & 1ul)
+}gpio_input_mode_e;
 
 
-#define CSP_GPIO_SET_CONLR(cm,val) ((cm)->CONLR = val)
-#define CSP_GPIO_GET_CONLR(cm)     ((cm)->CONLR)
 
-#define CSP_GPIO_SET_CONHR(cm,val) ((cm)->CONHR = val)
-#define CSP_GPIO_GET_CONHR(cm)     ((cm)->CONHR)
+#define SETPA0(n)   (GPIOA0->SODR = (1ul<<n))
+#define CLRPA0(n)   (GPIOA0->CODR = (1ul<<n))
 
-#define CSP_GPIO_SET_WODR(cm,val) ((cm)->WODR = val)
-#define CSP_GPIO_SET_SODR(cm,val) ((cm)->SODR = val)
-#define CSP_GPIO_SET_CODR(cm,val) ((cm)->CODR = val)
-#define CSP_GPIO_GET_PSDR(cm)     ((cm)->PSDR)
+#define SETPB0(n)   (GPIOB0->SODR = (1ul<<n))
+#define CLRPB0(n)   (GPIOB0->CODR = (1ul<<n))
 
-#define CSP_GPIO_SET_PUDR(cm,val) ((cm)->PUDR = val)
-#define CSP_GPIO_GET_PUDR(cm)     ((cm)->PUDR)
+#define PA0IN(n)    (((GPIOA0->PSDR)>>n) & 1ul)
+#define PB0IN(n)    (((GPIOB0->PSDR)>>n) & 1ul)
 
-#define CSP_GPIO_SET_DSCR(cm,val) ((cm)->DSCR = val)
-#define CSP_GPIO_GET_DSCR(cm)     ((cm)->DSCR)
 
-#define CSP_GPIO_SET_OMCR(cm,val) ((cm)->OMCR = val)
-#define CSP_GPIO_GET_OMCR(cm)     ((cm)->OMCR)
+#define CSP_GPIO_SET_CONLR(gpio,val) ((gpio)->CONLR = val)
+#define CSP_GPIO_GET_CONLR(gpio)     ((gpio)->CONLR)
 
-#define CSP_GPIO_SET_IECR(cm,val) ((cm)->IECR = val)
-#define CSP_GPIO_GET_IECR(cm)     ((cm)->IECR)
+#define CSP_GPIO_SET_CONHR(gpio,val) ((gpio)->CONHR = val)
+#define CSP_GPIO_GET_CONHR(gpio)     ((gpio)->CONHR)
 
-#define CSP_GPIO_SET_IGRP(cm,val) ((cm)->IGRP = val)
-#define CSP_GPIO_GET_IGRP(cm)     ((cm)->IGRP)
+#define CSP_GPIO_SET_WODR(gpio,val) ((gpio)->WODR = val)
+#define CSP_GPIO_SET_SODR(gpio,val) ((gpio)->SODR = val)
+#define CSP_GPIO_SET_CODR(gpio,val) ((gpio)->CODR = val)
+#define CSP_GPIO_GET_PSDR(gpio)     ((gpio)->PSDR)
+
+#define CSP_GPIO_SET_PUDR(gpio,val) ((gpio)->PUDR = val)
+#define CSP_GPIO_GET_PUDR(gpio)     ((gpio)->PUDR)
+
+#define CSP_GPIO_SET_DSCR(gpio,val) ((gpio)->DSCR = val)
+#define CSP_GPIO_GET_DSCR(gpio)     ((gpio)->DSCR)
+
+#define CSP_GPIO_SET_OMCR(gpio,val) ((gpio)->OMCR = val)
+#define CSP_GPIO_GET_OMCR(gpio)     ((gpio)->OMCR)
+
+#define CSP_GPIO_SET_IECR(gpio,val) ((gpio)->IECR = val)
+#define CSP_GPIO_GET_IECR(gpio)     ((gpio)->IECR)
+
+#define CSP_GPIO_SET_IGRP(gpio,val) ((gpio)->IGRP = val)
+#define CSP_GPIO_GET_IGRP(gpio)     ((gpio)->IGRP)
+
 
 /******************************************************************************
 ************************** Exported functions ************************
 ******************************************************************************/
-extern void GPIOA0_DeInit(GPIO_Pin_TypeDef GPIO_Pin);
-extern void GPIO_DeInit(void);
-extern void GPIO_TTL_COSM_Selecte(CSP_GPIO_T *GPIOx,uint8_t bit,INPUT_MODE_SETECTED_TypeDef INPUT_MODE_SETECTED_X);
-extern void GPIO_Init2(CSP_GPIO_T *GPIOx,GPIO_byte_TypeDef byte,uint32_t val);
-extern void GPIO_InPutOutPut_Disable(CSP_GPIO_T *GPIOx,uint8_t PinNum);
-extern void GPIO_Init(CSP_GPIO_T *GPIOx,uint8_t PinNum,GPIO_Dir_TypeDef Dir);
-extern void GPIO_Write_Low(CSP_GPIO_T *GPIOx,uint8_t bit);
-extern void GPIO_Write_High(CSP_GPIO_T *GPIOx,uint8_t bit);
-extern void GPIO_MODE_Init(CSP_GPIO_T *GPIOx,GPIO_Mode_TypeDef IO_MODE,uint32_t val);
-extern uint8_t GPIO_Read_Status(CSP_GPIO_T *GPIOx,uint8_t bit);
-extern uint8_t GPIO_Read_Output(CSP_GPIO_T *GPIOx,uint8_t bit);
-extern void GPIO_Reverse(CSP_GPIO_T *GPIOx,uint8_t bit);
-extern void GPIO_Set_Value(CSP_GPIO_T *GPIOx,uint8_t bitposi,uint8_t bitval);
-extern void GPIOA0_EXI_Init(GPIO_EXI_TypeDef EXI_IO);
-extern void GPIOB0_EXI_Init(GPIO_EXI_TypeDef EXI_IO);
-extern void GPIO_EXI_EN(CSP_GPIO_T *GPIOx,GPIO_EXI_TypeDef EXI_IO);
-extern void GPIO_Debug_IO_12_13(void);
-extern void GPIO_Debug_IO_01_02(void);
-extern void GPIO_IntGroup_Set(GPIO_Group_TypeDef IO_MODE , uint8_t PinNum , GPIO_EXIPIN_TypeDef EXIPIN_x);
-extern void GPIOA00_Set_ResetPin();
-extern void GPIO_PullHigh_Init(CSP_GPIO_T *GPIOx,uint8_t bit);
-extern void GPIO_PullLow_Init(CSP_GPIO_T *GPIOx,uint8_t bit);
-extern void GPIO_PullHighLow_DIS(CSP_GPIO_T *GPIOx,uint8_t bit);
-extern void GPIO_OpenDrain_EN(CSP_GPIO_T *GPIOx,uint8_t bit);
-extern void GPIO_OpenDrain_DIS(CSP_GPIO_T *GPIOx,uint8_t bit);
-extern void GPIO_DriveStrength_EN(CSP_GPIO_T *GPIOx,uint8_t bit);
-extern void GPIO_DriveStrength_DIS(CSP_GPIO_T *GPIOx,uint8_t bit);
+/** \brief Deinitialize GPIO registers to their reset value
+ * 
+ *  \param[in] none
+ *  \return none
+ */ 
+void gpio_deinit(void);
+
+/** \brief port initialization to GPIO input/output or AF functions
+ *  The operation changes all the 8 ports simutaneously
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] eByte: either lower 8 pins or higher 8 pins \ref gpio_byte_e
+ * 	\param[in] val: 0x00000000 ~ 0xffffffff, refer to chapter2 Pin Configruation in datasheet for AF assignment
+ *  \return none
+ */  
+void gpio_init2(csp_gpio_t *ptGpioBase,gpio_byte_e eByte,U32_T wValue);
+
+/** \brief Set a specific pin to either input or output
+ * 
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] byPinNum: 0~15
+ * 	\param[in] eIoMux: GPIO input/output/AFs \ref io_mux_e
+ *  \return none
+ */ 
+void gpio_init(csp_gpio_t *ptGpioBase,uint8_t byPinNum,io_mux_e eIoMux);
+
+/** \brief Set a specific pin to GPD(GPIO Disable) mode
+ * 
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] byPinNum: 0~15
+ * 	\param[in] Dir: 0  output
+ * 					1  input
+ *  \return none
+ */ 
+void gpio_inputoutput_disable(csp_gpio_t *ptGpioBase,uint8_t byPinNum);
+
+/** \brief port mode configuration
+ * 	The operation changes all the 8 ports simutaneously
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] eMode:   PUDR(IO PULL UP/DOWN Configuration)
+						DSCR(IO DRIVE STRENGHT Configuration)
+						OMCR(OUTPUT MODE Configuration)
+						IECR(IO INT ENABLE/DISABLE)
+ * 	\param[in] wValue: 0x00000000 ~ 0xffffffff, refer to Chapter GPIO in user maunal for Mode definition
+ *  \return none
+ */ 
+void gpio_mode_init(csp_gpio_t *ptGpioBase,gpio_mode_e eMode,U32_T wValue);
+
+/** \brief Enable pull-up Resistor of a specific pin
+ * 
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] byPinNum: 0~15
+ *  \return none
+ */ 
+void gpio_pul_lhigh_init(csp_gpio_t *ptGpioBase,uint8_t byPinNum);
+
+/** \brief Disable pull-down Resistor of a specific pin
+ * 
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] byPinNum: 0~15
+ *  \return none
+ */ 
+void gpio_pull_low_init(csp_gpio_t *ptGpioBase,uint8_t byPinNum);
+
+/** \brief Disable pull-down/up Resistor of a specific pin
+ * 
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] byPinNum: 0~15
+ *  \return none
+ */
+void gpio_pull_disable(csp_gpio_t *ptGpioBase,uint8_t byPinNum);
+
+/** \brief Set/Unset a specific pin to open-drain
+ * 
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] byPinNum: 0~15
+ *  \return none
+ */ 
+
+void gpio_opendrain_enable(csp_gpio_t *ptGpioBase,uint8_t byPinNum);
+
+/** \brief Enable open-drain of a specific pin
+ * 
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] byPinNum: 0~15
+ *  \return none
+ */ 
+void gpio_opendrain_enable(csp_gpio_t *ptGpioBase,uint8_t byPinNum);
+
+/** \brief Disable open-drain of a specific pin
+ * 
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] byPinNum: 0~15
+ *  \return none
+ */ 
+void gpio_opendrain_disable(csp_gpio_t *ptGpioBase,uint8_t byPinNum);
+
+/** \brief Config a specific input pin to TTL or CMOS mode
+ * 
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] byPinNum: 0~15
+ *  \param[in] eInputMode: \ref gpio_input_mode_e
+ *  \return none
+ */ 
+void gpio_ttl_gpioos_select(csp_gpio_t *ptGpioBase,uint8_t byPinNum,gpio_input_mode_e eInputMode);
+
+/** \brief Set a specific output pin to strong driving ability
+ * 
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] byPinNum: 0~15
+ *  \return none
+ */ 
+void gpio_drive_strength_enable(csp_gpio_t *ptGpioBase,uint8_t byPinNum);
+
+/** \brief Set a specific output pin to normal driving ability
+ * 
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] byPinNum: 0~15
+ *  \return none
+ */ 
+void gpio_drive_strength_disable(csp_gpio_t *ptGpioBase,uint8_t byPinNum);
+
+/** \brief IO Group configuration
+ *  There are 20 possible groups seperately connecting to EXI0~19 in SYSCON 
+ *  This function assigns a specific input pin to one of EXI0~19 where:
+ * 	- EXI0 could be PA0.0/PB0.0
+ *  - ...
+ *  - EXI15 could be PA0.15/PB0.15
+ *  - EXI16/17 could be PA0.0~ PA0.7
+ *  - EXI18/19 could be PB0.0~PB0.3
+ *  \param[in] eGroup: GPIOA/GPIOB...
+ *  \param[in] byPinNum: 0~15
+ *  \param[in] exi_group_e: SELECT_EXI_GROUP0 ~19 \ref exi_group_e
+ *  \return err_status_e
+ */ 
+err_status_e gpio_igroup_set(gpio_group_e eGroup , uint8_t byPinNum , exi_group_e eExiGroup);
+
+/** \brief Enable gpio group signal output to SYSCON module
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] eExiPin: EXI0~EXI15 \ref exi_e
+ *  \return none
+ */ 
+void gpio_exi_enable(csp_gpio_t *ptGpioBase,exi_e eExiPin);
+
+/** \brief Set/Clear a specific output pin
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] byPinNum: 0~15
+ *  \return none
+ */ 
+void gpio_write_high(csp_gpio_t *ptGpioBase,uint8_t byPinNum);
+void gpio_write_low(csp_gpio_t *ptGpioBase,uint8_t byPinNum);
+
+/** \brief Set a specific output pin to a specific level
+ * 
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] byPinNum: 0~15
+ *  \param[in] bValue: 0 or 1
+ *  \return none
+ */ 
+void gpio_set_value(csp_gpio_t *ptGpioBase,uint8_t byPinNum, bool bValue);
+
+/** \brief Toggle a specific output pin
+ * 
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] byPinNum: 0~15
+ *  \return none
+ */ 
+void gpio_reverse(csp_gpio_t *ptGpioBase,uint8_t byPinNum);
+
+/** \brief Read port status info from a specific pin
+ *  this pin does not have to be an output pin
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] byPinNum: 0~15
+ *  \return byValue: 
+ */ 
+uint8_t gpio_read_status(csp_gpio_t *ptGpioBase,uint8_t byPinNum);
+
+/** \brief Read output status info from a specific pin
+ *  The real level measured on this pin does not have to be the same as output status
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] byPinNum: 0~15
+ *  \return none
+ */ 
+uint8_t gpio_read_output(csp_gpio_t *ptGpioBase,uint8_t byPinNum);
+
 /*************************************************************/
 
-#endif   /**< apt32f102_gpio_H */
+#endif   /**_GPIO_H */
 
 /******************* (C) COPYRIGHT 2024 APT Chip *****END OF FILE****/

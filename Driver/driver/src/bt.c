@@ -178,7 +178,7 @@ void BT_Soft_Tigger(CSP_BT_T *BTx)
 //NewState:ENABLE,DISABLE
 //ReturnValue:NONE
 /*************************************************************/ 
-void BT_ConfigInterrupt_CMD(CSP_BT_T *BTx,FunctionalStatus NewState,BT_IMSCR_TypeDef BT_IMSCR_X)
+void BT_ConfigInterrupt_CMD(CSP_BT_T *BTx,functional_status_e NewState,BT_IMSCR_TypeDef BT_IMSCR_X)
 {
 	if (NewState != DISABLE)
 	{
