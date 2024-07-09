@@ -21,8 +21,6 @@
 CSP_IFC_T   	*IFC     = (CSP_IFC_T    *)APB_IFCBASE ;
 csp_syscon_t 	*SYSCON = (csp_syscon_t *)APB_SYSCONBASE ;
 
-//CSP_TKEY_T  	*TKEY    = (CSP_TKEY_T  *)APB_TKEYBASE ;
-//CSP_TKEYBUF_T   *TKEYBUF = (CSP_TKEYBUF_T  *)APB_TKEYBUFBASE;
 //CSP_ADC12_T 	*ADC0    = (CSP_ADC12_T  *)APB_ADC0BASE ;
 
 csp_gpio_t  	*GPIOA0   = (csp_gpio_t  *)APB_GPIOA0BASE ; // A0
@@ -43,7 +41,7 @@ csp_etcb_t  	*ETCB     = (csp_etcb_t *)APB_ETCBBASE ;
 //
 CSP_BT_T    	*BT0      = (CSP_BT_T   *)APB_BT0BASE ;
 CSP_BT_T    	*BT1      = (CSP_BT_T   *)APB_BT1BASE ;
-//CSP_CRC_T   	*CRC      = (CSP_CRC_T  *)AHB_CRCBASE ;
+CSP_CRC_T   	*CRC      = (CSP_CRC_T  *)AHB_CRCBASE ;
 
 /* Private variablesr---------------------------------------------------------*/
 /* defines -------------------------------------------------------------------*/

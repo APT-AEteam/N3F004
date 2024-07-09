@@ -22,8 +22,8 @@
 //#include "adc.h"
 #include "bt.h"
 #include "coret.h"
-//#include "crc.h"
-//#include "ept.h"
+#include "crc.h"
+#include "ept.h"
 #include "etcb.h"
 #include "gpio.h"
 //#include "gpt.h"
@@ -56,10 +56,10 @@ extern csp_igrp_t	*GPIOGRP  ;
 //extern CSP_SSP_T  	*SPI0     ;
 //extern CSP_I2C_T  	*I2C0     ;
 //extern CSP_GPT_T 	*GPT0     ;
-//extern CSP_EPT_T 	*EPT0     ;
+extern CSP_EPT_T 	*EPT0     ;
 extern CSP_BT_T  	*BT0      ;
 extern CSP_BT_T  	*BT1      ;
-//extern CSP_CRC_T 	*CRC      ;
+extern CSP_CRC_T 	*CRC      ;
 
 
 

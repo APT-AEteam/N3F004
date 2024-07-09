@@ -64,6 +64,12 @@
       <File Name="../../../../../Driver/driver/src/iomux.c">
         <FileOption/>
       </File>
+      <File Name="../../../../../Driver/driver/src/ept.c">
+        <FileOption/>
+      </File>
+      <File Name="../../../../../Driver/driver/src/crc.c">
+        <FileOption/>
+      </File>
     </VirtualDirectory>
     <VirtualDirectory Name="inc">
       <File Name="../../../../../Driver/driver/inc/bt.h">
@@ -91,6 +97,12 @@
         <FileOption/>
       </File>
       <File Name="../../../../../Driver/driver/inc/n3f004_top.h">
+        <FileOption/>
+      </File>
+      <File Name="../../../../../Driver/driver/inc/ept.h">
+        <FileOption/>
+      </File>
+      <File Name="../../../../../Driver/driver/inc/crc.h">
         <FileOption/>
       </File>
     </VirtualDirectory>
