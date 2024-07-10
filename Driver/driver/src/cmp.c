@@ -38,15 +38,7 @@ void cmp_software_reset(csp_cmp_t *ptCmpBase )
  */ 
 void cmp_clk_cmd(csp_cmp_t *ptCmpBase , functional_status_e eNewState)
 {
-	if (eNewState) {
-		ptCmpBase -> CEDR |= CMP_CLK_EN;
-		
-	}
-	else {
-		ptCmpBase -> CEDR &= ~CMP_CLK_EN;
-		
-		
-	}
+	ptCmpBase -> CEDR &= (~CMP_CLK_MSK) | (eNewState << CMP_CLK_POS);
 }
 
 /** \brief enable cmp module (digital + analog)
@@ -217,3 +209,4 @@ U8_T cmp_get_all_output(void)
 	return ((CMP0 -> CR & (CMP_CPOUT_ALL_MSK)) >> CMP_CPOUT_ALL_POS);
 }
 
+/******************* (C) COPYRIGHT 2020 APT Chip *****END OF FILE****/
