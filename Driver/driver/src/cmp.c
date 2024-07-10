@@ -101,21 +101,20 @@ void cmp_intbemf_cmd(csp_cmp_t *ptCmpBase, functional_status_e eNewState)
 }
 
 
-/** \brief CR Configuration, including:
- *  - input polarity
- *  - positive input hysteresis
- *  - negative input hysteresis
- *  - filters bypass
- *  - output polarity
+/** \brief CR Configuration
  *  \param[in] ptCmpBase: pointer of CMP register structure
- *  \param[in] eNewState: ENABLE/DISABLE
+ *  \param[in] eCmpIntPol: interrupt polarity \ref filters bypass
+ *  \param[in] ePHyst: positive input hysteresis \ref cmp_physt_e
+ *  \param[in  eNHyst: negative input hysteresis \ref cmp_nhyst_e
+ *  \param[in] eCmpOutSel: filters bypass \ref cmp_nhyst_e
+ *  \param[in] eCmpOutPol: output polarity \ref cmpout_pol_e
  *  \return none
  */
-void cmp_cr_configure(csp_cmp_t *ptCmpBase , cmpin_pol_e eCmpInPol, cmp_physt_e ePHyst, cmp_nhyst_e eNHyst,  
+void cmp_cr_configure(csp_cmp_t *ptCmpBase , cmpint_pol_e eCmpIntPol, cmp_physt_e ePHyst, cmp_nhyst_e eNHyst,  
 				   cmp_cposel_e eCmpOutSel, cmpout_pol_e eCmpOutPol)
 {
-	ptCmpBase->CR &= (~CMPIN_POL_MSK) & (~CMP_PHYST_MSK) & (~CMP_NHYST_MSK) & (~CMP_CPOSEL_MSK) & (~CMPO_POL_MSK)
-					| (eCmpInPol<<CMPIN_POL_POS) | (ePHyst << CMP_PHYST_POS) | (eNHyst << CMP_NHYST_POS) 
+	ptCmpBase->CR &= (~CMPINT_POL_MSK) & (~CMP_PHYST_MSK) & (~CMP_NHYST_MSK) & (~CMP_CPOSEL_MSK) & (~CMPO_POL_MSK)
+					| (eCmpIntPol<<CMPINT_POL_POS) | (ePHyst << CMP_PHYST_POS) | (eNHyst << CMP_NHYST_POS) 
 					| (eCmpOutSel << CMP_CPOSEL_POS) | (eCmpOutPol << CMPO_POL_POS);
 }
 

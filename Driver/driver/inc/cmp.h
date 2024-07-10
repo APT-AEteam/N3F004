@@ -89,14 +89,14 @@ typedef enum
 	TRGOE_EN,				
 }cmp_trgoe_e;
 
-#define	CMPIN_POL_POS		    (8)
-#define	CMPIN_POL_MSK		    (0x03ul << CMPIN_POL_POS)
+#define	CMPINT_POL_POS		    (8)
+#define	CMPINT_POL_MSK		    (0x03ul << CMPINT_POL_POS)
 typedef enum
 {
-	CMPIN_POL_F	= 0x00,
-	CMPIN_POL_R,
-	CMPIN_POL_BOTH,
-}cmpin_pol_e;
+	CMPINT_POL_F	= 0x00,
+	CMPINT_POL_R,
+	CMPINT_POL_BOTH,
+}cmpint_pol_e;
 
 #define	CMP_DF1EN_POS		    (10)
 #define	CMP_DF1EN_MSK		    (0x01ul << CMP_DF1EN_POS)
