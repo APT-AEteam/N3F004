@@ -32,6 +32,7 @@
 //#include "spi.h"
 #include "syscon.h"
 //#include "uart.h"
+#include "cmp.h"
 #include "n3f004_top.h"
 
 
@@ -60,6 +61,8 @@ extern csp_ept_t 	*EPT0     ;
 extern csp_bt_t  	*BT0      ;
 extern csp_bt_t  	*BT1      ;
 extern csp_crc_t 	*CRC      ;
+extern csp_cmp_t	*CMP0  ;
+extern csp_cmp_t	*CMP1  ;
 
 
 

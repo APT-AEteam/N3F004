@@ -73,6 +73,9 @@
       <File Name="../../../../../Driver/driver/src/gpt.c">
         <FileOption/>
       </File>
+      <File Name="../../../../../Driver/driver/src/cmp.c">
+        <FileOption/>
+      </File>
     </VirtualDirectory>
     <VirtualDirectory Name="inc">
       <File Name="../../../../../Driver/driver/inc/bt.h">
@@ -109,6 +112,9 @@
         <FileOption/>
       </File>
       <File Name="../../../../../Driver/driver/inc/gpt.h">
+        <FileOption/>
+      </File>
+      <File Name="../../../../../Driver/driver/inc/cmp.h">
         <FileOption/>
       </File>
     </VirtualDirectory>
