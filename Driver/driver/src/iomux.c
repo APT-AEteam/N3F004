@@ -98,12 +98,12 @@ void ept_pin_config(ept_io_e eEptIo)
 
 /** \brief set gpt io as CHA
  * 
- *  \param[in] eGptIo: GPT IO \ref gpt_io_e
+ *  \param[in] eGptaIo: GPT IO \ref gpta_io_e
  *  \return none
  */ 
-void gpt_pin_config(gpt_io_e eGptIo)
+void gpt_pin_config(gpta_io_e eGptaIo)
 {
-	switch (eGptIo)
+	switch (eGptaIo)
 	{
 		case (GPTA_CHA_PA06): gpio_init(GPIOA0, 6, PA06_GPTA_CHA); break;
 		case (GPTA_CHA_PA09): gpio_init(GPIOA0, 9,PA09_GPTA_CHA); break;

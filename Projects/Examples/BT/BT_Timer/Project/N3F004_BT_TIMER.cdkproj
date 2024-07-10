@@ -108,7 +108,9 @@
       <File Name="../../../../../Driver/driver/inc/crc.h">
         <FileOption/>
       </File>
-      <File Name="../../../../../Driver/driver/inc/gpt.h"/>
+      <File Name="../../../../../Driver/driver/inc/gpt.h">
+        <FileOption/>
+      </File>
     </VirtualDirectory>
   </VirtualDirectory>
   <BuildConfigs>

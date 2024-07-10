@@ -365,7 +365,7 @@ typedef enum{
 	GPTA_CHA_PB01,
 	GPTA_CHA_PA01,
 	GPTA_CHA_PA03
-}gpt_io_e;
+}gpta_io_e;
 
 #endif 
 
