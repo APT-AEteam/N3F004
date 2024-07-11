@@ -189,8 +189,12 @@ typedef enum
 #define	CMP_WF_DIVN_POS		    (16)
 #define	CMP_WF_DIVN_MSK		    (0x1ful << CMP_WF_DIVN_POS)
 
-#define CMP_SWFORCE_POS			(16)
-#define CMP_SWFORCE_MSK			(0x1ul << CMP_SWFORCE_POS)
+#define CMP_SWSET_POS			(16)
+#define CMP_SWSET_MSK			(0x1ul << CMP_SWSET_POS)
+typedef enum{
+	SW_HOLD0 = 0,
+	SW_HOLD1
+}cmp_swsetval_e;
 
 /******************************************************************************
 * INPCR : 
@@ -341,7 +345,7 @@ void cmp_intbemf_cmd(csp_cmp_t *ptCmpBase, functional_status_e eNewState);
  *  \param[in] eNewState: ENABLE/DISABLE
  *  \return none
  */
-void cmp_cr_configure(csp_cmp_t *ptCmpBase , cmpin_pol_e eCmpInPol, cmp_physt_e ePHyst, cmp_nhyst_e eNHyst,  
+void cmp_cr_configure(csp_cmp_t *ptCmpBase , cmpint_pol_e eCmpInPol, cmp_physt_e ePHyst, cmp_nhyst_e eNHyst,  
 				   cmp_cposel_e eCmpOutSel, cmpout_pol_e eCmpOutPol);
 
 /** \brief digital filter(Integrating filter) Configuration, including:
@@ -365,7 +369,6 @@ void cmp_dflt_configure(csp_cmp_t *ptCmpBase,cmp_df_depth_e eDepth, U8_T byDivN,
  *  \return none
  */
 void cmp_hwflt_configure(csp_cmp_t *ptCmpBase, U8_T byWCnt, U8_T byDiv, cmp_wf_align_e eNewTrigEffect);
-}
 
 /** \brief soft window filter configuration, including:
  *  - window width
@@ -374,16 +377,11 @@ void cmp_hwflt_configure(csp_cmp_t *ptCmpBase, U8_T byWCnt, U8_T byDiv, cmp_wf_a
  *  \param[in] byWCnt: 0~0xff, window width = byWcnt/clock 
  *  \param[in] byDiv: 0~0xf, clock = PCLK/byDiv 
  *  \param[in] eNewTrigEffect： effect when new trigger arrives before previous window completion
+ *  \param[in] eSwSetVal: filter output status when window is valid
  *  \return none
  */
-void cmp_swflt_configure(csp_cmp_t *ptCmpBase, U8_T byWCnt, U8_T byDiv, cmp_wf_align_e eNewTrigEffect);
+void cmp_swflt_configure(csp_cmp_t *ptCmpBase, U8_T byWCnt, U8_T byDiv, cmp_wf_align_e eNewTrigEffect, cmp_swsetval_e eSwSetVal);
 
-/** \brief soft force CMP output
- *  \param[in] ptCmpBase: pointer of CMP register structure
- *  \param[in] bValue :0/1
- *  \return none
- */
-void cmp_force_output(csp_cmp_t *ptCmpBase, bool bValue);
 
 /** \brief CMP interrupt enable
  *  \param[in] ptCmpBase: pointer of CMP register structure

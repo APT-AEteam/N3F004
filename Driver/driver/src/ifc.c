@@ -1,268 +1,241 @@
-/*
-  ******************************************************************************
-  * @file    apt32f102_ifc.c
-  * @author  APT AE Team
-  * @version V1.17
-  * @date    2023/08/30
-  ******************************************************************************
-  *THIS SOFTWARE WHICH IS FOR ILLUSTRATIVE PURPOSES ONLY WHICH PROVIDES 
-  *CUSTOMER WITH CODING INFORMATION REGARDING THEIR PRODUCTS.
-  *APT CHIP SHALL NOT BE HELD RESPONSIBILITY ADN LIABILITY FOR ANY DIRECT, 
-  *INDIRECT DAMAGES WITH RESPECT TO ANY CLAIMS ARISING FROM THE CONTENT OF 
-  *SUCH SOFTWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING INFORMATION 
-  *CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.AND APT CHIP RESERVES 
-  *THE RIGHT TO MAKE CHANGES IN THE SOFTWARE WITHOUT NOTIFICATION
-  ******************************************************************************
-  */
+/***********************************************************************//** 
+ * \file  ifc.c
+ * \brief  IFC driver
+ * \copyright Copyright (C) 2015-2024 @ APTCHIP
+ * <table>
+ * <tr><th> Date  <th>Version  <th>Author  <th>Description
+ * <tr><td> 2024-7 <td>V1.0 <td>WNN     <td>new STDLib
+ * </table>
+ * *********************************************************************
+*/
+
 
 /* Includes ------------------------------------------------------------------*/
 #include "n3f004.h"
-volatile unsigned int R_INT_FlashAdd;
+
+
+
 volatile unsigned char f_Drom_writing=0;
-/* define --------------------------------------------------------------------*/
-extern void delay_nms(unsigned int t); 
+
+
 /* externs--------------------------------------------------------------------*/
-/*************************************************************
-//ChipErase fuction
-//EntryParameter:NONE
-//ReturnValue:NONE
-*************************************************************/
-void ChipErase(void)
+/* private function-----------------------------------------------------------*/
+static void apt_ifc_step_sync(ifc_cmd_e eCmd, uint32_t wPageStAddr);
+/* global variablesr----------------------------------------------------------*/
+volatile bool g_bFlashPgmDne = 1;
+/* Private variablesr---------------------------------------------------------*/
+/* defines -------------------------------------------------------------------*/
+
+
+/** \brief Chip(PROM + UserOption + Protection) Erase
+ * 
+ *  \param[in] none
+ *  \return none
+ */ 
+void chip_erase(void)
 {
-	SetUserKey;
-	EnChipErase;
-	StartErase;
-	while(IFC->CR!=0x0);			//Wait for the operation to complete
+	apt_ifc_step_sync(IFC_CHIP_ERASE, 0);
+
 }
-/*************************************************************
-//PageErase fuction
-//EntryParameter:XROM_PageAdd
-//XROM_PageAdd:PROM_PageAdd0~PROM_PageAdd255
-//DROM_PageAdd0~DROM_PageAdd31
-//ReturnValue:NONE
-*************************************************************/
-void PageErase(IFC_ROMSELETED_TypeDef XROM_PageAdd)
+
+
+/** \brief erase one page(DFLASH or PFLASH). 
+ *  \brief NOTE!!! Extra ERASE is NOT needed before programming, otherwise, endurance would decrease.
+ *  \param[in] wPageStAddr: Page start address
+ *  \return none
+ */
+void page_erase(U32_T wPageStAddr)
 {
-	SetUserKey;
-	EnPageErase;
-	IFC->FM_ADDR=XROM_PageAdd;
-	StartErase;
-	while(IFC->CR!=0x0);
+	if (((wPageStAddr < DFLASH_BASE) && ((wPageStAddr )>PFLASH_LIMIT) )|| ((wPageStAddr>=DFLASH_BASE)&& ((wPageStAddr )> DFLASH_LIMIT))) {
+		return;
+	}
+	apt_ifc_step_sync(IFC_PAGE_ERASE, wPageStAddr);
+	
 }
-/*************************************************************
-//Enable or Disable IFC Interrupt when Operate FlashData 
-//EntryParameter:FlashAdd、DataSize、*BufArry
-//ReturnValue:NONE
-*************************************************************/
-//PROM:Write at most 256 bytes once time
-//DROM:Write at most 64 bytes at once time
-//Interrupt mode requires multiple loop queries to complete
-//Not Support across page writing!!!
-void Page_ProgramData_int(unsigned int FlashAdd,unsigned int DataSize,volatile unsigned char *BufArry)
+
+
+/** \brief 		write n words within a page  (Not Support across page writing!!!)
+ *              CPU would halt for around 4.2ms when IFC programming is excecuted.
+
+ *  \param[in] 	wAddr:		PGM start address
+ * 	\param[in] 	wDataNum:	number of words to be written
+ *  \param[in]	pwData:		point points to data to be written
+ *  \return error code:		return CSI_ERROR when PGM verify fails \ref csi_error_t	
+ */
+
+void page_program_u32(U32_T wAddr, U32_T wDataNum,U32_T *pwData)
 {
-	int i,DataBuffer;
-	if(!f_Drom_writing)
-	{
-		f_Drom_writing=1;
-		R_INT_FlashAdd=FlashAdd;
-		ifc_step=0;
-		//Page cache wipe 1
-		SetUserKey;
-		IFC->CMR=0x07;					//Page cache wipe
-		IFC->FM_ADDR=FlashAdd;
-		IFC->CR=0X01;					//Start Program
-		while(IFC->CR!=0x0);			//Wait for the operation to complete
-		//Write data to the cache 2
-		for(i=0;i<((DataSize+3)/4);i++)   //sizeof structure
-		{
-			DataBuffer=*BufArry+(*(BufArry+1)<<8)+(*(BufArry+2)<<16)+(*(BufArry+3)<<24);
-			*(volatile unsigned int *)(FlashAdd+4*i)=DataBuffer;
-			BufArry  +=4;
+	
+	
+	U32_T i,j,wPageStAddr,wBuff[PFLASH_PAGESIZE/4] = {0};
+	U8_T byPageSize;
+	
+	g_bFlashPgmDne = 0;
+	if (wAddr >= DFLASH_BASE) {
+		wPageStAddr = wAddr & DFLASH_PAGE_MSK; 
+		byPageSize = DFLASH_PAGESIZE/4;
+	}
+	else {
+		wPageStAddr = wAddr & PFLASH_PAGE_MSK;
+		byPageSize = PFLASH_PAGESIZE/4;
+	}
+	
+	wAddr -= wPageStAddr;
+	wAddr = wAddr >> 2;	
+
+	///step1
+	apt_ifc_step_sync( IFC_PAGE_LAT_CLR, wPageStAddr);
+	///step2
+	for(i=0; i< byPageSize; i++) {
+      if( i == wAddr )
+	  {
+		for(j = 0; j<wDataNum; j++)
+			wBuff[i++] = pwData[j];
+		i--;
+	  }
+      else {
+        wBuff[i] = *(uint32_t *)(wPageStAddr+4*i);
+      }
+    }
+	
+	for(i=0; i<byPageSize; i++) {
+        *(uint32_t *)(wPageStAddr+4*i) = wBuff[i];
+    }
+	///step3
+	apt_ifc_step_sync( IFC_PRE_PGM, wPageStAddr);
+
+	///step4
+	apt_ifc_step_sync( IFC_PROGRAM, wPageStAddr);
+
+	
+	///step5
+	apt_ifc_step_sync( IFC_PAGE_ERASE, wPageStAddr);
+	///step6
+	apt_ifc_step_sync( IFC_PROGRAM, wPageStAddr);
+
+	g_bFlashPgmDne = 1;
+	
+}
+
+/** \brief 		write n bytes within a page  (Not Support across page writing!!!)
+ *              1) CPU would halt for around 4.2ms when IFC programming is excecuted.
+				2) Start Address has to be word alligned
+ *  \param[in] 	wAddr:		PGM start address
+ * 	\param[in] 	wDataNum:	number of words to be written
+ *  \param[in]	pwData:		point points to data to be written
+ *  \return error code:		return CSI_ERROR when PGM verify fails \ref csi_error_t	
+ */
+void page_program_u8(U32_T wAddr,U32_T wDataNum, U8_T *pbyData)
+{
+	U32_T i,j,wPageStAddr;
+	;
+	U8_T byPageSize, byBuff[PFLASH_PAGESIZE];
+	
+		
+	g_bFlashPgmDne = 0;
+	if (wAddr >= DFLASH_BASE) {
+		wPageStAddr = wAddr & DFLASH_PAGE_MSK; 
+		byPageSize = DFLASH_PAGESIZE;
+	}
+	else {
+		
+		wPageStAddr = wAddr & PFLASH_PAGE_MSK;
+		byPageSize = PFLASH_PAGESIZE;
+	}
+	
+	wAddr -= wPageStAddr;
+
+	///step1
+	apt_ifc_step_sync( IFC_PAGE_LAT_CLR, wPageStAddr);
+	///step2
+	for(i=0; i< byPageSize; i++) {
+      if( i == wAddr )
+	  {
+		j = 0;
+		while(wDataNum > 0) {
+			byBuff[i++] = pbyData[j++];  
+			wDataNum --;
 		}
-		//Pre-programmed operation settings 3
-		SetUserKey;
-		IFC->CMR=0x06;					
-		IFC->FM_ADDR=FlashAdd;
-		IFC->CR=0X01;					//Start Program
-		while(IFC->CR!=0x0);			//Wait for the operation to complete
-		//Perform pre-programming 4
-		SetUserKey;
-		IFC->CMR=0x01;					
-		IFC->FM_ADDR=FlashAdd;			//
-		IFC->CR=0X01;					//Start Program
-	}
-}
-//Normal mode, when the call is completed once, it will delay 4.2ms in the program
-//Not Support across page writing!!!
-void Page_ProgramData(unsigned int FlashAdd,unsigned int DataSize,volatile unsigned char *BufArry)
-{
-	int i,DataBuffer;
+		i -= 1;
+	  }
+      else {
+        byBuff[i] = *(U8_T *)(wPageStAddr+i);
+      }
+    }
+	
+	for(i=0; i<byPageSize/4; i+=4) {
+        *(U32_T *)(wPageStAddr+i) = byBuff[i] + (byBuff[i+1] << 8) + (byBuff[i+2] << 16) + (byBuff[i+3] <<24);
+		
+    }
+	///step3
+	apt_ifc_step_sync( IFC_PRE_PGM, wPageStAddr);
 
-	//Page cache wipe 1
-	SetUserKey;
-	IFC->CMR=0x07;					
-	IFC->FM_ADDR=FlashAdd;
-	IFC->CR=0X01;					//Start Program
-	while(IFC->CR!=0x0);			//Wait for the operation to complete
-	//Write data to the cache 2
-	for(i=0;i<((DataSize+3)/4);i++)   //sizeof structure
-	{
-		DataBuffer=*BufArry+(*(BufArry+1)<<8)+(*(BufArry+2)<<16)+(*(BufArry+3)<<24);
-		*(volatile unsigned int *)(FlashAdd+4*i)=DataBuffer;
-		BufArry  +=4;
-	}
-	//Pre-programmed operation settings 3
-	SetUserKey;
-	IFC->CMR=0x06;					
-	IFC->FM_ADDR=FlashAdd;
-	IFC->CR=0X01;					//Start Program
-	while(IFC->CR!=0x0);			//Wait for the operation to complete
-	//Perform pre-programming 4
-	SetUserKey;
-	IFC->CMR=0x01;					
-	IFC->FM_ADDR=FlashAdd;			//
-	IFC->CR=0X01;					//Start Program
-	while(IFC->RISR!=PEP_END_INT);			//Wait for the operation to complete
-	//Page erase 5
-	SetUserKey;
-	IFC->CMR=0x02;					
-	IFC->FM_ADDR=FlashAdd;			//
-	IFC->CR=0X01;					//Start Program
-	while(IFC->RISR!=ERS_END_INT);			//Wait for the operation to complete
-	//Write page cache data to flash memory 6
-	SetUserKey;
-	IFC->CMR=0x01;					
-	IFC->FM_ADDR=FlashAdd;		//
-	IFC->CR=0X01;					//Start Program
-	while(IFC->RISR!=RGM_END_INT);			//Wait for the operation to complete
+	///step4
+	apt_ifc_step_sync( IFC_PROGRAM, wPageStAddr);
+
+	///step5
+	apt_ifc_step_sync( IFC_PAGE_ERASE, wPageStAddr);
+	///step6
+	apt_ifc_step_sync( IFC_PROGRAM, wPageStAddr);
+
+	g_bFlashPgmDne = 1;
 }
 
-//Not Support across page writing!!!
-void Page_ProgramData_U32(unsigned int FlashAdd,unsigned int DataSize,volatile U32_T *BufArry)
-{
-	int i,DataBuffer;
 
-	//Page cache wipe 1
-	SetUserKey;
-	IFC->CMR=0x07;					
-	IFC->FM_ADDR=FlashAdd;
-	IFC->CR=0X01;					//Start Program
-	while(IFC->CR!=0x0);			//Wait for the operation to complete
-	//Write data to the cache 2
-	for(i=0;i<DataSize;i++)   //sizeof structure
-	{
-		DataBuffer=*BufArry;
-		*(volatile unsigned int *)(FlashAdd+4*i)=DataBuffer;
-		BufArry  +=1;
-	}
-	//Pre-programmed operation settings 3
-	SetUserKey;
-	IFC->CMR=0x06;					
-	IFC->FM_ADDR=FlashAdd;
-	IFC->CR=0X01;					//Start Program
-	while(IFC->CR!=0x0);			//Wait for the operation to complete
-	//Perform pre-programming 4
-	SetUserKey;
-	IFC->CMR=0x01;					
-	IFC->FM_ADDR=FlashAdd;			//
-	IFC->CR=0X01;					//Start Program
-	while(IFC->RISR!=PEP_END_INT);			//Wait for the operation to complete
-	//Page erase 5
-	SetUserKey;
-	IFC->CMR=0x02;					
-	IFC->FM_ADDR=FlashAdd;			//
-	IFC->CR=0X01;					//Start Program
-	while(IFC->RISR!=ERS_END_INT);			//Wait for the operation to complete
-	//Write page cache data to flash memory 6
-	SetUserKey;
-	IFC->CMR=0x01;					
-	IFC->FM_ADDR=FlashAdd;		//
-	IFC->CR=0X01;					//Start Program
-	while(IFC->RISR!=RGM_END_INT);			//Wait for the operation to complete
-}
-/*************************************************************
-// ReadFlashData fuction return Data arry save in Flash
-// DataLength must be a multiple of 4, DataLength % 4 ==0.
-//EntryParameter:RdStartAdd、DataLength、*DataArryPoint
-//ReturnValue:NONE
-*************************************************************/
-void ReadDataArry(unsigned int RdStartAdd,unsigned int DataLength,volatile unsigned char *DataArryPoint)
+/** \brief Read data(byte) from Flash.
+ *  \param[in] 	wAddr：		data address（(SHOULD BE WORD ALLIGNED)）
+ *  \param[out] wData：		data  Pointer to a buffer storing the data read from Flash.
+ *  \param[in] 	wDataNum：	number of data（WORDs）to read.
+ *  \return none
+ */
+void read_data_array_u8(U32_T wRdStartAdd,U32_T wDataNum, U8_T * pbyData)
 {
-	unsigned int i,Buffer;
-	//delay_nms(1);
-	for(i=0;i<((DataLength+3)/4);i++)
-	{
-		Buffer=*(volatile unsigned int *)RdStartAdd;
-		*DataArryPoint=Buffer;
-		*(DataArryPoint+1)=Buffer>>8;
-		*(DataArryPoint+2)=Buffer>>16;
-		*(DataArryPoint+3)=Buffer>>24;
-		RdStartAdd +=4;
-		DataArryPoint +=4;
-	}
-}
-/*************************************************************
-//ReadFlashData fuction return Data arry save in Flash
-//EntryParameter:RdStartAdd、DataLength、*DataArryPoint
-//ReturnValue:NONE
-*************************************************************/
-void ReadDataArry_U8(unsigned int RdStartAdd,unsigned int DataLength,volatile unsigned char *DataArryPoint)
-{
-	unsigned int i;
-	for (i=0;i<DataLength;i++)
+	U32_T i;
+	for (i=0;i<wDataNum;i++)
 	{
 		if((i!=0)&&(i%4==0))
 		{
-			RdStartAdd +=4;
+			wRdStartAdd +=4;
 		}	
-		*DataArryPoint=*(U8_T *)(RdStartAdd+ (i%4));
-		DataArryPoint++;
+		*pbyData=*(U8_T *)(wRdStartAdd+ (i%4));
+		pbyData++;
 	}
-}
-void ReadDataArry_U32(unsigned int RdStartAdd,unsigned int DataLength,volatile U32_T *DataArryPoint)
-{
-	unsigned int i;
-	for (i=0;i<DataLength;i++)
-	{
-		*DataArryPoint=*(U32_T *)(RdStartAdd+4*i);
-		DataArryPoint++;
-	}
-}
-/*************************************************************
-//Enable or Disable IFC Interrupt when Operate FlashData 
-//EntryParameter:IFC_INT_x
-//IFC_INT_x:ERS_END_INT,RGM_END_INT,PEP_END_INT,PROT_ERR_INT,UDEF_ERR_INT,ADDR_ERR_INT,OVW_ERR_INT
-//ReturnValue:NONE
-*************************************************************/
-void IFC_interrupt_CMD(functional_status_e NewState ,IFC_INT_TypeDef IFC_INT_x)
-{
-	if(NewState != DISABLE)
-	{
-		IFC->IMCR =IFC->IMCR|IFC_INT_x;
-	}
-	else 
-	{
-		IFC->IMCR =IFC->IMCR & (~IFC_INT_x);
-	}
-}
-/*************************************************************/
-//IFC Interrupt enable
-//EntryParameter:NONE
-//ReturnValue:NONE
-/*************************************************************/
-void IFC_Int_Enable(void)
-{
-    IFC->ICR=0Xf007;					//CLAER IFC INT status
-	INTC_ISER_WRITE(IFC_INT);    
 }
 
-/*************************************************************/
-//IFC Interrupt enable
-//EntryParameter:NONE
-//ReturnValue:NONE
-/*************************************************************/
-void IFC_Int_Disable(void)
+/** \brief Read data(word) from Flash.
+ *  \param[in] 	wAddr：		data address（(SHOULD BE WORD ALLIGNED)）
+ *  \param[out] wData：		data  Pointer to a buffer storing the data read from Flash.
+ *  \param[in] 	wDataNum：	number of data（WORDs）to read.
+ *  \return none
+ */
+ 
+void read_data_array_u32(U32_T wRdStartAdd,U32_T wDataNum,volatile U32_T *pbyData)
 {
-    INTC_ICER_WRITE(IFC_INT);    
+	U32_T i;
+	for (i=0;i<wDataNum;i++)
+	{
+		*pbyData=*(U32_T *)(wRdStartAdd+4*i);
+		pbyData++;
+	}
 }
-/******************* (C) COPYRIGHT 2020 APT Chip *****END OF FILE****/
+
+
+/** \brief     IFC operation step, used for normal mode operations
+ * 
+ *  \param[in] eCmd:		ifc command \ref ifc_cmd_e
+ *  \param[in] wPageStAddr:	page address
+ *  \return none
+ */
+static void apt_ifc_step_sync(ifc_cmd_e eCmd, uint32_t wPageStAddr)
+{
+	IFC->CEDR = IFC_CLKEN;	
+	SET_USER_KEY;	
+	IFC->CMR = eCmd;
+	IFC->ADDR = wPageStAddr;
+	IFC->CR = IFC_START;
+	while(IFC->CR != 0);
+}
+
+
+
+/******************* (C) COPYRIGHT 2024 APT Chip *****END OF FILE****/

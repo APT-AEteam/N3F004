@@ -45,7 +45,7 @@
 /******************************************************************************
 * IP instance declaration
 ******************************************************************************/
-extern CSP_IFC_T 	*IFC;
+extern csp_ifc_t 	*IFC;
 extern csp_syscon_t *SYSCON  ;
 extern csp_etcb_t   *ETCB ;
 //extern CSP_ADC12_T 	*ADC0     ;

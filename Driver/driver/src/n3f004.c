@@ -18,7 +18,7 @@
 /* private function-----------------------------------------------------------*/
 /* global variablesr----------------------------------------------------------*/
 
-CSP_IFC_T   	*IFC     = (CSP_IFC_T    *)APB_IFCBASE ;
+csp_ifc_t   	*IFC     = (csp_ifc_t    *)APB_IFCBASE ;
 csp_syscon_t 	*SYSCON = (csp_syscon_t *)APB_SYSCONBASE ;
 
 //CSP_ADC12_T 	*ADC0    = (CSP_ADC12_T  *)APB_ADC0BASE ;

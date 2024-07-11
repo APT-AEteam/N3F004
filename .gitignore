@@ -58,3 +58,12 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+__workspace_pack__
+cdkws.mk
+N3F004_IFC.mk
+N3F004_IFC.modify.bat
+N3F004_IFC.cdkws
+Obj
+Lst
+.cdk
+.cache

@@ -18,12 +18,20 @@
 ******************************************************************************/	
 #define PFLASH_BASE 		0x00000000
 #define PFLASH_SIZE 		0x00008000
-	
+#define PFLASH_PAGESIZE		256	    //Bytes
+//#define PFLASH_PAGESIZE		128	    //Bytes
 #define PFLASH_PAGENUM		256
+
 #define PFLASH_LIMIT 		(PFLASH_BASE + PFLASH_SIZE) 
+#define PFLASH_PAGE_MSK		~(PFLASH_PAGESIZE-1)
+
 #define DFLASH_BASE 		0x10000000
 #define DFLASH_SIZE 		0x10000C00
-		
+
+//#define DFLASH_PAGESIZE		128		//Bytes
+#define DFLASH_PAGESIZE		64		//Bytes
+#define DFLASH_PAGE_MSK	 	~(DFLASH_PAGESIZE-1)
+
 #define DLASH_PAGENUM		24
 #define DFLASH_LIMIT 		(DFLASH_BASE + DFLASH_SIZE) 
 
@@ -33,7 +41,7 @@
 
 #define USEROPTION_ADDR		0x000800C0
 #define PROTECTION_ADDR		0x00080104
-#define SWD_ADDR			0x000801C0
+#define SWDREMAP_ADDR			0x000801C0
 
 /******************************************************************************
 * Peripheral Address Information
