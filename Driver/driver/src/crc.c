@@ -1,6 +1,6 @@
 /***********************************************************************//** 
  * \file  crc.c
- * \brief BT function interface
+ * \brief crc function interface
  * \copyright Copyright (C) 2015-2024 @ APTCHIP
  * <table>
  * <tr><th> Date  <th>Version  <th>Author  <th>Description

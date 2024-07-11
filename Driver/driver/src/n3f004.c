@@ -27,8 +27,8 @@ csp_gpio_t  	*GPIOA0   = (csp_gpio_t  *)APB_GPIOA0BASE ; // A0
 csp_gpio_t  	*GPIOB0   = (csp_gpio_t  *)APB_GPIOB0BASE ; // B0
 csp_igrp_t  	*GPIOGRP  = (csp_igrp_t *)APB_IGRPBASE;
 
-//CSP_UART_T  	*UART0    = (CSP_UART_T  *)APB_UART0BASE ;
-//CSP_UART_T  	*UART1    = (CSP_UART_T  *)APB_UART1BASE ;
+csp_uart_t  	*UART0    = (csp_uart_t  *)APB_UART0BASE ;
+csp_uart_t  	*UART1    = (csp_uart_t  *)APB_UART1BASE ;
 //
 //CSP_SSP_T   	*SPI0     = (CSP_SSP_T   *)APB_SPI0BASE ;
 //CSP_I2C_T   	*I2C0     = (CSP_I2C_T   *)APB_I2C0BASE ;
@@ -41,7 +41,7 @@ csp_etcb_t  	*ETCB     = (csp_etcb_t *)APB_ETCBBASE ;
 //
 csp_bt_t    	*BT0      = (csp_bt_t   *)APB_BT0BASE ;
 csp_bt_t    	*BT1      = (csp_bt_t   *)APB_BT1BASE ;
-csp_crc_t   	*CRC      = (csp_crc_t  *)AHB_CRCBASE ;
+csp_crc_t   *CRC      = (csp_crc_t  *)AHB_CRCBASE ;
 
 /* Private variablesr---------------------------------------------------------*/
 /* defines -------------------------------------------------------------------*/

@@ -112,7 +112,45 @@ void gpt_pin_config(gpta_io_e eGptaIo)
 		case (GPTA_CHA_PB01): gpio_init(GPIOB0, 1, PB01_GPTA_CHA); break;
 		case (GPTA_CHA_PA01): gpio_init(GPIOA0, 1, PA01_GPTA_CHA); break;
 		case (GPTA_CHA_PA03): gpio_init(GPIOA0, 3, PA03_GPTA_CHA); break;
+		default: break;
+	}
+}
 
+/** \brief set uart0 io as TX,RX
+ * 
+ *  \param[in] eUart0Io: UART0 IO \ref uart0_io_e
+ *  \return none
+ */ 
+void uart0_pin_config(uart0_io_e eUart0Io)
+{
+	switch (eUart0Io) {
+		case(UART0_TX_PA06):gpio_init(GPIOA0, 6, PA06_UART0_TX); break;
+		case(UART0_RX_PA07):gpio_init(GPIOA0, 7, PA07_UART0_RX); break;
+		case(UART0_TX_PB02):gpio_init(GPIOB0, 2, PB02_UART0_TX); break;
+		case(UART0_RX_PA05):gpio_init(GPIOA0, 5, PA05_UART0_RX); break;
+		case(UART0_TX_PA012):gpio_init(GPIOA0, 12, PA012_UART0_TX); break;
+		case(UART0_TX_PA00):gpio_init(GPIOA0, 0, PA00_UART0_TX); break;
+		case(UART0_RX_PA01):gpio_init(GPIOA0, 1, PA01_UART0_RX); break;
+		default: break;
+	}
+}
+
+/** \brief set uart1 io as TX,RX
+ * 
+ *  \param[in] eUart1Io: UART1 IO \ref uart1_io_e
+ *  \return none
+ */ 
+void uart1_pin_config(uart1_io_e eUart1Io)
+{
+	switch (eUart1Io) {
+		case(UART1_RX_PA011):gpio_init(GPIOA0, 11, PA011_UART1_RX); break;
+		case(UART1_RX_PA013):gpio_init(GPIOA0, 13, PA013_UART1_RX); break;
+		case(UART1_TX_PB00):gpio_init(GPIOB0, 0, PB00_UART1_TX); break;
+		case(UART1_RX_PB01):gpio_init(GPIOB0, 1, PB01_UART1_RX); break;
+		case(UART1_TX_PA00):gpio_init(GPIOA0, 0, PA00_UART1_TX); break;
+		case(UART1_TX_PA03):gpio_init(GPIOA0, 3, PA03_UART1_TX); break;
+		case(UART1_RX_PA04):gpio_init(GPIOA0, 4, PA04_UART1_RX); break;
+		case(UART1_TX_PA02):gpio_init(GPIOA0, 2, PA02_UART1_TX); break;
 		default: break;
 	}
 }

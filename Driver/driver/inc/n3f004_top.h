@@ -367,6 +367,28 @@ typedef enum{
 	GPTA_CHA_PA03
 }gpta_io_e;
 
+typedef enum{
+	UART0_TX_PA06		= 0,
+	UART0_RX_PA07,
+	UART0_TX_PB02,
+	UART0_RX_PA05,
+	UART0_TX_PA012,
+	UART0_TX_PA00,
+	UART0_RX_PA01,
+}uart0_io_e;
+
+typedef enum{
+	UART1_RX_PA011		= 0,
+	UART1_RX_PA013,
+	UART1_TX_PB00,
+	UART1_RX_PB01,
+	UART1_TX_PA00,
+	UART1_TX_PA03,
+	UART1_RX_PA04,
+	UART1_TX_PA02,
+}uart1_io_e;
+
+
 #endif 
 
 /******************* (C) COPYRIGHT 2024 APT Chip *****END OF FILE****/

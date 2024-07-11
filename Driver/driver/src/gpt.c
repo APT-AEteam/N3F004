@@ -45,44 +45,6 @@ void gpt_deinit(csp_gpta_t *ptGptaBase)
 	ptGptaBase->ICR 			= GPT_RESET_VALUE;
 }
 
-///** \brief gpt io init 
-// * 
-// *  \param[in] 
-// * 			   
-// *  \return none
-// */ 
-//void gpt_io_init(GPT_IOSET_TypeDef IONAME)
-//{
-//	if(IONAME==GPT_CHA_PB01)
-//	{
-//		GPIOB0->CONLR=(GPIOB0->CONLR & 0XFFFFFF0F)|0x00000050;
-//	}
-//	if(IONAME==GPT_CHA_PA09)
-//	{
-//		GPIOA0->CONHR=(GPIOA0->CONHR & 0XFFFFFF0F)|0x00000050;
-//	}
-//	if(IONAME==GPT_CHA_PA010)
-//	{
-//		GPIOA0->CONHR=(GPIOA0->CONHR & 0XFFFFF0FF)|0x00000600;
-//	}
-//	if(IONAME==GPT_CHB_PA010)
-//	{
-//		GPIOA0->CONHR=(GPIOA0->CONHR & 0XFFFFF0FF)|0x00000700;
-//	}
-//	if(IONAME==GPT_CHB_PA011)
-//	{
-//		GPIOA0->CONHR=(GPIOA0->CONHR & 0XFFFF0FFF)|0x00006000;
-//	}
-//	if(IONAME==GPT_CHB_PB00)
-//	{
-//		GPIOB0->CONLR=(GPIOB0->CONLR & 0XFFFFFFF0)|0x00000004;
-//	}
-//	if(IONAME==GPT_CHB_PB01)
-//	{
-//		GPIOB0->CONLR=(GPIOB0->CONLR & 0XFFFFFF0F)|0x00000060;
-//	}
-//}
-
 
 /** \brief gpt init, clk enable/disable, clk source select, stop mode config and clk div setting
  * 
@@ -413,7 +375,9 @@ void gpt_reglink_configure(csp_gpta_t *ptGptaBase,gpt_reglk_e ePrdrLk, gpt_reglk
  */ 
 void gpt_int_enable(csp_gpta_t *ptGptaBase,gpta_int_e eInt)
 {
-	ptGptaBase->IMCR  |= eInt;						
+	ptGptaBase->ICR = eInt;
+	csi_vic_enable_irq(GPT0_INT);
+	ptGptaBase->IMCR  |= eInt;				
 }
 
 /** \brief gpt interrupt disable
@@ -425,7 +389,9 @@ void gpt_int_enable(csp_gpta_t *ptGptaBase,gpta_int_e eInt)
  */ 
 void gpt_int_disable(csp_gpta_t *ptGptaBase,gpta_int_e eInt)
 {
-	ptGptaBase->IMCR  &= ~eInt;					
+	ptGptaBase->IMCR  &= ~eInt;		
+	csi_vic_disable_irq(GPT0_INT);
+	ptGptaBase->ICR = eInt;
 }
 
 	

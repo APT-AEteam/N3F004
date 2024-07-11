@@ -31,7 +31,8 @@
 #include "ifc.h"
 //#include "spi.h"
 #include "syscon.h"
-//#include "uart.h"
+#include "uart.h"
+#include "cmp.h"
 #include "n3f004_top.h"
 
 
@@ -51,8 +52,8 @@ extern csp_etcb_t   *ETCB ;
 extern csp_gpio_t 	*GPIOA0   ;
 extern csp_gpio_t 	*GPIOB0   ;
 extern csp_igrp_t	*GPIOGRP  ;
-//extern CSP_UART_T 	*UART0    ;
-//extern CSP_UART_T 	*UART1    ;
+extern csp_uart_t 	*UART0    ;
+extern csp_uart_t 	*UART1    ;
 //extern CSP_SSP_T  	*SPI0     ;
 //extern CSP_I2C_T  	*I2C0     ;
 extern csp_gpta_t 	*GPT0     ;
@@ -60,6 +61,8 @@ extern csp_ept_t 	*EPT0     ;
 extern csp_bt_t  	*BT0      ;
 extern csp_bt_t  	*BT1      ;
 extern csp_crc_t 	*CRC      ;
+extern csp_cmp_t	*CMP0  ;
+extern csp_cmp_t	*CMP1  ;
 
 
 

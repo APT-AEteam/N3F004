@@ -650,6 +650,7 @@ void ept_event_software_trigger(ept_trgsrc_e eTrg)
 void ept_int_enable(ept_int_e eInt)
 {
 	EPT0->ICR 	= eInt;							//clear LVD INT status
+	csi_vic_enable_irq(EPT0_INT);
 	EPT0->IMCR  |= eInt;
 }
 
@@ -662,6 +663,8 @@ void ept_int_enable(ept_int_e eInt)
 void ept_int_disable(ept_int_e eInt)
 {
 	EPT0->IMCR  &= ~eInt;
+	csi_vic_disable_irq(EPT0_INT);
+	EPT0->ICR= eInt;
 }
 
 /** \brief   EPT emergency interrupt enable 
