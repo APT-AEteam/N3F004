@@ -47,7 +47,7 @@ void emosc_pin_init(void)
  *  \param[in] eCloIo: CLO IO \ref clo_io_e
  *  \return none
  */ 
-void syscon_clo_pin_config(clo_io_e eCloIo)
+void syscon_clo_pin_init(clo_io_e eCloIo)
 {
 	switch (eCloIo)
 	{
@@ -168,3 +168,29 @@ void gpio_remap(csp_gpio_t * ptGpioBase,U8_T byPinNum, ioremap_e eCfgVal)
 	syscon_ioremap(byPinNum, eCfgVal);
 
 }
+
+/** \brief cmp io configuration
+ * 
+ *  \param[in] eCmpIo: CMP IO \ref cmp_io_e
+ *  \return none
+ */
+void cmp_io_init(cmp_io_e eCmpIo)
+{
+	switch(eCmpIo)
+	{
+		case (CMPIN1P_PA08): gpio_init(GPIOA0, 8, PA08_CMPIN1P); break;
+		case (CMPIN1N_PA09): gpio_init(GPIOA0, 9 , PA09_CMPIN1N); break;
+		case (CMPIN2P_PA013): gpio_init(GPIOA0, 13, PA013_CMPIN2P); break;
+		case (CMPIN2N_PB00): gpio_init(GPIOB0, 0, PB00_CMPIN2N); break;
+		case (CMPIN3P_PB01):gpio_init(GPIOB0, 1, PB01_CMPIN3P); break;
+		case (CMPIN3N_PA00):gpio_init(GPIOA0, 0, PA00_CMPIN3N); break;
+		case (CMPIN4P_PB02):gpio_init(GPIOB0, 2, PB02_CMPIN4P); break;
+		case (CMPIN4N_PB03):gpio_init(GPIOB0, 3, PB03_CMPIN4N); break;
+		case (CMP0OUT_PA03):gpio_init(GPIOA0, 3, PA03_CMP0_OUT); break;
+		case (CMP0OUT_PA06):gpio_init(GPIOA0, 6, PA06_CMP0_OUT); break;
+		case (CMP1OUT_PA07):gpio_init(GPIOA0, 7, PA07_CMP1_OUT); break;
+		case (CMP1OUT_PA012):gpio_init(GPIOA0, 12, PA012_CMP1_OUT); break;
+		default:break;
+	}
+}
+

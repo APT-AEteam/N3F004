@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CDK_Workspace Name="N3F004_BT_TIMER" Database="LanguageSever" DoubleClick="Yes">
   <DefaultPackPath>$(CDKWS)\__workspace_pack__</DefaultPackPath>
-  <Project Name="N3F004_BT_TIMER" Path="N3F004_BT_TIMER.cdkproj" RootPath="" Active="Yes"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Debug" Selected="yes">
       <Environment/>

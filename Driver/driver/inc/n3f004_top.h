@@ -18,12 +18,20 @@
 ******************************************************************************/	
 #define PFLASH_BASE 		0x00000000
 #define PFLASH_SIZE 		0x00008000
-	
+#define PFLASH_PAGESIZE		256	    //Bytes
+//#define PFLASH_PAGESIZE		128	    //Bytes
 #define PFLASH_PAGENUM		256
+
 #define PFLASH_LIMIT 		(PFLASH_BASE + PFLASH_SIZE) 
+#define PFLASH_PAGE_MSK		~(PFLASH_PAGESIZE-1)
+
 #define DFLASH_BASE 		0x10000000
 #define DFLASH_SIZE 		0x10000C00
-		
+
+//#define DFLASH_PAGESIZE		128		//Bytes
+#define DFLASH_PAGESIZE		64		//Bytes
+#define DFLASH_PAGE_MSK	 	~(DFLASH_PAGESIZE-1)
+
 #define DLASH_PAGENUM		24
 #define DFLASH_LIMIT 		(DFLASH_BASE + DFLASH_SIZE) 
 
@@ -33,7 +41,7 @@
 
 #define USEROPTION_ADDR		0x000800C0
 #define PROTECTION_ADDR		0x00080104
-#define SWD_ADDR			0x000801C0
+#define SWDREMAP_ADDR			0x000801C0
 
 /******************************************************************************
 * Peripheral Address Information
@@ -328,6 +336,26 @@ typedef enum{
 	IOREMAP_EPT_CHBY,
 	IOREMAP_EPT_CHCY
 }ioremap_e;
+
+
+typedef enum
+{
+	CMPIN1P_PA08 = 0,
+	CMPIN1N_PA09,
+	CMPIN2P_PA013,
+	CMPIN2N_PB00,
+	CMPIN3P_PB01,
+	CMPIN3N_PA00,
+	CMPIN4P_PB02,
+	CMPIN4N_PB03,
+	CMP0OUT_PA06,
+	CMP0OUT_PA03,
+	CMP1OUT_PA07,
+	CMP1OUT_PA012
+}cmp_io_e;
+
+
+
 
 typedef enum{
 	EPT_CHAX_PA07		= 0,

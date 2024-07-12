@@ -39,6 +39,6 @@ extern void CORET_TICKINT_Enable(void);
 extern void CORET_TICKINT_Disable(void);
 extern void CORET_reload(void);
 
-#endif   /**< apt32f102_coret_H */
+#endif   /**< CORET_H */
 
 /******************* (C) COPYRIGHT 2024 APT Chip *****END OF FILE****/
