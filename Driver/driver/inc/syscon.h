@@ -560,6 +560,17 @@ typedef enum
 	CLO_DIV16		    =	5,
 }clo_div_e;
 
+
+/******************************************************************************
+*WKCR Wakeup Source Control Register
+******************************************************************************/
+typedef enum{
+	IWDT_WKEN = 8,
+	LVD_WKEN  = 11,
+	TC3_WKEN  = 13
+}syscon_wksrc_e;
+
+
 /******************************************************************************
 *IOMAP1: IOMAP1 configuration
 ******************************************************************************/
@@ -687,7 +698,7 @@ void syscon_iwdt_Config(iwdt_ovt_e eOvTime , iwdt_intv_e eIntvTime );
  *  \param[in] ePol: interrupt polarity \ref lvdint_pol_e
  *  \return none
  */
-void SYSCON_LVD_Config(functional_status_e eLvdEnable , lvd_level_e eLvd , lvr_level_e eLvr, lvdint_pol_e ePol);
+void syscom_lvd_config(functional_status_e eLvdEnable , lvd_level_e eLvd , lvr_level_e eLvr, lvdint_pol_e ePol);
 
 
 
@@ -835,7 +846,12 @@ void syscon_swd_lock(void);
  */
 void syscon_swd_unlock(void);
 
-
+/** \brief configure wakeup source 
+ *  \param[in] eWkupSrc: wakup source \ref syscon_wksrc_e
+ *  \param[in] eNewState: ENABLE/DSIABLE
+ *  \return  none
+ */
+void pm_wakupsrc_cmd(syscon_wksrc_e eWkupSrc, functional_status_e eNewState);
 
 
 /******************* (C) COPYRIGHT 2024 APT Chip *****END OF FILE****/

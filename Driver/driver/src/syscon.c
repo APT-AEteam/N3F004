@@ -184,7 +184,7 @@ void syscon_iwdt_Config(iwdt_ovt_e eOvTime , iwdt_intv_e eIntvTime )
  *  \param[in] ePol: interrupt polarity \ref lvdint_pol_e
  *  \return none
  */
-void SYSCON_LVD_Config(functional_status_e eLvdEnable , lvd_level_e eLvd , lvr_level_e eLvr, lvdint_pol_e ePol)
+void syscon_lvd_config(functional_status_e eLvdEnable , lvd_level_e eLvd , lvr_level_e eLvr, lvdint_pol_e ePol)
 {
 	U32_T wTemp = LVD_DIS;
 	if (eLvdEnable)
@@ -203,6 +203,7 @@ void lvd_int_enable(void)
 {
 	SYSCON->ICR = LVD_INT;				//clear LVD INT status
 	SYSCON->IMER  |= LVD_INT;
+	csi_vic_enable_irq(SYSCON_INT);
 }
 
 /** \brief LVD interrupt disable
@@ -428,7 +429,7 @@ U32_T syscon_ureg_read(user_reg_e eUreg)
 		return (*(U32_T *)((U32_T)&SYSCON->UREG0 + (eUreg * 4)));
 }
 
-/** \brief SWD Lock
+/** \brief SWD Lock: valid SWDIOs are locked, thus can not be configufed to other AF
  * 
  *  \param[in]  none
  *  \return  none
@@ -438,7 +439,8 @@ void syscon_swd_lock(void)
 	SYSCON->DBGCR = SWD_LOCK;
 }
 
-/** \brief SWD Unlock
+/** \brief SWD Unlock: valid SWDIOs can be configured to other AF
+			Once changed, swd connection would be lost.
  * 
  *  \param[in]  none
  *  \return  none
@@ -449,6 +451,15 @@ void syscon_swd_unlock(void)
 }
 
 
+/** \brief configure wakeup source 
+ *  \param[in] eWkupSrc: wakup source \ref syscon_wksrc_e
+ *  \param[in] eNewState: ENABLE/DSIABLE
+ *  \return  none
+ */
+void pm_wakupsrc_cmd(syscon_wksrc_e eWkupSrc, functional_status_e eNewState)
+{
+	SYSCON->WKCR &= ~(0x1 << eWkupSrc) | (eNewState << eWkupSrc);
+}
 
 
 
