@@ -155,6 +155,28 @@ void uart1_pin_config(uart1_io_e eUart1Io)
 	}
 }
 
+/** \brief set SPI io as NSS,MOSI,MISO,SCK
+ * 
+ *  \param[in] eSpiIo: SPI IO \ref spi_io_e
+ *  \return none
+ */ 
+void spi_pin_config(spi_io_e eSpiIo)
+{
+	switch (eSpiIo) {
+		case(SPI_NSS_PA06):gpio_init(GPIOA0, 6, PA06_SPI_NSS); break;
+		case(SPI_SCK_PB02):gpio_init(GPIOB0, 2, PB02_SPI_SCK); break;
+		case(SPI_MOSI_PB03):gpio_init(GPIOB0, 3, PB03_SPI_MOSI); break;
+		case(SPI_MISO_PA08):gpio_init(GPIOA0, 8, PA08_SPI_MISO); break;
+		case(SPI_SCK_PA09):gpio_init(GPIOA0, 9, PA09_SPI_SCK); break;
+		case(SPI_MOSI_PA010):gpio_init(GPIOA0, 10, PA010_SPI_MOSI); break;
+		case(SPI_MISO_PA011):gpio_init(GPIOA0, 11, PA011_SPI_MISO); break;
+		case(SPI_MISO_PA05):gpio_init(GPIOA0, 5, PA05_SPI_MISO); break;
+		case(SPI_MOSI_PA012):gpio_init(GPIOA0, 12, PA012_SPI_MOSI); break;
+		case(SPI_SCK_PA02):gpio_init(GPIOA0, 2, PA02_SPI_SCK); break;
+		default: break;
+	}
+}
+
 /** \brief iomap configuration
  * 
  *  \param[in] eCloIo: CLO IO \ref clo_io_e

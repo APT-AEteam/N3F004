@@ -663,7 +663,6 @@ void ept_int_enable(ept_int_e eInt)
 void ept_int_disable(ept_int_e eInt)
 {
 	EPT0->IMCR  &= ~eInt;
-	csi_vic_disable_irq(EPT0_INT);
 	EPT0->ICR= eInt;
 }
 

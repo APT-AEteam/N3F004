@@ -335,13 +335,6 @@ void bt_int_enable(csp_bt_t *ptBtBase,bt_int_e eImcr)
 void bt_int_disable(csp_bt_t *ptBtBase,bt_int_e eImcr)
 {
 	ptBtBase->IMCR  |= eImcr;	
-	if((csp_bt_t *)ptBtBase == BT0)
-	{
-		csi_vic_disable_irq(BT0_INT);
-	}
-	else{
-		csi_vic_disable_irq(BT1_INT);
-	}
 	ptBtBase->ICR = eImcr;
 }
 

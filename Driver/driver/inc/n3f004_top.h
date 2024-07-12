@@ -416,6 +416,19 @@ typedef enum{
 	UART1_TX_PA02,
 }uart1_io_e;
 
+typedef enum{
+	SPI_NSS_PA06		= 0,
+	SPI_SCK_PB02,
+	SPI_MOSI_PB03,
+	SPI_MISO_PA08,
+	SPI_SCK_PA09,
+	SPI_MOSI_PA010,
+	SPI_MISO_PA011,
+	SPI_MISO_PA05,
+	SPI_MOSI_PA012,
+	SPI_SCK_PA02
+}spi_io_e;
+
 
 #endif 
 
