@@ -124,6 +124,143 @@ typedef enum{
 /******************************************************************************
 ********************* UARTx inline Functions Declaration **********************
 ******************************************************************************/
+/** \brief UART0/1 deinit
+ * 
+ *  \param[in] ptUartBase: pointer of uart register structure
+ * 			   
+ *  \return none
+ */ 
+void uart_deinit(csp_uart_t *ptUartBase);
+
+/** \brief UART0/1 wake up enable
+ * 
+ *  \param[in] ptUartBase: pointer of uart register structure
+ * 			   
+ *  \return none
+ */ 
+void uart_wakeup_enable(csp_uart_t *ptUartBase);
+
+/** \brief UART0/1 wake up disable
+ * 
+ *  \param[in] ptUartBase: pointer of uart register structure
+ * 			   
+ *  \return none
+ */ 
+void uart_wakeup_disable(csp_uart_t *ptUartBase);
+
+/** \brief UART0/1 initial 
+ * 
+ *  \param[in] ptUartBase: pointer of uart register structure
+ *  \param[in] hwBaudDiv: the division of baudrate ,range: 1~0xfffff
+ * 										BaudRate = PCLK/ hwBaudDiv
+ *  \param[in] eDataBit:  transmit data bit select \ref uart_databit_e
+ *  \param[in] eParity:  Parity select   \ref uart_parity_e
+ * 			   
+ *  \return none
+ */ 
+void uart_init(csp_uart_t *ptUartBase,U16_T hwBaudDiv, uart_databit_e eDataBit, uart_parity_e eParity);
+
+/** \brief UART0/1 initial & enable rx,tx interrupt
+ * 
+ *  \param[in] ptUartBase: pointer of uart register structure
+ *  \param[in] hwBaudDiv: the division of baudrate ,range: 1~0xfffff
+ * 										BaudRate = PCLK/ hwBaudDiv
+ *  \param[in] eDataBit:  transmit data bit select \ref uart_databit_e
+ *  \param[in] eParity:  Parity select   \ref uart_parity_e
+ * 			   
+ *  \return none
+ */ 
+void uart_init_rxtx_inten(csp_uart_t *ptUartBase,U16_T hwBaudDiv, uart_databit_e eDataBit, uart_parity_e eParity);
+
+/** \brief UART0/1 initial & enable rx interrupt
+ * 
+ *  \param[in] ptUartBase: pointer of uart register structure
+ *  \param[in] hwBaudDiv: the division of baudrate ,range: 1~0xfffff
+ * 										BaudRate = PCLK/ hwBaudDiv
+ *  \param[in] eDataBit:  transmit data bit select \ref uart_databit_e
+ *  \param[in] eParity:  Parity select   \ref uart_parity_e
+ * 			   
+ *  \return none
+ */ 
+void uart_init_rx_inten(csp_uart_t *ptUartBase,U16_T hwBaudDiv, uart_databit_e eDataBit, uart_parity_e eParity);
+
+/** \brief UART0/1 disable
+ * 
+ *  \param[in] ptUartBase: pointer of uart register structure
+ * 			   
+ *  \return none
+ */ 
+void uart_disable(csp_uart_t *ptUartBase);
+
+/** \brief  get uart status 
+ * 
+ *  \param[in] ptUartBase: pointer of uart register structure
+ * 			   
+ *  \return none
+ */ 
+U8_T uart_get_status(csp_uart_t *ptUartBase);
+
+/** \brief UART0/1  one byte data without interrupt
+ * 
+ *  \param[in] ptUartBase: pointer of uart register structure
+ *  \param[in] byData: datab to be sent
+ * 			   
+ *  \return none
+ */ 
+void uart_send_byte(csp_uart_t *ptUartBase,U8_T byData);
+
+/** \brief UART0/1  send data without interrupt
+ * 
+ *  \param[in] ptUartBase: pointer of uart register structure
+ *  \param[in] ptData: pointer of data to be sent
+ *  \param[in] hwLen: data length
+ * 			   
+ *  \return none
+ */ 
+void uart_send(csp_uart_t *ptUartBase,U8_T *ptData ,U16_T hwLen);
+
+/** \brief UART0/1  interrupt send byte  
+ * 
+ *  \param[in] ptUartBase: pointer of uart register structure
+ * 			   
+ *  \return none
+ */ 
+void uart_int_send_byte(csp_uart_t *ptUartBase );
+
+/** \brief UART0/1  interrupt send data  
+ * 
+ *  \param[in] ptUartBase: pointer of uart register structure
+ * 			   
+ *  \return none
+ */ 
+void uart_int_send(csp_uart_t *ptUartBase );
+
+/** \brief UART0/1 receive one byte 
+ * 
+ *  \param[in] ptUartBase: pointer of uart register structure
+ *  \param[out] ptData: pointer of  received data 
+ * 			   
+ *  \return TRUE or FLASE
+ */ 
+U8_T uart_receive_byte(csp_uart_t *ptUartBase,U8_T *ptData);
+
+/** \brief UART0/1 interrupt receive one byte
+ * 
+ *  \param[in] ptUartBase: pointer of uart register structure
+ * 			   
+ *  \return recieved data
+ */ 
+U8_T uart_int_receive_byte(csp_uart_t *ptUartBase);
+
+/** \brief UART0/1  receive data
+ * 
+ *  \param[in] ptUartBase: pointer of uart register structure
+ *  \param[in] ptData: pointer of received data
+ *  \param[in] hwLen:  receive data length
+ * 			   
+ *  \return TRUE OR FLASE
+ */ 
+U16_T UARTReceive(csp_uart_t *ptUartBase,U8_T *ptData,U16_T hwLen);
 
 	
 	

@@ -29,7 +29,7 @@
 #include "gpt.h"
 //#include "i2c.h"
 #include "ifc.h"
-//#include "spi.h"
+#include "spi.h"
 #include "syscon.h"
 #include "uart.h"
 #include "cmp.h"
@@ -54,7 +54,7 @@ extern csp_gpio_t 	*GPIOB0   ;
 extern csp_igrp_t	*GPIOGRP  ;
 extern csp_uart_t 	*UART0    ;
 extern csp_uart_t 	*UART1    ;
-//extern CSP_SSP_T  	*SPI0     ;
+extern csp_spi_t  	*SPI0     ;
 //extern CSP_I2C_T  	*I2C0     ;
 extern csp_gpta_t 	*GPT0     ;
 extern csp_ept_t 	*EPT0     ;

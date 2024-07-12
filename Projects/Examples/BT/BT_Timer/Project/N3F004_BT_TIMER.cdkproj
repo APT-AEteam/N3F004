@@ -76,7 +76,12 @@
       <File Name="../../../../../Driver/driver/src/cmp.c">
         <FileOption/>
       </File>
-      <File Name="../../../../../Driver/driver/src/uart.c"/>
+      <File Name="../../../../../Driver/driver/src/uart.c">
+        <FileOption/>
+      </File>
+      <File Name="../../../../../Driver/driver/src/spi.c">
+        <FileOption/>
+      </File>
     </VirtualDirectory>
     <VirtualDirectory Name="inc">
       <File Name="../../../../../Driver/driver/inc/bt.h">
@@ -121,6 +126,7 @@
       <File Name="../../../../../Driver/driver/inc/uart.h">
         <FileOption/>
       </File>
+      <File Name="../../../../../Driver/driver/inc/spi.h"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <BuildConfigs>

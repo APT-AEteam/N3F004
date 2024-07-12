@@ -390,7 +390,6 @@ void gpt_int_enable(csp_gpta_t *ptGptaBase,gpta_int_e eInt)
 void gpt_int_disable(csp_gpta_t *ptGptaBase,gpta_int_e eInt)
 {
 	ptGptaBase->IMCR  &= ~eInt;		
-	csi_vic_disable_irq(GPT0_INT);
 	ptGptaBase->ICR = eInt;
 }
 
