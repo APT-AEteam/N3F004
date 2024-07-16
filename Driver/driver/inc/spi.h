@@ -223,7 +223,7 @@ void spi_master_init(csp_spi_t *ptSpiBase,spi_data_len_e eDataLen , spi_work_mod
  * 			   
  *  \return none
  */ 
-void SPI_Slave_Init(csp_spi_t *ptSpiBase,spi_data_len_e eDataLen , spi_work_mode_e eWorkMd ,  spi_rxifl_e eRxFifo , U8_T bySclkDiv, U8_T byPclkDiv);
+void spi_slave_init(csp_spi_t *ptSpiBase,spi_data_len_e eDataLen , spi_work_mode_e eWorkMd ,  spi_rxifl_e eRxFifo , U8_T bySclkDiv, U8_T byPclkDiv);
 
 /** \brief SPI write data
  * 
@@ -243,7 +243,7 @@ void spi_write_data(csp_spi_t *ptSpiBase, U16_T hwData);
  * 			   
  *  \return none
  */ 
-void SPI_READ_BYTE(csp_spi_t *ptSpiBase, U16_T hwData ,volatile U16_T *ptData , U8_T byNum);
+void spi_read_data(csp_spi_t *ptSpiBase, U16_T hwData ,volatile U16_T *ptData , U8_T byNum);
 
 /** \brief SPI interrupt enable 
  * 

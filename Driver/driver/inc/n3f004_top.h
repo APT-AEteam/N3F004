@@ -429,6 +429,22 @@ typedef enum{
 	SPI_SCK_PA02
 }spi_io_e;
 
+typedef enum{
+	I2C_SCL_PA06		= 0,
+	I2C_SDA_PA07,
+	I2C_SCL_PB02,
+	I2C_SDA_PA09,
+	I2C_SCL_PA010,
+	I2C_SDA_PA013,
+	I2C_SCL_PB00,
+	I2C_SDA_PA00,
+	I2C_SCL_PA01,
+	I2C_SDA_PA01,
+	I2C_SDA_PA03,
+	I2C_SCL_PA04,
+	I2C_SCL_PA02
+}i2c_io_e;
+
 
 #endif 
 

@@ -177,6 +177,31 @@ void spi_pin_config(spi_io_e eSpiIo)
 	}
 }
 
+/** \brief set i2c io as SCL ,SDA
+ * 
+ *  \param[in] eI2cIo: I2C IO \ref i2c_io_e
+ *  \return none
+ */ 
+void i2c_pin_config(i2c_io_e eI2cIo)
+{
+	switch (eI2cIo) {
+		case(I2C_SCL_PA06):gpio_init(GPIOA0, 6, PA06_I2C_SCL); break;
+		case(I2C_SDA_PA07):gpio_init(GPIOA0, 7, PA07_I2C_SDA); break;
+		case(I2C_SCL_PB02):gpio_init(GPIOB0, 2, PB02_I2C_SCL); break;
+		case(I2C_SDA_PA09):gpio_init(GPIOA0, 9,PA09_I2C_SDA); break;
+		case(I2C_SCL_PA010):gpio_init(GPIOA0, 10, PA010_I2C_SCL); break;
+		case(I2C_SDA_PA013):gpio_init(GPIOA0, 13, PA013_I2C_SDA); break;
+		case(I2C_SCL_PB00):gpio_init(GPIOB0, 0, PB00_I2C_SCL); break;
+		case(I2C_SDA_PA00):gpio_init(GPIOA0, 0, PA00_I2C_SDA); break;
+		case(I2C_SCL_PA01):gpio_init(GPIOA0, 1, PA01_I2C_SCL); break;
+		case(I2C_SDA_PA01):gpio_init(GPIOA0, 1, PA01_I2C_SDA); break;
+		case(I2C_SDA_PA03):gpio_init(GPIOA0, 3, PA03_I2C_SDA); break;
+		case(I2C_SCL_PA04):gpio_init(GPIOA0, 4, PA04_I2C_SCL); break;
+		case(I2C_SCL_PA02):gpio_init(GPIOA0, 2, PA02_I2C_SCL); break;
+		default: break;
+	}
+}
+
 /** \brief iomap configuration
  * 
  *  \param[in] eCloIo: CLO IO \ref clo_io_e

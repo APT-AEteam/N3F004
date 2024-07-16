@@ -31,7 +31,7 @@ csp_uart_t  	*UART0    = (csp_uart_t  *)APB_UART0BASE ;
 csp_uart_t  	*UART1    = (csp_uart_t  *)APB_UART1BASE ;
 //
 csp_spi_t   	*SPI0     = (csp_spi_t   *)APB_SPI0BASE ;
-//CSP_I2C_T   	*I2C0     = (CSP_I2C_T   *)APB_I2C0BASE ;
+csp_i2c_t   	*I2C0     = (csp_i2c_t   *)APB_I2C0BASE ;
 //
 //CSP_CA_T    	*CA0      = (CSP_CA_T    *)APB_CNTABASE ;
 //
