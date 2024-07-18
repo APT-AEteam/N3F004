@@ -19,7 +19,7 @@
 #include "types_local.h"
 #include "core_801.h"
 #include "csi_gcc.h"
-//#include "adc.h"
+#include "adc.h"
 #include "bt.h"
 #include "coret.h"
 #include "crc.h"
@@ -48,7 +48,7 @@
 extern csp_ifc_t 	*IFC;
 extern csp_syscon_t *SYSCON  ;
 extern csp_etcb_t   *ETCB ;
-//extern CSP_ADC12_T 	*ADC0     ;
+extern csp_adc_t 	*ADC0     ;
 extern csp_gpio_t 	*GPIOA0   ;
 extern csp_gpio_t 	*GPIOB0   ;
 extern csp_igrp_t	*GPIOGRP  ;

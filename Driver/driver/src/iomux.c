@@ -202,6 +202,31 @@ void i2c_pin_config(i2c_io_e eI2cIo)
 	}
 }
 
+/** \brief set ADC io as AINx, VREFP,VREFN
+ * 
+ *  \param[in] eAdcIo: adc IO \ref adc_io_e
+ *  \return none
+ */ 
+void adc_pin_config(adc_io_e eAdcIo)
+{
+	switch (eAdcIo) {
+		case(ADC_AIN0_PB01):gpio_init(GPIOB0, 1, PB01_AIN0); break;
+		case(ADC_AIN1_PA00):gpio_init(GPIOA0, 0, PA00_AIN1); break;
+		case(ADC_AIN2_PA01):gpio_init(GPIOA0, 1, PA01_AIN2); break;
+		case(ADC_AIN3_VREFN_PA03):gpio_init(GPIOA0, 3,PA03_AIN3_VREFN); break;
+		case(ADC_AIN4_PA05):gpio_init(GPIOA0, 5, PA05_AIN4); break;
+		case(ADC_AIN5_PB02):gpio_init(GPIOB0, 2, PB02_AIN5); break;
+		case(ADC_AIN6_PB03):gpio_init(GPIOB0, 3, PB03_AIN6); break;
+		case(ADC_AIN7_PA08):gpio_init(GPIOA0, 8, PA08_AIN7); break;
+		case(ADC_AIN8_PA09):gpio_init(GPIOA0, 9, PA09_AIN8); break;
+		case(ADC_AIN9_PA010):gpio_init(GPIOA0, 10, PA010_AIN9); break;
+		case(ADC_AIN10_PA013):gpio_init(GPIOA0, 13, PA013_AIN10); break;
+		case(ADC_AIN11_PB00):gpio_init(GPIOB0, 0, PB00_AIN11); break;
+		case(ADC_VREFP_BUF_PA02):gpio_init(GPIOA0, 2, PA02_VREFP_BUF); break;
+		default: break;
+	}
+}
+
 /** \brief iomap configuration
  * 
  *  \param[in] eCloIo: CLO IO \ref clo_io_e

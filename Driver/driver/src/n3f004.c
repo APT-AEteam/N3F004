@@ -21,7 +21,7 @@
 csp_ifc_t   	*IFC     = (csp_ifc_t    *)APB_IFCBASE ;
 csp_syscon_t 	*SYSCON = (csp_syscon_t *)APB_SYSCONBASE ;
 
-//CSP_ADC12_T 	*ADC0    = (CSP_ADC12_T  *)APB_ADC0BASE ;
+csp_adc_t 	*ADC0    = (csp_adc_t  *)APB_ADC0BASE ;
 
 csp_gpio_t  	*GPIOA0   = (csp_gpio_t  *)APB_GPIOA0BASE ; // A0
 csp_gpio_t  	*GPIOB0   = (csp_gpio_t  *)APB_GPIOB0BASE ; // B0

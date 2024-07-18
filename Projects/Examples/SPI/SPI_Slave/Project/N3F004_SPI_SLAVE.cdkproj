@@ -82,7 +82,10 @@
       <File Name="../../../../../Driver/driver/src/spi.c">
         <FileOption/>
       </File>
-      <File Name="../../../../../Driver/driver/src/i2c.c"/>
+      <File Name="../../../../../Driver/driver/src/i2c.c">
+        <FileOption/>
+      </File>
+      <File Name="../../../../../Driver/driver/src/adc.c"/>
     </VirtualDirectory>
     <VirtualDirectory Name="inc">
       <File Name="../../../../../Driver/driver/inc/bt.h">
@@ -131,6 +134,9 @@
         <FileOption/>
       </File>
       <File Name="../../../../../Driver/driver/inc/i2c.h">
+        <FileOption/>
+      </File>
+      <File Name="../../../../../Driver/driver/inc/adc.h">
         <FileOption/>
       </File>
     </VirtualDirectory>
