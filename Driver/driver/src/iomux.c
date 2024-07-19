@@ -227,6 +227,23 @@ void adc_pin_config(adc_io_e eAdcIo)
 	}
 }
 
+/** \brief set tc3 io as buzzer out
+ * 
+ *  \param[in] eTc3Io: tc3 IO \ref tc3_io_e
+ *  \return none
+ */ 
+void tc3_pin_config(tc3_io_e eTc3Io)
+{
+	switch (eTc3Io) {
+		case(TC3_BUZZ_PA010):gpio_init(GPIOA0, 10, PA010_TC3_BUZZ); break;
+		case(TC3_BUZZ_PA012):gpio_init(GPIOA0, 12, PA012_TC3_BUZZ); break;
+		case(TC3_BUZZ_PB00):gpio_init(GPIOB0, 0, PB00_TC3_BUZZ); break;
+		case(TC3_BUZZ_PB01):gpio_init(GPIOB0, 1, PB01_TC3_BUZZ); break;
+		case(TC3_BUZZ_PA01):gpio_init(GPIOA0, 1, PA01_TC3_BUZZ); break;
+		default: break;
+	}
+}
+
 /** \brief iomap configuration
  * 
  *  \param[in] eCloIo: CLO IO \ref clo_io_e

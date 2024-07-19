@@ -43,6 +43,8 @@ csp_bt_t    	*BT0      = (csp_bt_t   *)APB_BT0BASE ;
 csp_bt_t    	*BT1      = (csp_bt_t   *)APB_BT1BASE ;
 csp_crc_t   *CRC      = (csp_crc_t  *)AHB_CRCBASE ;
 
+csp_tc3_t	*TC3 		= (csp_tc3_t	*)APB_TC3BASE;
+
 /* Private variablesr---------------------------------------------------------*/
 /* defines -------------------------------------------------------------------*/
 

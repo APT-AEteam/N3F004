@@ -34,6 +34,7 @@
 #include "uart.h"
 #include "cmp.h"
 #include "n3f004_top.h"
+#include "tc3.h"
 
 
 #define CK_CPU_ENALLNORMALIRQ		__enable_irq()
@@ -63,6 +64,7 @@ extern csp_bt_t  	*BT1      ;
 extern csp_crc_t 	*CRC      ;
 extern csp_cmp_t	*CMP0  ;
 extern csp_cmp_t	*CMP1  ;
+extern csp_tc3_t	*TC3  ;
 
 
 
