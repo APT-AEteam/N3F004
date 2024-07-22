@@ -32,7 +32,7 @@ void syscon_config(void)
 	syscon_osc_enable(ENDIS_IMOSC);												//使能IMOSC
 	syscon_pll_configure(PLL_TYPE_DIG, PLL_SRC_IMOSC, ENABLE);					//设置IMOSC为PLL的源，使用digital PLL，PLL失锁时产生系统复位
 	syscon_osc_enable(ENDIS_PLL);												//使能pll
-	syscon_hclk_pclk_configure(SYSCLK_PLL, HCLK_DIV_1,PCLK_DIV_1,F_24_48MHz);   //将PLL作为系统时钟，HCLK = PLLCLK, PCLK = HCLK/1,系统时钟频率在24～48MHz之间
+	syscon_hclk_pclk_configure(SYSCLK_PLL, HCLK_DIV_1,PCLK_DIV_1,F_24_48MHz);   //将PLL作为系统时钟，HCLK = PLLCLK, PCLK = HCLK/1, 24 MHz <系统时钟频率 <= 48MHz
 	
 	syscon_iwdt_disable();														//disable IWDT	
   
