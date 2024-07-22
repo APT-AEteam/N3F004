@@ -144,14 +144,7 @@ void SPI0IntHandler(void)
 void EXI0IntHandler(void) 
 {
     // ISR content ...
-	if ((SYSCON->EXIRS&EXI_PIN0)==EXI_PIN0) 			//EXT0 Interrupt
-	{
-		SYSCON->EXICR = EXI_PIN0;
-	}
-	else if ((SYSCON->EXIRS&EXI_PIN16)==EXI_PIN16) 		//EXT16 Interrupt
-	{
-		SYSCON->EXICR = EXI_PIN16;
-	}
+
 }
 /*************************************************************/
 //EXT1/17 Interrupt
@@ -161,14 +154,6 @@ void EXI0IntHandler(void)
 void EXI1IntHandler(void) 
 {
     // ISR content ...
-	if ((SYSCON->EXIRS&EXI_PIN1)==EXI_PIN1) 			//EXT1 Interrupt
-	{
-		SYSCON->EXICR = EXI_PIN1;
-	}
-	else if ((SYSCON->EXIRS&EXI_PIN17)==EXI_PIN17) 		//EXT17 Interrupt
-	{
-		SYSCON->EXICR = EXI_PIN17;
-	}
 }
 /*************************************************************/
 //EXI2~3 18~19Interrupt
@@ -178,22 +163,7 @@ void EXI1IntHandler(void)
 void EXI2to3IntHandler(void) 
 {
     // ISR content ...
-	if ((SYSCON->EXIRS&EXI_PIN2)==EXI_PIN2) 			//EXT2 Interrupt
-	{
-		SYSCON->EXICR = EXI_PIN2;
-	} 
-	else if ((SYSCON->EXIRS&EXI_PIN3)==EXI_PIN3) 		//EXT3 Interrupt
-	{
-		SYSCON->EXICR = EXI_PIN3;
-	}
-	else if ((SYSCON->EXIRS&EXI_PIN18)==EXI_PIN18) 		//EXT18 Interrupt
-	{
-		SYSCON->EXICR = EXI_PIN18;
-	}
-	else if ((SYSCON->EXIRS&EXI_PIN19)==EXI_PIN19) 		//EXT19 Interrupt
-	{
-		SYSCON->EXICR = EXI_PIN19;
-	}
+
 }
 /*************************************************************/
 //EXI4~9 Interrupt
@@ -203,30 +173,7 @@ void EXI2to3IntHandler(void)
 void EXI4to9IntHandler(void) 
 {
     // ISR content ...
-	if ((SYSCON->EXIRS&EXI_PIN4)==EXI_PIN4) 			//EXT4 Interrupt
-	{
-		SYSCON->EXICR = EXI_PIN4;
-	} 
-	else if ((SYSCON->EXIRS&EXI_PIN5)==EXI_PIN5) 		//EXT5 Interrupt
-	{
-		SYSCON->EXICR = EXI_PIN5;
-	} 
-	else if ((SYSCON->EXIRS&EXI_PIN6)==EXI_PIN6) 		//EXT6 Interrupt
-	{
-		SYSCON->EXICR = EXI_PIN6;
-	} 
-	else if ((SYSCON->EXIRS&EXI_PIN7)==EXI_PIN7) 		//EXT7 Interrupt
-	{
-		SYSCON->EXICR = EXI_PIN7;
-	} 
-	else if ((SYSCON->EXIRS&EXI_PIN8)==EXI_PIN8) 		//EXT8 Interrupt
-	{
-		SYSCON->EXICR = EXI_PIN8;
-	}
-	else if ((SYSCON->EXIRS&EXI_PIN9)==EXI_PIN9) 		//EXT9 Interrupt
-	{
-		SYSCON->EXICR = EXI_PIN9;
-	} 
+
 
 }
 /*************************************************************/
@@ -237,30 +184,7 @@ void EXI4to9IntHandler(void)
 void EXI10to15IntHandler(void) 
 {
     // ISR content ...
-	if ((SYSCON->EXIRS&EXI_PIN10)==EXI_PIN10) 			//EXT10 Interrupt
-	{
-		SYSCON->EXICR = EXI_PIN10;
-	} 
-	else if ((SYSCON->EXIRS&EXI_PIN11)==EXI_PIN11) 		//EXT11 Interrupt
-	{
-		SYSCON->EXICR = EXI_PIN11;
-	} 
-	else if ((SYSCON->EXIRS&EXI_PIN12)==EXI_PIN12) 		//EXT12 Interrupt
-	{
-		SYSCON->EXICR = EXI_PIN12;
-	} 
-	else if ((SYSCON->EXIRS&EXI_PIN13)==EXI_PIN13) 		//EXT13 Interrupt
-	{
-		SYSCON->EXICR = EXI_PIN13;
-	}
-	else if ((SYSCON->EXIRS&EXI_PIN14)==EXI_PIN14) 		//EXT14 Interrupt
-	{
-		SYSCON->EXICR = EXI_PIN14;
-	}
-	else if ((SYSCON->EXIRS&EXI_PIN15)==EXI_PIN15) 		//EXT15 Interrupt
-	{
-		SYSCON->EXICR = EXI_PIN15;
-	}
+
 }
 /*************************************************************/
 //CONTA Interrupt

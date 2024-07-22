@@ -139,7 +139,7 @@ typedef enum
 	ENDIS_ISOSC			=	 	(0x01 << 0),
 	ENDIS_IMOSC 		=		(0x01 << 1),
 	ENDIS_EMOSC 		=		(0x01 << 3),
-	ENDIS_PLL 		=		(0x01 << 5),
+	ENDIS_PLL 			=		(0x01 << 5),
 
 //	ENDIS_IDLE_PCLK 	=		(8),
 //	ENDIS_SYSTICK 		=		(11)
@@ -483,55 +483,6 @@ typedef enum {
 	LVR40
 }lvr_level_e;
 
-
-
-
-
-/**
-  * @brief  EXI PIN
-  */
-typedef enum
-{
-	EXI_PIN0		=		(0x01ul),						
-	EXI_PIN1		=		(0x01ul<<1),
-	EXI_PIN2		=		(0x01ul<<2),
-	EXI_PIN3		=		(0x01ul<<3),
-	EXI_PIN4		=		(0x01ul<<4),
-	EXI_PIN5		=		(0x01ul<<5),
-	EXI_PIN6		=		(0x01ul<<6),
-	EXI_PIN7		=		(0x01ul<<7),
-	EXI_PIN8		=		(0x01ul<<8),
-	EXI_PIN9		=		(0x01ul<<9),
-	EXI_PIN10		=		(0x01ul<<10),
-	EXI_PIN11		=		(0x01ul<<11),
-	EXI_PIN12		=		(0x01ul<<12),
-	EXI_PIN13		=		(0x01ul<<13),
-	EXI_PIN14		=		(0x01ul<<14),
-	EXI_PIN15		=		(0x01ul<<15),
-	EXI_PIN16		=		(0x01ul<<16),
-	EXI_PIN17		=		(0x01ul<<17),
-	EXI_PIN18		=		(0x01ul<<18),
-	EXI_PIN19		=		(0x01ul<<19),
-}SYSCON_EXIPIN_TypeDef;
-
-
-
-
-typedef enum
-{
-	//IOMAP1
-	PIN_DISABLE			=	0x10,						//
-	PIN_EPT_CHD			=	0x11,						//
-	PIN_EPT_CHAX		=	0x12,						//
-	PIN_EPT_CHBX		=	0x13,						//
-	PIN_EPT_CHCX		=	0x14,						//
-	PIN_EPT_CHAY		=	0x15,						//
-	PIN_EPT_CHBY		=	0x16,						//
-	PIN_EPT_CHCY		=	0x17,						//
-}IOMAP_DIR_TypeDef;
-
-
-
 /******************************************************************************
 *OPT1: clo/osc freq/Flash LP mode/EXI filter/EM clock monitoring config
 ******************************************************************************/
@@ -623,17 +574,23 @@ void syscon_deinit(void);
  *  \param[in] eEMFlt: EM_FLSEL_5NS~EM_FLSEL_20NS \ref em_fltsel_e
  *  \return none
  */ 
-void emosc_ostr_config(U16_T hwEmCnt, U8_T byEmGain ,em_lfsel_e eEmWkMd, functional_status_e eEmFltEnable, em_fltsel_e eEMFlt);
+void syscon_emosc_configure(U16_T hwEmCnt, U8_T byEmGain ,em_lfsel_e eEmWkMd, functional_status_e eEmFltEnable, em_fltsel_e eEMFlt);
 
 
-/** \brief Enable/Disable OSC
+/** \brief Enable OSC
  * 
- *  \param[in] eNewState: ENABLE/DISABLE \ref functional_status_e
  *  \param[in] eOscEnable:ENDIS_ISOSC/ENDIS_IMOSC/ENDIS_EMOSC/ENDIS_PLL \ref osc_enable_e
  *  \return none
  */
-void syscon_general_cmd(functional_status_e eNewState, osc_enable_e eOscEnable );
+void syscon_osc_enable(osc_enable_e eOscEnable );
 
+
+/** \brief Disable OSC
+ * 
+ *  \param[in] eOscEnable:ENDIS_ISOSC/ENDIS_IMOSC/ENDIS_EMOSC/ENDIS_PLL \ref osc_enable_e
+ *  \return none
+ */
+void syscon_osc_disable(osc_enable_e eOscEnable );
 
 
 /** \brief PLL configuration
@@ -642,7 +599,7 @@ void syscon_general_cmd(functional_status_e eNewState, osc_enable_e eOscEnable )
  *  \param[in] eOscEnable:ENDIS_ISOSC/ENDIS_IMOSC/ENDIS_EMOSC \ref osc_enable_e
  *  \return none
  */
-void pll_config(pll_type_e eType, pll_src_e eSrc, functional_status_e eUnlockRst);
+void syscon_pll_configure(pll_type_e eType, pll_src_e eSrc, functional_status_e eUnlockRst);
 
 
 /** \brief PLL configuration
@@ -654,7 +611,7 @@ void pll_config(pll_type_e eType, pll_src_e eSrc, functional_status_e eUnlockRst
  *  \param[in] eFreq:  HCLK clock frequence range \ref sysclk_freq_e
  *  \return none
  */
-void sysclk_hclk_pclk_config(sycclk_sel_e eSysclk , hclk_div_e eHclkDiv , pclk_div_e ePclkDiv , sysclk_freq_e eFreq);
+void syscon_hclk_pclk_configure(sycclk_sel_e eSysclk , hclk_div_e eHclkDiv , pclk_div_e ePclkDiv , sysclk_freq_e eFreq);
 
 
 /** \brief Set sysclk to a lower frequence: HCLK = IMOSC/3 = 8MHz
@@ -663,15 +620,18 @@ void sysclk_hclk_pclk_config(sycclk_sel_e eSysclk , hclk_div_e eHclkDiv , pclk_d
  */
 void sysclk_clear(void);
 
-
-
-
-/** \brief IWDT enable and disable 
- *  \param[in] eNewState: ENABLE,DISABLE
+/** \brief IWDT enable 
+ *  \param[in] none
  *  \return none
  */
-void syscon_iwdt_cmd(functional_status_e eNewState);
+void syscon_iwdt_enable(void);
 
+
+/** \brief IWDT disable 
+ *  \param[in] none
+ *  \return none
+ */
+void syscon_iwdt_disable(void);
 
 
 /** \brief IWDT reload， feed IWDT
@@ -698,7 +658,7 @@ void syscon_iwdt_config(iwdt_ovt_e eOvTime , iwdt_intv_e eIntvTime );
  *  \param[in] ePol: interrupt polarity \ref lvdint_pol_e
  *  \return none
  */
-void syscon_lvd_config(functional_status_e eLvdEnable , lvd_level_e eLvd , lvr_level_e eLvr, lvdint_pol_e ePol);
+void syscon_lvd_configure(functional_status_e eLvdEnable , lvd_level_e eLvd , lvr_level_e eLvr, lvdint_pol_e ePol);
 
 
 

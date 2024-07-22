@@ -51,31 +51,33 @@ void syscon_deinit(void)									//reset value
  *  \param[in] eEMFlt: EM_FLSEL_5NS~EM_FLSEL_20NS \ref em_fltsel_e
  *  \return none
  */ 
-void emosc_ostr_config(U16_T hwEmCnt, U8_T byEmGain ,em_lfsel_e eEmWkMd, functional_status_e eEmFltEnable, em_fltsel_e eEMFlt)
+void syscon_emosc_configure(U16_T hwEmCnt, U8_T byEmGain ,em_lfsel_e eEmWkMd, functional_status_e eEmFltEnable, em_fltsel_e eEMFlt)
 {
 	SYSCON->OSTR= (hwEmCnt << EM_CNT_POS)|(byEmGain<<EM_GMCTL_POS)| (eEmWkMd << EM_LFSEL_POS) | (eEmFltEnable << EM_FLT_EN_POS) | (eEMFlt << EM_FLTSEL_POS);
 }
 
 
-/** \brief Enable/Disable OSC
+/** \brief Enable OSC
  * 
- *  \param[in] eNewState: ENABLE/DISABLE \ref functional_status_e
  *  \param[in] eOscEnable:ENDIS_ISOSC/ENDIS_IMOSC/ENDIS_EMOSC/ENDIS_PLL \ref osc_enable_e
  *  \return none
  */
-void syscon_general_cmd(functional_status_e eNewState, osc_enable_e eOscEnable )
+void syscon_osc_enable(osc_enable_e eOscEnable )
 {
-	if (eNewState != DISABLE)
-	{
-		
-		SYSCON->GCER |= eOscEnable;													//enable 	
-		while(!(SYSCON->CKST & eOscEnable));
+	SYSCON->GCER |= eOscEnable;													//enable 	
+	while(!(SYSCON->CKST & eOscEnable));
 
-	}
-	else
-	{
-		SYSCON->GCDR |= eOscEnable;													//disable
-	}
+}
+
+/** \brief Disable OSC
+ * 
+ *  \param[in] eOscEnable:ENDIS_ISOSC/ENDIS_IMOSC/ENDIS_EMOSC/ENDIS_PLL \ref osc_enable_e
+ *  \return none
+ */
+void syscon_osc_disable(osc_enable_e eOscEnable )
+{
+	SYSCON->GCDR |= eOscEnable;													//disable
+	
 }
 
 
@@ -85,7 +87,7 @@ void syscon_general_cmd(functional_status_e eNewState, osc_enable_e eOscEnable )
  *  \param[in] eOscEnable:ENDIS_ISOSC/ENDIS_IMOSC/ENDIS_EMOSC \ref osc_enable_e
  *  \return none
  */
-void pll_config(pll_type_e eType, pll_src_e eSrc, functional_status_e eUnlockRst)
+void syscon_pll_configure(pll_type_e eType, pll_src_e eSrc, functional_status_e eUnlockRst)
 {
 	SYSCON ->PLLCR = (eType << PLL_TYPE_POS) | (eSrc << PLL_SRC_POS) | (eUnlockRst << PLL_UNLOCK_RST_EN_POS);
 }
@@ -100,7 +102,7 @@ void pll_config(pll_type_e eType, pll_src_e eSrc, functional_status_e eUnlockRst
  *  \param[in] eFreq:  HCLK clock frequence range \ref sysclk_freq_e
  *  \return none
  */
-void sysclk_hclk_pclk_config(sycclk_sel_e eSysclk , hclk_div_e eHclkDiv , pclk_div_e ePclkDiv , sysclk_freq_e eFreq)
+void syscon_hclk_pclk_configure(sycclk_sel_e eSysclk , hclk_div_e eHclkDiv , pclk_div_e ePclkDiv , sysclk_freq_e eFreq)
 {
 	IFC->CEDR=0x01;						//IFC CLKEN
 	if(eFreq == F_24_48MHz)
@@ -134,22 +136,23 @@ void sysclk_clear(void)
 	SYSCON->SCLKCR = HCLK_DIV_6;	
 }
 
-
-
-/** \brief IWDT enable and disable 
- *  \param[in] eNewState: ENABLE,DISABLE
+/** \brief IWDT enable 
+ *  \param[in] none
  *  \return none
  */
-void syscon_iwdt_cmd(functional_status_e eNewState)
+void syscon_iwdt_enable(void)
 {
-	if(eNewState != DISABLE)
-	{
-		SYSCON->IWDEDR= IWDEDR_KEY|EN_IWDT;
-	}
-	else
-	{
-		SYSCON->IWDEDR = IWDEDR_KEY|EN_IWDT;
-	}
+	SYSCON->IWDEDR= IWDEDR_KEY|EN_IWDT;
+	while(!(SYSCON->IWDCR & IWDT_BUSY));
+}
+
+/** \brief IWDT disable 
+ *  \param[in] none
+ *  \return none
+ */
+void syscon_iwdt_disable(void)
+{
+	SYSCON->IWDEDR = IWDEDR_KEY|DIS_IWDT;	
 	while(!(SYSCON->IWDCR & IWDT_BUSY));
 }
 
@@ -184,7 +187,7 @@ void syscon_iwdt_config(iwdt_ovt_e eOvTime , iwdt_intv_e eIntvTime )
  *  \param[in] ePol: interrupt polarity \ref lvdint_pol_e
  *  \return none
  */
-void syscon_lvd_config(functional_status_e eLvdEnable , lvd_level_e eLvd , lvr_level_e eLvr, lvdint_pol_e ePol)
+void syscon_lvd_configure(functional_status_e eLvdEnable , lvd_level_e eLvd , lvr_level_e eLvr, lvdint_pol_e ePol)
 {
 	U32_T wTemp = LVD_DIS;
 	if (eLvdEnable)
@@ -225,6 +228,7 @@ void syscon_iwdt_int_enable(void)
 {
 	SYSCON->ICR = IWDT_INT;				//clear LVD INT status
 	SYSCON->IMER  |= IWDT_INT;
+	csi_vic_enable_irq(SYSCON_INT);
 }
 
 /** \brief IWDT interrupt disable
