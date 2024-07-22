@@ -545,7 +545,7 @@ void tc3_pin_config(tc3_io_e eTc3Io);
  *  \param[in] eCfgVal: remap function configuration \ref ioremap_e
  *  \return none
  */ 
-void gpio_remap(csp_gpio_t * ptGpioBase,U8_T byPinNum, ioremap_e eCfgVal);
+void ioremap_configure(csp_gpio_t * ptGpioBase,U8_T byPinNum, ioremap_e eCfgVal);
 
 /** \brief cmp io configuration
  * 

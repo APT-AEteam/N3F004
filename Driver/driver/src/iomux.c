@@ -244,7 +244,6 @@ void tc3_pin_config(tc3_io_e eTc3Io)
 	}
 }
 
-
 /** \brief cmp io configuration
  * 
  *  \param[in] eCmpIo: CMP IO \ref cmp_io_e
@@ -270,3 +269,17 @@ void cmp_io_init(cmp_io_e eCmpIo)
 	}
 }
 
+/** \brief iomap configuration
+ * 
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] byPinNum: 0~15
+ *  \param[in] eCfgVal: remap function configuration \ref ioremap_e
+ *  \return none
+ */ 
+void ioremap_configure(csp_gpio_t * ptGpioBase,U8_T byPinNum, ioremap_e eCfgVal)
+{
+	if(ptGpioBase == GPIOB0 || byPinNum > 7)
+		return;
+	gpio_init(ptGpioBase, byPinNum, PA06_G1); 
+	syscon_ioremap(byPinNum, eCfgVal);
+}
