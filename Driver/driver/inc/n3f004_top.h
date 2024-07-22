@@ -13,6 +13,7 @@
 #ifndef _N3F004_TOP_H
 #define _N3F004_TOP_H
 
+
 /******************************************************************************
 * Embedded Mempry Information
 ******************************************************************************/	
@@ -468,6 +469,90 @@ typedef enum{
 	TC3_BUZZ_PB01,
 	TC3_BUZZ_PA01
 }tc3_io_e;
+
+
+#include "gpio.h"
+
+
+/** \brief Set specific pins to EMOSC IN and OUT
+ * 			PA03,PA04 in case of N3F004
+ *  \param[in] none
+ *  \return none
+ */ 
+void emosc_pin_init(void);
+
+
+/** \brief set PA0.2/PA0.8/PA0.9 as CLO output 
+ * 
+ *  \param[in] eCloIo: CLO IO \ref clo_io_e
+ *  \return none
+ */ 
+void clo_pin_init(clo_io_e eCloIo);
+
+/** \brief set gpt io as CHA
+ * 
+ *  \param[in] eGptaIo: GPT IO \ref gpta_io_e
+ *  \return none
+ */ 
+void gpt_pin_config(gpta_io_e eGptaIo);
+
+/** \brief set uart0 io as TX,RX
+ * 
+ *  \param[in] eUart0Io: UART0 IO \ref uart0_io_e
+ *  \return none
+ */ 
+void uart0_pin_config(uart0_io_e eUart0Io);
+
+/** \brief set uart1 io as TX,RX
+ * 
+ *  \param[in] eUart1Io: UART1 IO \ref uart1_io_e
+ *  \return none
+ */ 
+void uart1_pin_config(uart1_io_e eUart1Io);
+
+/** \brief set SPI io as NSS,MOSI,MISO,SCK
+ * 
+ *  \param[in] eSpiIo: SPI IO \ref spi_io_e
+ *  \return none
+ */ 
+void spi_pin_config(spi_io_e eSpiIo);
+
+/** \brief set i2c io as SCL ,SDA
+ * 
+ *  \param[in] eI2cIo: I2C IO \ref i2c_io_e
+ *  \return none
+ */ 
+void i2c_pin_config(i2c_io_e eI2cIo);
+
+/** \brief set ADC io as AINx, VREFP,VREFN
+ * 
+ *  \param[in] eAdcIo: adc IO \ref adc_io_e
+ *  \return none
+ */ 
+void adc_pin_config(adc_io_e eAdcIo);
+
+/** \brief set tc3 io as buzzer out
+ * 
+ *  \param[in] eTc3Io: tc3 IO \ref tc3_io_e
+ *  \return none
+ */ 
+void tc3_pin_config(tc3_io_e eTc3Io);
+
+/** \brief iomap configuration
+ * 
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] byPinNum: 0~15
+ *  \param[in] eCfgVal: remap function configuration \ref ioremap_e
+ *  \return none
+ */ 
+void gpio_remap(csp_gpio_t * ptGpioBase,U8_T byPinNum, ioremap_e eCfgVal);
+
+/** \brief cmp io configuration
+ * 
+ *  \param[in] eCmpIo: CMP IO \ref cmp_io_e
+ *  \return none
+ */
+void cmp_io_init(cmp_io_e eCmpIo);
 
 
 #endif 

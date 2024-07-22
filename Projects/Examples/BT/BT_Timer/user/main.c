@@ -33,7 +33,7 @@ extern void my_printf(const char *fmt, ...);
 int main(void) 
 {
 //	delay_nms(1000);
-//	APT32F102_init();
+	n3f004_init();
 
     while(1)
 	{

@@ -432,4 +432,19 @@ uint8_t gpio_read_output(csp_gpio_t *ptGpioBase,uint8_t byPinNum)
     return byValue;
 }
 
+/** \brief iomap configuration
+ * 
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] byPinNum: 0~15
+ *  \param[in] eCfgVal: remap function configuration \ref ioremap_e
+ *  \return none
+ */ 
+void gpio_remap(csp_gpio_t * ptGpioBase,U8_T byPinNum, ioremap_e eCfgVal)
+{
+	if(ptGpioBase == GPIOB0 || byPinNum > 7)
+		return;
+	gpio_init(ptGpioBase, byPinNum, PA06_G1); 
+	syscon_ioremap(byPinNum, eCfgVal);
+}
+
 /******************* (C) COPYRIGHT 2024 APT Chip *****END OF FILE****/

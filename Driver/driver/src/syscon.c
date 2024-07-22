@@ -91,7 +91,7 @@ void pll_config(pll_type_e eType, pll_src_e eSrc, functional_status_e eUnlockRst
 }
 
 
-/** \brief PLL configuration
+/** \brief System clock/peripheral clock configuration
  *  WARNING: This function can only be safely called when changing hclk frequence from low to high.
  * 			 Call systemclk_clear() first when change hclk frequence from high to low
  *  \param[in] eSysclk: select system clock srouce \ref sycclk_sel_e
@@ -129,7 +129,7 @@ void sysclk_hclk_pclk_config(sycclk_sel_e eSysclk , hclk_div_e eHclkDiv , pclk_d
  * 	 Call this function first when change hclk frequence from high to low
  *  \return none
  */
-void systemclk_clear(void)
+void sysclk_clear(void)
 {
 	SYSCON->SCLKCR = HCLK_DIV_6;	
 }
@@ -171,7 +171,7 @@ void syscon_iwdtcnt_reload(void)
  *  \return none
  */
 
-void syscon_iwdt_Config(iwdt_ovt_e eOvTime , iwdt_intv_e eIntvTime )
+void syscon_iwdt_config(iwdt_ovt_e eOvTime , iwdt_intv_e eIntvTime )
 {
 	SYSCON->IWDCR = IWDCR_KEY | (eOvTime << IWDT_OVT_POS) | (eIntvTime << IWDT_INTV_POS);
 }
@@ -199,7 +199,7 @@ void syscon_lvd_config(functional_status_e eLvdEnable , lvd_level_e eLvd , lvr_l
  *  \return none
  */
 
-void lvd_int_enable(void)
+void syscon_lvd_int_enable(void)
 {
 	SYSCON->ICR = LVD_INT;				//clear LVD INT status
 	SYSCON->IMER  |= LVD_INT;
@@ -210,7 +210,7 @@ void lvd_int_enable(void)
  *  \param[in] none
  *  \return none
  */
-void lvd_int_disable(void)
+void syscon_lvd_int_disable(void)
 {
 	SYSCON->IMDR  |= LVD_INT;
 	SYSCON->ICR = LVD_INT;				//clear LVD INT status
@@ -221,7 +221,7 @@ void lvd_int_disable(void)
  *  \param[in] none
  *  \return none
  */
-void iwdt_int_enable(void)
+void syscon_iwdt_int_enable(void)
 {
 	SYSCON->ICR = IWDT_INT;				//clear LVD INT status
 	SYSCON->IMER  |= IWDT_INT;
@@ -231,7 +231,7 @@ void iwdt_int_enable(void)
  *  \param[in] none
  *  \return none
  */
-void iwdt_int_disable(void)
+void syscon_iwdt_int_disable(void)
 {
 	SYSCON->IMDR  |= IWDT_INT;
 	SYSCON->ICR = IWDT_INT;				//clear LVD INT status

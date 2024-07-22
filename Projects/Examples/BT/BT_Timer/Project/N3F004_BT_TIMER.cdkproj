@@ -126,7 +126,9 @@
       <File Name="../../../../../Driver/driver/inc/uart.h">
         <FileOption/>
       </File>
-      <File Name="../../../../../Driver/driver/inc/spi.h"/>
+      <File Name="../../../../../Driver/driver/inc/spi.h">
+        <FileOption/>
+      </File>
     </VirtualDirectory>
   </VirtualDirectory>
   <BuildConfigs>

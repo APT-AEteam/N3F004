@@ -383,6 +383,13 @@ uint8_t gpio_read_status(csp_gpio_t *ptGpioBase,uint8_t byPinNum);
  */ 
 uint8_t gpio_read_output(csp_gpio_t *ptGpioBase,uint8_t byPinNum);
 
+/** \brief iomap configuration
+ *   \param[in] ptGpioBase: GPIOA/GPIOB...
+ *   \param[in] byPinNum: 0~15
+ *  \param[in] eCfgVal: remap config value \ref ioremap_e
+ *  \return none
+ */ 
+void gpio_remap(csp_gpio_t * ptGpioBase,U8_T byPinNum, ioremap_e eCfgVal);
 /*************************************************************/
 
 #endif   /**_GPIO_H */

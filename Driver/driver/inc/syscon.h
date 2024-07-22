@@ -661,7 +661,7 @@ void sysclk_hclk_pclk_config(sycclk_sel_e eSysclk , hclk_div_e eHclkDiv , pclk_d
  * 	 Call this function first when change hclk frequence from high to low
  *  \return none
  */
-void systemclk_clear(void);
+void sysclk_clear(void);
 
 
 
@@ -688,7 +688,7 @@ void syscon_iwdtcnt_reload(void);
  *  \return none
  */
 
-void syscon_iwdt_Config(iwdt_ovt_e eOvTime , iwdt_intv_e eIntvTime );
+void syscon_iwdt_config(iwdt_ovt_e eOvTime , iwdt_intv_e eIntvTime );
 
 
 /** \brief LVR confiuration
@@ -698,7 +698,7 @@ void syscon_iwdt_Config(iwdt_ovt_e eOvTime , iwdt_intv_e eIntvTime );
  *  \param[in] ePol: interrupt polarity \ref lvdint_pol_e
  *  \return none
  */
-void syscom_lvd_config(functional_status_e eLvdEnable , lvd_level_e eLvd , lvr_level_e eLvr, lvdint_pol_e ePol);
+void syscon_lvd_config(functional_status_e eLvdEnable , lvd_level_e eLvd , lvr_level_e eLvr, lvdint_pol_e ePol);
 
 
 
@@ -707,28 +707,28 @@ void syscom_lvd_config(functional_status_e eLvdEnable , lvd_level_e eLvd , lvr_l
  *  \return none
  */
 
-void lvd_int_enable(void);
+void syscon_lvd_int_enable(void);
 
 
 /** \brief LVD interrupt disable
  *  \param[in] none
  *  \return none
  */
-void lvd_int_disable(void);
+void syscon_lvd_int_disable(void);
 
 
 /** \brief IWDT interrupt enable
  *  \param[in] none
  *  \return none
  */
-void iwdt_int_enable(void);
+void syscon_iwdt_int_enable(void);
 
 
 /** \brief IWDT interrupt disable
  *  \param[in] none
  *  \return none
  */
-void iwdt_int_disable(void);
+void syscon_iwdt_int_disable(void);
 
 
 /** \brief read reset status

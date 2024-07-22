@@ -47,7 +47,7 @@ void emosc_pin_init(void)
  *  \param[in] eCloIo: CLO IO \ref clo_io_e
  *  \return none
  */ 
-void syscon_clo_pin_init(clo_io_e eCloIo)
+void clo_pin_init(clo_io_e eCloIo)
 {
 	switch (eCloIo)
 	{
@@ -244,19 +244,6 @@ void tc3_pin_config(tc3_io_e eTc3Io)
 	}
 }
 
-/** \brief iomap configuration
- * 
- *  \param[in] eCloIo: CLO IO \ref clo_io_e
- *  \return none
- */ 
-void gpio_remap(csp_gpio_t * ptGpioBase,U8_T byPinNum, ioremap_e eCfgVal)
-{
-	if(ptGpioBase == GPIOB0 || byPinNum > 7)
-		return;
-	gpio_init(ptGpioBase, byPinNum, PA06_G1); 
-	syscon_ioremap(byPinNum, eCfgVal);
-
-}
 
 /** \brief cmp io configuration
  * 

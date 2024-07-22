@@ -129,7 +129,7 @@ void page_program_u8(U32_T wAddr,U32_T wDataNum, U8_T *pbyData)
 {
 	U32_T i,j,wPageStAddr;
 	;
-	U8_T byPageSize, byBuff[PFLASH_PAGESIZE];
+	U16_T byPageSize, byBuff[PFLASH_PAGESIZE];
 	
 		
 	g_bFlashPgmDne = 0;
