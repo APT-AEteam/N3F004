@@ -100,21 +100,21 @@ typedef enum
     BT_SYNCTRG            
 }bt_extckm_e;
 
-#define BT_IDLEST_POS			(6)
-#define BT_IDLEST_MSK		(0x01ul << BT_IDLEST_POS)
-typedef enum
-{
-	BT_IDLE_LOW		= 0,
-    BT_IDLE_HIGH            
-}bt_idlest_e;
-
-#define BT_STARTST_POS		(7)
-#define BT_STARTST_MSK	(0x01ul << BT_STARTST_POS)
-typedef enum
-{
-	BT_START_LOW	= 0,
-    BT_START_HIGH        
-}bt_startst_e;
+//#define BT_IDLEST_POS			(6)
+//#define BT_IDLEST_MSK		(0x01ul << BT_IDLEST_POS)
+//typedef enum
+//{
+//	BT_IDLE_LOW		= 0,
+//    BT_IDLE_HIGH            
+//}bt_idlest_e;
+//
+//#define BT_STARTST_POS		(7)
+//#define BT_STARTST_MSK	(0x01ul << BT_STARTST_POS)
+//typedef enum
+//{
+//	BT_START_LOW	= 0,
+//    BT_START_HIGH        
+//}bt_startst_e;
 
 #define BT_SYNC_POS(n)		(8 + n)    //n=0/1/2
 #define BT_SYNC_MSK(n)		(0x01ul << BT_SYNC_POS(n))
@@ -341,11 +341,9 @@ void bt_soft_reset(csp_bt_t *ptBtBase);
  */ 
 void bt_configure(csp_bt_t *ptBtBase, bt_clk_e eClkEn, U16_T hwPscrData , bt_shdw_e eShwdStp, bt_opm_e eOpm,bt_extckm_e eExtCkm);
 
-/** \brief bt config 
+/** \brief bt sync1 config - START
  * 
  *  \param[in] ptBtBase: pointer of bt register structure
- *  \param[in] eStartSt:  bt start status \ref bt_startst_e
- *  \param[in] eIdleSt: bt idle status \ref  bt_idlest_e
  *  \param[in] eSync0: sync0  enable/disable  control , sync0 trigger bt start \ref bt_sync_e
  *  \param[in] eSyncCmd: bt sync result control  \ref bt_synccmd_e
  *  \param[in] eOstMd0: bt sync0 mode control  \ref bt_ostmd_e
@@ -354,7 +352,33 @@ void bt_configure(csp_bt_t *ptBtBase, bt_clk_e eClkEn, U16_T hwPscrData , bt_shd
  * 			   
  *  \return none
  */ 
-void bt_sync_configure(csp_bt_t *ptBtBase, bt_startst_e eStartSt, bt_idlest_e eIdleSt , bt_sync_e eSync0 ,bt_synccmd_e eSyncCmd, bt_ostmd_e eOstMd0 ,bt_arearm_e eAreArm ,bt_cntrld_e eCntRld);
+void bt_sync0_configure(csp_bt_t *ptBtBase , bt_sync_e eSync0 ,bt_synccmd_e eSyncCmd, bt_ostmd_e eOstMd0 ,bt_arearm_e eAreArm ,bt_cntrld_e eCntRld);
+
+/** \brief bt sync1 config - COUNTER +1
+ * 
+ *  \param[in] ptBtBase: pointer of bt register structure
+ *  \param[in] eSync1: sync1 enable/disable  control , sync1 trigger bt start \ref bt_sync_e
+ *  \param[in] eSyncCmd: bt sync result control  \ref bt_synccmd_e
+ *  \param[in] eOstMd1: bt sync1 mode control  \ref bt_ostmd_e
+ *  \param[in] eAreArm: bt hardware auto rearm enable/ disable control  \ref bt_arearm_e
+ *  \param[in] eCntRld: bt hardware auto reload cnt enable/disable control \ref bt_cntrld_e
+ * 			   
+ *  \return none
+ */ 
+void bt_sync1_configure(csp_bt_t *ptBtBase , bt_sync_e eSync1 ,bt_synccmd_e eSyncCmd, bt_ostmd_e eOstMd1 ,bt_arearm_e eAreArm ,bt_cntrld_e eCntRld);
+
+/** \brief bt sync2 config - STOP
+ * 
+ *  \param[in] ptBtBase: pointer of bt register structure
+ *  \param[in] eSync2: sync2 enable/disable  control , sync2 trigger bt start \ref bt_sync_e
+ *  \param[in] eSyncCmd: bt sync result control  \ref bt_synccmd_e
+ *  \param[in] eOstMd2: bt sync2 mode control  \ref bt_ostmd_e
+ *  \param[in] eAreArm: bt hardware auto rearm enable/ disable control  \ref bt_arearm_e
+ *  \param[in] eCntRld: bt hardware auto reload cnt enable/disable control \ref bt_cntrld_e
+ * 			   
+ *  \return none
+ */ 
+void bt_sync2_configure(csp_bt_t *ptBtBase, bt_sync_e eSync2 ,bt_synccmd_e eSyncCmd, bt_ostmd_e eOstMd2 ,bt_arearm_e eAreArm ,bt_cntrld_e eCntRld);
 
 /** \brief bt Period & Compare set
  * 
@@ -400,17 +424,26 @@ U16_T bt_cmp_read(csp_bt_t *ptBtBase);
  */ 
 U16_T bt_cnt_read(csp_bt_t *ptBtBase);
 
-/** \brief  bt  trigger init
+/** \brief  bt  trigger event 0 init
  * 
  *  \param[in] ptBtBase: pointer of bt register structure
  *  \param[in] eEvTrg0:  trigger source of TRGEV0 event  select control \ref bt_evtrg_src_e
- *  \param[in] eEvTrg1:  trigger source of TRGEV1 event  select control \ref bt_evtrg_src_e
  *  \param[in] eTrgOe0: TRGOUT0 enable/disable control \ref  bt_trgoe_e
+ * 			   
+ *  \return none
+ */ 
+void bt_trgev0_configure(csp_bt_t *ptBtBase,bt_evtrg_src_e eEvTrg0,bt_trgoe_e eTrgOe0 );
+
+/** \brief  bt  trigger event 1 init
+ * 
+ *  \param[in] ptBtBase: pointer of bt register structure
+ *  \param[in] eEvTrg1:  trigger source of TRGEV1 event  select control \ref bt_evtrg_src_e
  *  \param[in] eTrgOe1: TRGOUT1 enable/disable control \ref  bt_trgoe_e
  * 			   
  *  \return none
  */ 
-void bt_trigger_configure(csp_bt_t *ptBtBase,bt_evtrg_src_e eEvTrg0,bt_evtrg_src_e eEvTrg1,bt_trgoe_e eTrgOe0 ,bt_trgoe_e eTrgOe1);
+void bt_trgev1_configure(csp_bt_t *ptBtBase,bt_evtrg_src_e eEvTrg1,bt_trgoe_e eTrgOe1 );
+
 
 /** \brief  bt  trigger_event0 counter period configure to trigger stop 
  * 
