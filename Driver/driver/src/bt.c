@@ -96,16 +96,16 @@ void bt_configure(csp_bt_t *ptBtBase, bt_clk_e eClkEn, U16_T hwPscrData , bt_shd
  *  \param[in] eSync0: sync0  enable/disable  control , sync0 trigger bt start \ref bt_sync_e
  *  \param[in] eSyncCmd: bt sync result control  \ref bt_synccmd_e
  *  \param[in] eOstMd0: bt sync0 mode control  \ref bt_ostmd_e
- *  \param[in] eAreArm: bt hardware auto rearm enable/ disable control  \ref bt_arearm_e
+ *  \param[in] eAreArm0: bt sync0 aream control  \ref bt_arearm_e
  *  \param[in] eCntRld: bt hardware auto reload cnt enable/disable control \ref bt_cntrld_e
  * 			   
  *  \return none
  */ 
-void bt_sync0_configure(csp_bt_t *ptBtBase, bt_sync_e eSync0 ,bt_synccmd_e eSyncCmd, bt_ostmd_e eOstMd0 ,bt_arearm_e eAreArm ,bt_cntrld_e eCntRld)
+void bt_sync0_configure(csp_bt_t *ptBtBase, bt_sync_e eSync0 ,bt_synccmd_e eSyncCmd, bt_ostmd_e eOstMd0 ,bt_arearm_e eAreArm0 ,bt_cntrld_e eCntRld)
 {
-	ptBtBase->CR = (ptBtBase->CR & (~( BT_SYNC_MSK(BT_SYNCEN0)| BT_SYNCCMD_MSK|  BT_OSTMD_MSK(BT_SYNCEN0) |BT_AREARM_MSK| BT_CNTRLD_MSK))) 
+	ptBtBase->CR = (ptBtBase->CR & (~( BT_SYNC_MSK(BT_SYNCEN0)| BT_SYNCCMD_MSK|  BT_OSTMD_MSK(BT_SYNCEN0) |BT_AREARM_MSK(BT_SYNCEN0)| BT_CNTRLD_MSK))) 
 								| (eSync0<<BT_SYNC_POS(BT_SYNCEN0))|(eSyncCmd<<BT_SYNCCMD_POS)| (eOstMd0<<BT_OSTMD_POS(BT_SYNCEN0))| 
-								(eAreArm<<BT_AREARM_POS)| (eCntRld<< BT_CNTRLD_POS);
+								(eAreArm0<<BT_AREARM_POS(BT_SYNCEN0))| (eCntRld<< BT_CNTRLD_POS);
 }
 
 /** \brief bt sync1 config - COUNTER +1
@@ -114,16 +114,16 @@ void bt_sync0_configure(csp_bt_t *ptBtBase, bt_sync_e eSync0 ,bt_synccmd_e eSync
  *  \param[in] eSync1: sync1 enable/disable  control , sync1 trigger bt start \ref bt_sync_e
  *  \param[in] eSyncCmd: bt sync result control  \ref bt_synccmd_e
  *  \param[in] eOstMd1: bt sync1 mode control  \ref bt_ostmd_e
- *  \param[in] eAreArm: bt hardware auto rearm enable/ disable control  \ref bt_arearm_e
+ *  \param[in] eAreArm1: bt sync1 aream control  \ref bt_arearm_e
  *  \param[in] eCntRld: bt hardware auto reload cnt enable/disable control \ref bt_cntrld_e
  * 			   
  *  \return none
  */ 
-void bt_sync1_configure(csp_bt_t *ptBtBase, bt_sync_e eSync1 ,bt_synccmd_e eSyncCmd, bt_ostmd_e eOstMd1 ,bt_arearm_e eAreArm ,bt_cntrld_e eCntRld)
+void bt_sync1_configure(csp_bt_t *ptBtBase, bt_sync_e eSync1 ,bt_synccmd_e eSyncCmd, bt_ostmd_e eOstMd1 ,bt_arearm_e eAreArm1 ,bt_cntrld_e eCntRld)
 {
-	ptBtBase->CR = (ptBtBase->CR & (~(BT_SYNC_MSK(BT_SYNCEN1)| BT_SYNCCMD_MSK|  BT_OSTMD_MSK(BT_SYNCEN1) |BT_AREARM_MSK| BT_CNTRLD_MSK))) 
+	ptBtBase->CR = (ptBtBase->CR & (~(BT_SYNC_MSK(BT_SYNCEN1)| BT_SYNCCMD_MSK|  BT_OSTMD_MSK(BT_SYNCEN1) |BT_AREARM_MSK(BT_SYNCEN1)| BT_CNTRLD_MSK))) 
 								|  (eSync1<<BT_SYNC_POS(BT_SYNCEN1))|(eSyncCmd<<BT_SYNCCMD_POS)| (eOstMd1<<BT_OSTMD_POS(BT_SYNCEN1))| 
-								(eAreArm<<BT_AREARM_POS)| (eCntRld<< BT_CNTRLD_POS);
+								(eAreArm1<<BT_AREARM_POS(BT_SYNCEN1))| (eCntRld<< BT_CNTRLD_POS);
 }
 
 /** \brief bt sync2 config - STOP
@@ -132,16 +132,15 @@ void bt_sync1_configure(csp_bt_t *ptBtBase, bt_sync_e eSync1 ,bt_synccmd_e eSync
  *  \param[in] eSync2: sync2 enable/disable  control , sync2 trigger bt start \ref bt_sync_e
  *  \param[in] eSyncCmd: bt sync result control  \ref bt_synccmd_e
  *  \param[in] eOstMd2: bt sync2 mode control  \ref bt_ostmd_e
- *  \param[in] eAreArm: bt hardware auto rearm enable/ disable control  \ref bt_arearm_e
  *  \param[in] eCntRld: bt hardware auto reload cnt enable/disable control \ref bt_cntrld_e
  * 			   
  *  \return none
  */ 
-void bt_sync2_configure(csp_bt_t *ptBtBase, bt_sync_e eSync2 ,bt_synccmd_e eSyncCmd, bt_ostmd_e eOstMd2 ,bt_arearm_e eAreArm ,bt_cntrld_e eCntRld)
+void bt_sync2_configure(csp_bt_t *ptBtBase, bt_sync_e eSync2 ,bt_synccmd_e eSyncCmd, bt_ostmd_e eOstMd2 ,bt_cntrld_e eCntRld)
 {
-	ptBtBase->CR = (ptBtBase->CR & (~(BT_SYNC_MSK(BT_SYNCEN1)| BT_SYNCCMD_MSK|  BT_OSTMD_MSK(BT_SYNCEN1) |BT_AREARM_MSK| BT_CNTRLD_MSK))) 
-								| (eSync2<<BT_SYNC_POS(BT_SYNCEN2))|(eSyncCmd<<BT_SYNCCMD_POS)| (eOstMd2<<BT_OSTMD_POS(BT_SYNCEN2))| 
-								(eAreArm<<BT_AREARM_POS)| (eCntRld<< BT_CNTRLD_POS);
+	ptBtBase->CR = (ptBtBase->CR & (~(BT_SYNC_MSK(BT_SYNCEN1)| BT_SYNCCMD_MSK|  BT_OSTMD_MSK(BT_SYNCEN1) | BT_CNTRLD_MSK))) 
+								| (eSync2<<BT_SYNC_POS(BT_SYNCEN2))|(eSyncCmd<<BT_SYNCCMD_POS)| (eOstMd2<<BT_OSTMD_POS(BT_SYNCEN2))
+								| (eCntRld<< BT_CNTRLD_POS);
 }
 
 /** \brief bt Period & Compare set
@@ -255,29 +254,7 @@ void bt_trgev1_configure(csp_bt_t *ptBtBase,bt_evtrg_src_e eEvTrg1,bt_trgoe_e eT
  {
 	 ptBtBase->EVTRG = ptBtBase->EVTRG & (~BT_TRG1_PRD_MSK) | (byPrd<<BT_TRG1_PRD_POS);
  }
- 
- /** \brief  read TRGEV0_Counter
- * 
- *  \param[in] ptBtBase: pointer of bt register structure
- * 			   
- *  \return TRGEV0_Counter
- */ 
- U8_T  bt_trgev0_counter(csp_bt_t *ptBtBase)
- {
-	return  ptBtBase->EVTRG = (ptBtBase->EVTRG & BT_TRG0_CNT_MSK) >>BT_TRG0_CNT_POS ;
- }
- 
- /** \brief  read TRGEV1_Counter
- * 
- *  \param[in] ptBtBase: pointer of bt register structure
- * 			   
- *  \return TRGEV1_Counter
- */ 
- U8_T  bt_trgev1_counter(csp_bt_t *ptBtBase)
- {
-	return  ptBtBase->EVTRG = (ptBtBase->EVTRG & BT_TRG1_CNT_MSK) >>BT_TRG1_CNT_POS ;
- }
- 
+
   /** \brief  bt RPRD configure
  * 
  *  \param[in] ptBtBase: pointer of bt register structure

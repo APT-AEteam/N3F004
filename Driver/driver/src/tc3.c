@@ -137,4 +137,27 @@ void tc3_stop(csp_tc3_t *ptTc3Base)
 }
 
 
+/** \brief tc3 write prdr
+ * 
+ *  \param[in] ptTc3Base: pointer of tc3 register structure
+ *  \param[in] hwPrdr:  timer period  ,range : 1~0xffff
+ * 			   
+ *  \return none
+ */
+void tc3_write_prdr(csp_tc3_t *ptTc3Base,U16_T hwPrdr)
+{
+	ptTc3Base->PRDR=hwPrdr;
+}
+
+/** \brief tc3 write timdr
+ * 
+ *  \param[in] ptTc3Base: pointer of tc3 register structure
+ *  \param[in] hwTimdr:  timer data,range : 1~0xffff
+ * 			   
+ *  \return none
+ */
+void tc3_write_timdr(csp_tc3_t *ptTc3Base,U16_T hwTimdr)
+{
+	ptTc3Base->TIMDR=hwTimdr;
+}
 /******************* (C) COPYRIGHT 2018 APT Chip *****END OF FILE****/
