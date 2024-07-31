@@ -19,7 +19,7 @@
 /* Private variablesr---------------------------------------------------------*/
 volatile U8_T byI2cIntFlag ;					//I2C interrupt flag
 volatile U8_T byRestart;
-//volatile U8_T byI2cMode;
+volatile U8_T byI2cMode;
 volatile U8_T byI2cSlaveState = I2C_IDLE;
 volatile U8_T byI2cTxBuffer[BUFSIZE];		//I2C  Write buffer（slave mode）
 volatile U8_T byI2cRxBuffer[BUFSIZE];		//I2C  Read buffer（slave mode）
@@ -56,7 +56,7 @@ void i2c_deinit(csp_i2c_t *ptI2cBase)
  *  \param[in] hwPreDiv: pre scaler value ,range :0~0xfff
  * 					fscl = pclk/(hwPreDiv+4)
  *  \param[in] byThold: hold/setup time, range : 1~0xff
- * 					hold/setup time = byThold *pclk
+ * 					hold/setup time = byThold *（1/pclk)
  * 			   
  *  \return none
  */ 
@@ -71,8 +71,8 @@ void i2c_master_init(csp_i2c_t *ptI2cBase, i2c_mode_e eMode,U16_T hwPreDiv, U8_T
     else ptI2cBase->MR = hwPreDiv;
     ptI2cBase->THOLD = byThold;                                          //I2C Hold/Setup delays
     ptI2cBase->IER = I2C_SI_MSK;                                           //Enable Si interrupt
-	ptI2cBase->CR = I2C_ENABLE;                                                 //Enable I2C
-//	byI2cMode=1;
+	i2c_enable(ptI2cBase);                                                        //ptI2cBase->CR = I2C_ENABLE;  //Enable I2C
+	byI2cMode=I2C_MASTER;
 }
 
 /** \brief i2c slave init
@@ -103,9 +103,11 @@ void i2c_slave_init(csp_i2c_t *ptI2cBase, i2c_mode_e eMode,U16_T hwPreDiv, U8_T 
     ptI2cBase->SDR = bySlaveAdd;
     ptI2cBase->IER = I2C_SI_MSK;                           //Enable Si interrupt
     ptI2cBase->CR = (ptI2cBase->CR&(~I2C_STA_MSK))| (I2C_SLAVE<<I2C_STA_POS);                //I2C as Slave
-	ptI2cBase->CR |= I2C_ENABLE;                      //Enable I2C
-    ptI2cBase->CR  |= (I2C_ANSWER_EN<<I2C_AA_POS);
-//	byI2cMode=0;
+	i2c_enable(ptI2cBase);                  				    //Enable I2C
+//    ptI2cBase->CR  |= (I2C_ANSWER_EN<<I2C_AA_POS);
+	i2c_ack_configure(ptI2cBase,I2C_ANSWER_EN); //lib测试
+	
+	byI2cMode=I2C_SLAVE;
 }
 
 /** \brief i2c enable
@@ -312,12 +314,16 @@ void i2c_write_byte(csp_i2c_t *ptI2cBase, U8_T byAddr, U8_T byData)
 void i2c_write_bytes(csp_i2c_t *ptI2cBase, U8_T byAddr, U8_T *ptData,U8_T byNum)
 {
 // Write Byte
-	ptI2cBase->CR |= (I2C_MASTER<<I2C_STA_POS);
+//	ptI2cBase->CR |= (I2C_MASTER<<I2C_STA_POS);
+	i2c_generate_start(ptI2cBase);//lib测试
+	
 	while((ptI2cBase->SR & I2C_MTX_START) != I2C_MTX_START );   //master tx start bit is sent
 	while((ptI2cBase->CR & I2C_SI) != I2C_SI);
 
 	ptI2cBase->CR &= (~I2C_SI);
 	ptI2cBase->SDR = I2C_ADDRESS<<1;//0xA2;									// Device ID, Write
+	//ptI2cBase->SDR = I2C_GC_EN;   //用于general call 测试
+	
 	while((ptI2cBase->CR & I2C_SI) != I2C_SI);
 
 	ptI2cBase->CR &= (~I2C_SI);
@@ -331,7 +337,8 @@ void i2c_write_bytes(csp_i2c_t *ptI2cBase, U8_T byAddr, U8_T *ptData,U8_T byNum)
 	while((ptI2cBase->CR  & I2C_SI) != I2C_SI);
 	ptI2cBase->CR &= (~I2C_SI);
 	byNum--;               
-	ptI2cBase->CR  |= (I2C_STOPBIT_EN<<I2C_STO_POS);
+//	ptI2cBase->CR  |= (I2C_STOPBIT_EN<<I2C_STO_POS);
+	i2c_generate_stop(ptI2cBase);  //lib测试
 }
 
 /** \brief i2c write byte with interrupt

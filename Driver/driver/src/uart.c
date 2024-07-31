@@ -15,12 +15,6 @@
 /* externs--------------------------------------------------------------------*/
 /* private function-----------------------------------------------------------*/
 /* global variablesr----------------------------------------------------------*/
-volatile U8_T byRxDataFlag=0;
-volatile U8_T byTxDataFlag=0;
-volatile U8_T bySendCompleteFlag;
-volatile U16_T hwSendLengthTemp;
-volatile U16_T hwSendLength;
-volatile U8_T byUartBuffer[UART_BUFSIZE];
 /* Private variablesr---------------------------------------------------------*/
 /* defines -------------------------------------------------------------------*/
 
@@ -76,7 +70,7 @@ void uart_wakeup_disable(csp_uart_t *ptUartBase)
 	}
 }
 
-/** \brief UART0/1 initial 
+/** \brief UART0/1 initial ,enable rx & tx
  * 
  *  \param[in] ptUartBase: pointer of uart register structure
  *  \param[in] hwBaudDiv: the division of baudrate ,range: 1~0xfffff
@@ -168,7 +162,7 @@ U8_T uart_get_status(csp_uart_t *ptUartBase)
 	return ptUartBase->SR;
 }
 
-/** \brief UART0/1  one byte data without interrupt
+/** \brief UART0/1  one byte data with & without interrupt
  * 
  *  \param[in] ptUartBase: pointer of uart register structure
  *  \param[in] byData: datab to be sent
@@ -199,44 +193,6 @@ void uart_send(csp_uart_t *ptUartBase,U8_T *ptData ,U16_T hwLen)
 	}
 }
 
-/** \brief UART0/1  interrupt send byte  
- * 
- *  \param[in] ptUartBase: pointer of uart register structure
- * 			   
- *  \return none
- */ 
-void uart_int_send_byte(csp_uart_t *ptUartBase )
-{
-	if(!bySendCompleteFlag)
-	{
-		bySendCompleteFlag=1;
-		hwSendLengthTemp++;
-		ptUartBase->DATA = byUartBuffer[0];
-	}
-}
-
-/** \brief UART0/1  interrupt send data  
- * 
- *  \param[in] ptUartBase: pointer of uart register structure
- * 			   
- *  \return none
- */ 
-void uart_int_send(csp_uart_t *ptUartBase )
-{
-	if(bySendCompleteFlag)
-	{
-		if(hwSendLengthTemp>=hwSendLength)
-		{
-			bySendCompleteFlag=0;
-			hwSendLengthTemp=0;
-		}
-		else
-		{
-			ptUartBase->DATA = byUartBuffer[hwSendLengthTemp++];
-		}
-	}	
-}
-
 /** \brief UART0/1 receive one byte 
  * 
  *  \param[in] ptUartBase: pointer of uart register structure
@@ -263,8 +219,6 @@ U8_T uart_receive_byte(csp_uart_t *ptUartBase,U8_T *ptData)
  */ 
 U8_T uart_int_receive_byte(csp_uart_t *ptUartBase)
 {
-//	byRxDataFlag = FALSE;
-//	while(byRxDataFlag != TRUE);
 	return ptUartBase->DATA;
 }
 
@@ -276,7 +230,7 @@ U8_T uart_int_receive_byte(csp_uart_t *ptUartBase)
  * 			   
  *  \return TRUE OR FLASE
  */ 
-U16_T UARTReceive(csp_uart_t *ptUartBase,U8_T *ptData,U16_T hwLen)
+U8_T uart_receive(csp_uart_t *ptUartBase,U8_T *ptData,U16_T hwLen)
 {
 	U16_T hwCnt = 0;
 	U32_T wTime = 0;

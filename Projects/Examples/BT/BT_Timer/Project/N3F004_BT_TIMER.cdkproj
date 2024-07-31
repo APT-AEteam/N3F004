@@ -132,7 +132,9 @@
       <File Name="../../../../../Driver/driver/inc/spi.h">
         <FileOption/>
       </File>
-      <File Name="../../../../../Driver/driver/inc/tc3.h"/>
+      <File Name="../../../../../Driver/driver/inc/tc3.h">
+        <FileOption/>
+      </File>
     </VirtualDirectory>
   </VirtualDirectory>
   <BuildConfigs>

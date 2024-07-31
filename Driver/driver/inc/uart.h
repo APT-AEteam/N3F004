@@ -219,22 +219,6 @@ void uart_send_byte(csp_uart_t *ptUartBase,U8_T byData);
  */ 
 void uart_send(csp_uart_t *ptUartBase,U8_T *ptData ,U16_T hwLen);
 
-/** \brief UART0/1  interrupt send byte  
- * 
- *  \param[in] ptUartBase: pointer of uart register structure
- * 			   
- *  \return none
- */ 
-void uart_int_send_byte(csp_uart_t *ptUartBase );
-
-/** \brief UART0/1  interrupt send data  
- * 
- *  \param[in] ptUartBase: pointer of uart register structure
- * 			   
- *  \return none
- */ 
-void uart_int_send(csp_uart_t *ptUartBase );
-
 /** \brief UART0/1 receive one byte 
  * 
  *  \param[in] ptUartBase: pointer of uart register structure
@@ -260,7 +244,7 @@ U8_T uart_int_receive_byte(csp_uart_t *ptUartBase);
  * 			   
  *  \return TRUE OR FLASE
  */ 
-U16_T UARTReceive(csp_uart_t *ptUartBase,U8_T *ptData,U16_T hwLen);
+U8_T uart_receive(csp_uart_t *ptUartBase,U8_T *ptData,U16_T hwLen);
 
 	
 	

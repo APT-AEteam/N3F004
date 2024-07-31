@@ -196,6 +196,7 @@ typedef enum{
 	ADC_ADCINA9,
 	ADC_ADCINA10,
 	ADC_ADCINA11,
+	ADC_INTVREF = 0x1C,
 	ADC_ADCIN_1_5VDD = 0x1D,
 	ADC_ADCIN_VSS
 }adc_ainsel_e;
@@ -256,7 +257,7 @@ typedef enum{
 #define ADC_OSTMD_POS(n)	(8 + n)
 #define ADC_OSTMD_MSK(n)	(0x01ul << ADC_OSTMD_POS(n))
 typedef enum{
-	ADC_OSTMD_CONTINUOUS = 0,
+	ADC_OSTMD_CONTINUE = 0,
     ADC_OSTMD_ONCE   				
 }adc_ostmd_e;
 
@@ -367,7 +368,7 @@ void adc_clk_debug_configure(csp_adc_t *ptAdcBase, adc_clk_e eAdcClk , bool bSta
  *		   
  *  \return none
  */   
-void dac_software_reset(csp_adc_t *ptAdcBase);
+void adc_software_reset(csp_adc_t *ptAdcBase);
 
 /** \brief adc analog module enable 
  * 
@@ -460,12 +461,14 @@ void adc_ain_configure(csp_adc_t *ptAdcBase, adc_ainsel_e eAinSel , U8_T bySeq);
 /** \brief set adc sync 
  * 
  *  \param[in] ptAdcBase: pointer of adc register structure
- *  \param[in] eSyncIn: sync(0~5) of adc input channels
- *  \param[in] eOstMd: adc sync mode, continuous/once
+ *  \param[in] eSyncSrc: ADC sync source select  \ref adc_sync_source_e
+ *  \param[in] bySeq:  seqx used to sync ADC. range :0~7
+ *  \param[in] eSyncIn: sync(0~5) of adc input channels  \ref adc_sync_in_e
+ *  \param[in] eOstMd: adc sync mode, continuous/once \ref adc_ostmd_e
  *  \param[in] byDelay: adc input delay, delay timer =  (trg_delay+1)*4 PCLK
  *  \return none
  */
-void csi_adc_set_sync(csp_adc_t *ptAdcBase, adc_sync_in_e eSyncIn, adc_ostmd_e eOstMd, uint8_t byDelay);
+void adc_set_sync(csp_adc_t *ptAdcBase, adc_sync_source_e eSyncSrc, U8_T bySeq, adc_sync_in_e eSyncIn, adc_ostmd_e eOstMd, uint8_t byDelay);
 
 /** \brief rearm adc sync
  * 
@@ -473,7 +476,7 @@ void csi_adc_set_sync(csp_adc_t *ptAdcBase, adc_sync_in_e eSyncIn, adc_ostmd_e e
  *  \param[in] eSyncIn: adc sync evtrg input channel(0~5)
  *  \return none
  */
-void csi_adc_sync_rearm(csp_adc_t *ptAdcBase, adc_sync_in_e eSyncIn);
+void adc_sync_rearm(csp_adc_t *ptAdcBase, adc_sync_in_e eSyncIn);
 
 /** \brief set adc evtrg output
  * 
@@ -483,7 +486,7 @@ void csi_adc_sync_rearm(csp_adc_t *ptAdcBase, adc_sync_in_e eSyncIn);
  *  \param[in] byPeriod: The event triggers the count 
  *  \return none
  */
-void  csi_adc_set_evtrg(csp_adc_t *ptAdcBase, adc_evtrg_src_e eTrgSrc, adc_evtrg_out_e eTrgOut);
+void  adc_set_evtrg(csp_adc_t *ptAdcBase, adc_evtrg_src_e eTrgSrc, adc_evtrg_out_e eTrgOut);
 
 /** \brief  adc evtrg enable
  * 
@@ -491,7 +494,7 @@ void  csi_adc_set_evtrg(csp_adc_t *ptAdcBase, adc_evtrg_src_e eTrgSrc, adc_evtrg
  *  \param[in] byTrgOut: adc evtrg out port (0~1)
  *  \return none
  */
-void  csi_adc_evtrg_enable(csp_adc_t *ptAdcBase,adc_evtrg_out_e eTrgOut);
+void  adc_evtrg_enable(csp_adc_t *ptAdcBase,adc_evtrg_out_e eTrgOut);
 
 /** \brief  adc evtrg disable
  * 
@@ -499,7 +502,7 @@ void  csi_adc_evtrg_enable(csp_adc_t *ptAdcBase,adc_evtrg_out_e eTrgOut);
  *  \param[in] byTrgOut: adc evtrg out port (0~1)
  *  \return none
  */
-void  csi_adc_evtrg_disable(csp_adc_t *ptAdcBase,adc_evtrg_out_e eTrgOut);
+void  adc_evtrg_disable(csp_adc_t *ptAdcBase,adc_evtrg_out_e eTrgOut);
 
 #endif
 

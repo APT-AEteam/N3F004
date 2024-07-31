@@ -189,7 +189,7 @@ typedef enum{
 /******************************************************************************
 *  ADR : I2C Serial Slave Address Registers
 ******************************************************************************/
- #define I2C_GC_EN         (0x01ul << 0)            /**< General call           */  
+ #define I2C_GC_EN       		  (0x01ul << 0)            /**< General call           */  
  #define I2C_ADDR_POS  	  (1)
  #define I2C_ADDR_MASK   (0x7Ful << I2C_ADDR_POS)           /**< Address Mask           */
 
@@ -379,6 +379,15 @@ void i2c_write_bytes(csp_i2c_t *ptI2cBase, U8_T byAddr, U8_T *ptData,U8_T byNum)
  *  \return none
  */ 
 void i2c_int_write_byte(csp_i2c_t *ptI2cBase, U8_T byAddr, U8_T byData);
+
+/** \brief i2c read byte
+ * 
+ *  \param[in] ptI2cBase: pointer of i2c register structure
+ *  \param[in] byAddr: slave address 
+ * 			   
+ *  \return receive data
+ */ 
+U8_T i2c_read_byte(csp_i2c_t *ptI2cBase, U8_T byAddr);
 
 /** \brief i2c read byte with interrupt
  * 

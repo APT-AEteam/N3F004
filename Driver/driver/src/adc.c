@@ -132,7 +132,7 @@ void adc_clk_debug_configure(csp_adc_t *ptAdcBase, adc_clk_e eAdcClk , bool bSta
  *		   
  *  \return none
  */   
-void dac_software_reset(csp_adc_t *ptAdcBase)
+void adc_software_reset(csp_adc_t *ptAdcBase)
 {
 	ptAdcBase->CR |=ADC_SWRST;
 }
@@ -280,12 +280,14 @@ void adc_ain_configure(csp_adc_t *ptAdcBase, adc_ainsel_e eAinSel , U8_T bySeq)
 /** \brief set adc sync 
  * 
  *  \param[in] ptAdcBase: pointer of adc register structure
- *  \param[in] eSyncIn: sync(0~5) of adc input channels
- *  \param[in] eOstMd: adc sync mode, continuous/once
+ *  \param[in] eSyncSrc: ADC sync source select  \ref adc_sync_source_e
+ *  \param[in] bySeq:  seqx used to sync ADC. range :0~7
+ *  \param[in] eSyncIn: sync(0~5) of adc input channels  \ref adc_sync_in_e
+ *  \param[in] eOstMd: adc sync mode, continuous/once \ref adc_ostmd_e
  *  \param[in] byDelay: adc input delay, delay timer =  (trg_delay+1)*4 PCLK
  *  \return none
  */
-void csi_adc_set_sync(csp_adc_t *ptAdcBase, adc_sync_in_e eSyncIn, adc_ostmd_e eOstMd, uint8_t byDelay)
+void adc_set_sync(csp_adc_t *ptAdcBase, adc_sync_source_e eSyncSrc, U8_T bySeq, adc_sync_in_e eSyncIn, adc_ostmd_e eOstMd, uint8_t byDelay)
 {
 	//set sync delay
     if(eSyncIn < ADC_SYNCEN3)		
@@ -298,6 +300,7 @@ void csi_adc_set_sync(csp_adc_t *ptAdcBase, adc_sync_in_e eSyncIn, adc_ostmd_e e
 	}
 	//set sync source and mode
 	ptAdcBase->SYNCR =(ptAdcBase->SYNCR & (~ADC_OSTMD_MSK(eSyncIn))) | ((0x01ul << eSyncIn) | (eOstMd << (8 + eSyncIn)));
+	ptAdcBase->SEQ[bySeq] =(ptAdcBase->SEQ[bySeq] & (~ADC_SYNCSRC_MSK))|(eSyncSrc<<ADC_SYNCSRC_POS);
 	
 }
 
@@ -307,7 +310,7 @@ void csi_adc_set_sync(csp_adc_t *ptAdcBase, adc_sync_in_e eSyncIn, adc_ostmd_e e
  *  \param[in] eSyncIn: adc sync evtrg input channel(0~5)
  *  \return none
  */
-void csi_adc_sync_rearm(csp_adc_t *ptAdcBase, adc_sync_in_e eSyncIn)
+void adc_sync_rearm(csp_adc_t *ptAdcBase, adc_sync_in_e eSyncIn)
 {
 	ptAdcBase->SYNCR |= (0x1 << (eSyncIn + ADC_REARM_POS(eSyncIn)));
 }
@@ -320,7 +323,7 @@ void csi_adc_sync_rearm(csp_adc_t *ptAdcBase, adc_sync_in_e eSyncIn)
  *  \param[in] byPeriod: The event triggers the count 
  *  \return none
  */
-void  csi_adc_set_evtrg(csp_adc_t *ptAdcBase, adc_evtrg_src_e eTrgSrc, adc_evtrg_out_e eTrgOut)
+void  adc_set_evtrg(csp_adc_t *ptAdcBase, adc_evtrg_src_e eTrgSrc, adc_evtrg_out_e eTrgOut)
 {	
 	ptAdcBase->EVTRG = ptAdcBase->EVTRG & (~(ADC_TRGSRC_MSK(eTrgOut))) | eTrgSrc<<ADC_TRGSRC_POS(eTrgOut);
 }
@@ -331,7 +334,7 @@ void  csi_adc_set_evtrg(csp_adc_t *ptAdcBase, adc_evtrg_src_e eTrgSrc, adc_evtrg
  *  \param[in] byTrgOut: adc evtrg out port (0~1)
  *  \return none
  */
-void  csi_adc_evtrg_enable(csp_adc_t *ptAdcBase,adc_evtrg_out_e eTrgOut)
+void  adc_evtrg_enable(csp_adc_t *ptAdcBase,adc_evtrg_out_e eTrgOut)
 {	
 	ptAdcBase->EVTRG |=  ADC_TRGOE_MSK(eTrgOut) ;
 }
@@ -342,7 +345,7 @@ void  csi_adc_evtrg_enable(csp_adc_t *ptAdcBase,adc_evtrg_out_e eTrgOut)
  *  \param[in] byTrgOut: adc evtrg out port (0~1)
  *  \return none
  */
-void  csi_adc_evtrg_disable(csp_adc_t *ptAdcBase,adc_evtrg_out_e eTrgOut)
+void  adc_evtrg_disable(csp_adc_t *ptAdcBase,adc_evtrg_out_e eTrgOut)
 {	
 	ptAdcBase->EVTRG &=  ~ADC_TRGOE_MSK(eTrgOut);
 }

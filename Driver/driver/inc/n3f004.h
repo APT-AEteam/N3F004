@@ -99,6 +99,7 @@ void GPT0IntHandler(void) __attribute__((isr));
 void SPI0IntHandler(void) __attribute__((isr));
 void BT0IntHandler(void) __attribute__((isr));
 void BT1IntHandler(void) __attribute__((isr));
+void TC3IntHandler(void) __attribute__((isr));
 
 extern void delay_nms(unsigned int t);
 extern void delay_nus(unsigned int t);

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<CDK_Workspace Name="N3F004_SPI_SLAVE" Database="LanguageSever">
+<CDK_Workspace Name="N3F004_SPI_SLAVE" Database="LanguageSever" DoubleClick="Yes">
   <DefaultPackPath>$(CDKWS)\__workspace_pack__</DefaultPackPath>
   <Project Name="N3F004_SPI_Slave" Path="N3F004_SPI_SLAVE.cdkproj" RootPath="" Active="Yes"/>
   <BuildMatrix>
