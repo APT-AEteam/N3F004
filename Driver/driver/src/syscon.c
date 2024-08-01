@@ -84,12 +84,12 @@ void syscon_osc_disable(osc_enable_e eOscEnable )
 /** \brief PLL configuration
  *  \param[in] eType: PLL_TYPE_ANA/PLL_TYPE_DIG \ref pll_type_e
  *  \param[in] eSrc: PLL_SRC_IMOSC/PLL_SRC_EMOSC \ref pll_src_e
- *  \param[in] eOscEnable:ENDIS_ISOSC/ENDIS_IMOSC/ENDIS_EMOSC \ref osc_enable_e
+ *  \param[in] eUnlockRst: \ref pll_rst_e
  *  \return none
  */
-void syscon_pll_configure(pll_type_e eType, pll_src_e eSrc, functional_status_e eUnlockRst)
+void syscon_pll_configure(pll_type_e eType, pll_src_e eSrc, pll_rst_e eUnlockRst)
 {
-	SYSCON ->PLLCR = (eType << PLL_TYPE_POS) | (eSrc << PLL_SRC_POS) | (eUnlockRst << PLL_UNLOCK_RST_EN_POS);
+	SYSCON ->PLLCR = (eType << PLL_TYPE_POS) | (eSrc << PLL_SRC_POS) | (eUnlockRst << PLL_UNLOCK_RST_POS);
 }
 
 
@@ -161,7 +161,7 @@ void syscon_iwdt_disable(void)
  *  \param[in]none
  *  \return none
  */
-void syscon_iwdtcnt_reload(void)
+void syscon_iwdt_reload(void)
 {
 	SYSCON->IWDCNT = CLR_IWDT;
 	while((SYSCON->IWDCNT & IWDT_CLR_BUSY) == IWDT_CLR_BUSY);
@@ -242,11 +242,11 @@ void syscon_iwdt_int_disable(void)
 }
 
 
-/** \brief read reset status
+/** \brief read reset source
  *  \param[in] none
  *  \return reset source
  */
-U32_T read_reset_status(void)
+U32_T syscon_read_reset_src(void)
 {
 	return (SYSCON->RSR & 0x1ff);
 }
@@ -259,7 +259,7 @@ U32_T read_reset_status(void)
  *  \param[in] eMode: falling/rising/both falling and risiing \ref exi_trigger_e
  *  \return none
  */
-void exi_trigger_cmd(functional_status_e eNewState , exi_igrp_e eExiGrpNum , exi_trigger_e eMode)
+void syscon_exi_trigger_cmd(functional_status_e eNewState , exi_igrp_e eExiGrpNum , exi_trigger_e eMode)
 {
 	U32_T wPinMsak = (0x01ul << eExiGrpNum);
 	
@@ -301,7 +301,7 @@ void exi_trigger_cmd(functional_status_e eNewState , exi_igrp_e eExiGrpNum , exi
  *  \return none
  */
 
-void exi_interrupt_cmd(functional_status_e eNewState , exi_igrp_e eExiGrpNum)
+void syscon_exi_interrupt_cmd(functional_status_e eNewState , exi_igrp_e eExiGrpNum)
 {
 	if(eNewState != DISABLE){
 		SYSCON->EXICR |=  0x1 << eExiGrpNum;							// Clear EXI status bit
@@ -335,17 +335,14 @@ void pm_goto_deepsleep_mode(void)
 	asm ("stop");
 }  
 
-
-/**
-  \brief     Config the wakeup source
-   * 		 EXI always exists as wakeup sources, no need to config here
-  \param[in] eNewState: ENABLE/DISABLE
-  \param[in] eWkupSrc: a specific wakeup source
-  \return    none
-*/
-void pm_set_wakeup_src(functional_status_e eNewState, wakeup_src_e eWkupSrc)
+/** \brief configure wakeup source 
+ *  \param[in] eWkupSrc: wakup source \ref syscon_wksrc_e
+ *  \param[in] eNewState: ENABLE/DSIABLE
+ *  \return  none
+ */
+void pm_wakupsrc_cmd(syscon_wksrc_e eWkupSrc, functional_status_e eNewState)
 {
-	SYSCON -> WKCR &= ~(0x1<< eWkupSrc) | (eNewState << eWkupSrc);
+	SYSCON->WKCR &= ~(0x1 << eWkupSrc) | (eNewState << eWkupSrc);
 }
 
 
@@ -355,7 +352,7 @@ void pm_set_wakeup_src(functional_status_e eNewState, wakeup_src_e eWkupSrc)
   \param[in] eDiv: CLO output div \ref clo_div_e
   \return    none
 */
-void syscon_clo_src_set(clo_src_e eSrc,clo_div_e eDiv)
+void syscon_clo_configure(clo_src_e eSrc,clo_div_e eDiv)
 {
 	SYSCON->OPT1 &= ~(CLO_SRC_MSK) & ~(CLO_DIV_MSK) | (eSrc << CLO_SRC_POS) | (eDiv << CLO_DIV_POS);
 }
@@ -388,6 +385,26 @@ void syscon_int_priority(void)
 	}
 }
 
+/** \brief SYSCON interrupt enable
+ *  \param[in] eIntSrc :interrupt source \ref syscon_int_e
+ *  \return none
+ */
+void syscon_int_enable(syscon_int_e eIntSrc)
+{
+	SYSCON->ICR = eIntSrc;
+	csi_vic_enable_irq(SYSCON_INT);	
+	SYSCON->IMCR  |= eIntSrc;
+}
+
+/** \brief SYSCON interrupt disable
+ *  \param[in] eIntSrc :interrupt source \ref syscon_int_e
+ *  \return none
+ */
+void syscon_int_disable(syscon_int_e eIntSrc)
+{
+	SYSCON -> IMCR &= (~eIntSrc);
+	SYSCON -> ICR |= eIntSrc;
+} 
 
 /**
   \brief     Config IO Remap
@@ -399,7 +416,7 @@ void syscon_ioremap(U8_T byIndex, ioremap_e eCfgVal)
 	if (byIndex > 7)
 		return;
 	else {
-		SYSCON -> IOMAP1 &= ~(IOMAP_MSK(byIndex) | IOMAP_MSK_POS(byIndex));
+		SYSCON -> IOMAP1 &= ~(IOMAP_MSK(byIndex) | (eCfgVal<<IOMAP_MSK_POS(byIndex)));
 	}
 }
 
@@ -453,18 +470,6 @@ void syscon_swd_unlock(void)
 {
 	SYSCON->DBGCR = SWD_UNLOCK;
 }
-
-
-/** \brief configure wakeup source 
- *  \param[in] eWkupSrc: wakup source \ref syscon_wksrc_e
- *  \param[in] eNewState: ENABLE/DSIABLE
- *  \return  none
- */
-void pm_wakupsrc_cmd(syscon_wksrc_e eWkupSrc, functional_status_e eNewState)
-{
-	SYSCON->WKCR &= ~(0x1 << eWkupSrc) | (eNewState << eWkupSrc);
-}
-
 
 
 /******************* (C) COPYRIGHT 2024 APT Chip *****END OF FILE****/

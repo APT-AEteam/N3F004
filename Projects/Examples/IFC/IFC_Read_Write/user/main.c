@@ -58,7 +58,7 @@ int main(void)
 	
     while(1)
 	{
-		syscon_iwdtcnt_reload();  
+		syscon_iwdt_reload();  
 		//......
     }
 }

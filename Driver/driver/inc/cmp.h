@@ -276,8 +276,8 @@ typedef enum
 #define	CMP_WEND_MSK		     (0x1ul << CMP_WEND_POS)
 typedef enum
 {
-	CMP_EDGEDET_INT      = 0, 
-	CMP_WIEND_INT   	
+	CMP_EDGEDET_INT      = 0x1<<0, 
+	CMP_WIEND_INT   	 = 0x1<<1
 }cmp_int_e;
 
 /******************************************************************************

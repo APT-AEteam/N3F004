@@ -255,15 +255,15 @@ typedef enum
 *PLLCR : PLL Control Register
 ******************************************************************************/
 #define PLL_SRC_POS		0x0
-#define PLL_SRC_MSL		(0x3<<PLL_SRC_POS)
+#define PLL_SRC_MSK		(0x3<<PLL_SRC_POS)
 typedef enum
 {
 	PLL_SRC_IMOSC = 1,
 	PLL_SRC_EMOSC = 3,
 }pll_src_e;
 
-#define PLL_UNLOCK_RST_EN_POS 15
-#define PLL_UNLOCK_RST_EN_MSK (0x1<<15)
+#define PLL_UNLOCK_RST_POS 15
+#define PLL_UNLOCK_RST_MSK (0x1<<PLL_UNLOCK_RST_POS)
 
 #define PLL_TYPE_POS	16
 #define PLL_TYPE_MSK	(0x1 << PLL_TYPE_MSK)
@@ -273,6 +273,11 @@ typedef enum
 	PLL_TYPE_DIG = 1,
 }pll_type_e;
 
+typedef  enum
+{
+	PLL_UNLOCK_RST_DIS = 0,
+	PLL_UNLOCK_RST_EN = 1,
+}pll_rst_e;
 
 /******************************************************************************
 *WKCR : Wakeup Source Control Register
@@ -596,10 +601,10 @@ void syscon_osc_disable(osc_enable_e eOscEnable );
 /** \brief PLL configuration
  *  \param[in] eType: PLL_TYPE_ANA/PLL_TYPE_DIG \ref pll_type_e
  *  \param[in] eSrc: PLL_SRC_IMOSC/PLL_SRC_EMOSC \ref pll_src_e
- *  \param[in] eOscEnable:ENDIS_ISOSC/ENDIS_IMOSC/ENDIS_EMOSC \ref osc_enable_e
+ *  \param[in] eUnlockRst: \ref pll_rst_e
  *  \return none
  */
-void syscon_pll_configure(pll_type_e eType, pll_src_e eSrc, functional_status_e eUnlockRst);
+void syscon_pll_configure(pll_type_e eType, pll_src_e eSrc, pll_rst_e eUnlockRst);
 
 
 /** \brief PLL configuration
@@ -638,7 +643,7 @@ void syscon_iwdt_disable(void);
  *  \param[in]none
  *  \return none
  */
-void syscon_iwdtcnt_reload(void);
+void syscon_iwdt_reload(void);
 
 
 
@@ -691,11 +696,11 @@ void syscon_iwdt_int_enable(void);
 void syscon_iwdt_int_disable(void);
 
 
-/** \brief read reset status
+/** \brief read reset srouce
  *  \param[in] none
  *  \return reset source
  */
-U32_T read_reset_status(void);
+U32_T syscon_read_reset_src(void);
 
 
 
@@ -705,7 +710,7 @@ U32_T read_reset_status(void);
  *  \param[in] eMode: falling/rising/both falling and risiing \ref exi_trigger_e
  *  \return none
  */
-void exi_trigger_cmd(functional_status_e eNewState , exi_igrp_e eExiGrpNum , exi_trigger_e eMode);
+void syscon_exi_trigger_cmd(functional_status_e eNewState , exi_igrp_e eExiGrpNum , exi_trigger_e eMode);
 
 
 
@@ -715,7 +720,7 @@ void exi_trigger_cmd(functional_status_e eNewState , exi_igrp_e eExiGrpNum , exi
  *  \return none
  */
 
-void exi_interrupt_cmd(functional_status_e eNewState , exi_igrp_e eExiGrpNum);
+void syscon_exi_interrupt_cmd(functional_status_e eNewState , exi_igrp_e eExiGrpNum);
 
 
 
@@ -748,7 +753,7 @@ void pm_set_wakeup_src(functional_status_e eNewState, wakeup_src_e eWkupSrc);
   \param[in] eDiv: CLO output div \ref clo_div_e
   \return    none
 */
-void syscon_clo_src_set(clo_src_e eSrc,clo_div_e eDiv);
+void syscon_clo_configure(clo_src_e eSrc,clo_div_e eDiv);
 
 
 
@@ -813,6 +818,17 @@ void syscon_swd_unlock(void);
  */
 void pm_wakupsrc_cmd(syscon_wksrc_e eWkupSrc, functional_status_e eNewState);
 
+/** \brief SYSCON interrupt enable
+ *  \param[in] eIntSrc :interrupt source \ref syscon_int_e
+ *  \return none
+ */
+void syscon_int_enable(syscon_int_e eIntSrc);
+
+/** \brief SYSCON interrupt disable
+ *  \param[in] eIntSrc :interrupt source \ref syscon_int_e
+ *  \return none
+ */
+void syscon_int_disable(syscon_int_e eIntSrc);
 
 /******************* (C) COPYRIGHT 2024 APT Chip *****END OF FILE****/
 

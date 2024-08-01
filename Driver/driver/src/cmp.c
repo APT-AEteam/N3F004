@@ -173,9 +173,9 @@ void cmp_swflt_configure(csp_cmp_t *ptCmpBase, U8_T byWCnt, U8_T byDiv, cmp_wf_a
  */
 void cmp_int_enable(csp_cmp_t *ptCmpBase, cmp_int_e eIntSrc)
 {
-	ptCmpBase -> ICR |= 0x1 <<  eIntSrc;
-	ptCmpBase -> IMCR |= 0x1 <<  eIntSrc;
-	
+	ptCmpBase->ICR = eIntSrc;
+	csi_vic_enable_irq(CMP0_INT);	
+	ptCmpBase->IMCR  |= eIntSrc;	
 } 
 
 /** \brief CMP interrupt disable
@@ -185,8 +185,8 @@ void cmp_int_enable(csp_cmp_t *ptCmpBase, cmp_int_e eIntSrc)
  */
 void cmp_int_disable(csp_cmp_t *ptCmpBase, cmp_int_e eIntSrc)
 {
-	ptCmpBase -> IMCR &= (~0x1 <<  eIntSrc);
-	ptCmpBase -> ICR |= 0x1 <<  eIntSrc;
+	ptCmpBase -> IMCR &= (~eIntSrc);
+	ptCmpBase -> ICR |= eIntSrc;
 	
 } 
 

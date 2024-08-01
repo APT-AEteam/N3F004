@@ -55,13 +55,13 @@ void gpio_deinit(void)
 } 
 
 /** \brief port initialization to GPIO input/output or AF functions
- *  The operation changes all the 8 ports simutaneously
+ *  The operation changes all the 8 ports simutaneously for higher efficiency
  *  \param[in] ptGpioBase: GPIOA/GPIOB...
  *  \param[in] eByte: either lower 8 pins or higher 8 pins \ref gpio_byte_e
  * 	\param[in] val: 0x00000000 ~ 0xffffffff, refer to chapter2 Pin Configruation in datasheet for AF assignment
  *  \return none
  */  
-void gpio_init2(csp_gpio_t *ptGpioBase,gpio_byte_e eByte,U32_T wValue)
+void gpio_port_init(csp_gpio_t *ptGpioBase,gpio_byte_e eByte,U32_T wValue)
 {
     if (eByte==0)
     {
