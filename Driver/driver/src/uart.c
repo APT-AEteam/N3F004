@@ -100,14 +100,14 @@ void uart_init_rxtx_inten(csp_uart_t *ptUartBase,U16_T hwBaudDiv, uart_databit_e
 {
 	ptUartBase->ISR = UART_INT_RX|UART_INT_TX;
 	
-	if((csp_uart_t *)ptUartBase == UART0)
-	{
-		csi_vic_enable_irq(UART0_INT);
-	}
-	else 
-	{
-		csi_vic_enable_irq(UART1_INT);
-	}
+//	if((csp_uart_t *)ptUartBase == UART0)
+//	{
+//		csi_vic_enable_irq(UART0_INT);
+//	}
+//	else 
+//	{
+//		csi_vic_enable_irq(UART1_INT);
+//	}
 	ptUartBase->CTRL = (UART_ENABLE<<UART_TX_POS)|(UART_ENABLE<<UART_RX_POS)|(eDataBit<<UART_DATA_POS)|(eParity<<UART_PARITY_POS)
 										|UART_INT_TX|UART_INT_RX;
    ptUartBase->BRDIV = hwBaudDiv;
@@ -127,14 +127,14 @@ void uart_init_rx_inten(csp_uart_t *ptUartBase,U16_T hwBaudDiv, uart_databit_e e
 {
 	ptUartBase->ISR = UART_INT_RX;
 	
-	if((csp_uart_t *)ptUartBase == UART0)
-	{
-		csi_vic_enable_irq(UART0_INT);
-	}
-	else 
-	{
-		csi_vic_enable_irq(UART1_INT);
-	}
+//	if((csp_uart_t *)ptUartBase == UART0)
+//	{
+//		csi_vic_enable_irq(UART0_INT);
+//	}
+//	else 
+//	{
+//		csi_vic_enable_irq(UART1_INT);
+//	}
 	ptUartBase->CTRL = (UART_ENABLE<<UART_TX_POS)|(UART_ENABLE<<UART_RX_POS)|(eDataBit<<UART_DATA_POS)|(eParity<<UART_PARITY_POS)
 										|UART_INT_RX;
     ptUartBase->BRDIV = hwBaudDiv;

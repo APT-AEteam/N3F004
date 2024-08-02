@@ -71,7 +71,6 @@ void adc_int_enable( csp_adc_t *ptAdcBase, adc_int_e eInt)
 {
 	ptAdcBase->CSR	= eInt;
 	ptAdcBase->IER  |= eInt;						//SET
-	csi_vic_enable_irq(ADC_INT);
 } 
 /** \brief adc int disable 
  * 

@@ -104,23 +104,17 @@
 #define EPT_CKSRC_POS			(3)
 #define EPT_CKSRC_MSK			(1ul << EPT_CKSRC_POS)
 typedef enum{
-	EPT_Selecte_PCLK = 0,
-	EPT_Selecte_SYNCUSR3
+	EPT_SELECT_PCLK = 0,
+	EPT_SELECT_SYNCUSR3
 }ept_clksel_e;
 
-#define EPT_TIN_POS			(4)
-#define EPT_TIN_MSK			(3ul << EPT_TIN_POS)
+
 #define EPT_START_POS		(6)
 #define EPT_START_MSK		(0x1ul << EPT_START_POS)
 #define EPT_START_SHD       (0ul << EPT_START_POS)
 #define EPT_START_IMM      (1ul << EPT_START_POS)
 #define EPT_FLTPRS_POS		(8)
 #define EPT_FLTPRS_MSK		(0xfful << EPT_FLTPRS_POS)
-typedef enum{
-	EPT_TIN_DIS = 0,
-	EPT_TIN_BT0,
-	EPT_TIN_BT1,	
-}ept_tin_e;
 
 
 /******************************************************************************
@@ -163,7 +157,7 @@ typedef enum{
 typedef enum {
 	EPT_LDPRDR_PRD = 0,
 	EPT_LDPRDR_LD_SYNC,
-	EPT_LDPRDR_PRD_LD_SYNC,
+	EPT_LDPRDR_ZRO_LD_SYNC,
 	EPT_LDPRDR_IMMD
 }ept_ldprdr_e;
 
@@ -212,8 +206,6 @@ typedef enum {
 typedef enum {
 	EPT_CGSRC_CHAX = 0,
 	EPT_CGSRC_CHBX,
-	EPT_CGSRC_TIN_BT0OUT,
-	EPT_CGSRC_TIN_BT1OUT,
 	EPT_CGSRC_DIS,
 }ept_cgsrc_e;
 
@@ -276,6 +268,13 @@ typedef enum{
 /******************************************************************************
 * SYNCR :  sync control register
 ******************************************************************************/
+typedef enum{
+	EPT_SYNCIN0 =0,
+	EPT_SYNCIN1,
+	EPT_SYNCIN2,
+	EPT_SYNCIN3,
+}ept_syncin_e;
+
 #define EPT_SYNC_POS(ch)	(ch)
 #define EPT_SYNC_MSK(ch)	(1<<ch)
 
@@ -622,10 +621,10 @@ typedef enum{
 #define DB_CHC_OUTSEL_POS			(16)
 #define DB_CHC_OUTSEL_MSK		(0x3 << DB_CHC_OUTSEL_POS) 
 typedef enum {
-	EPT_DB_OUT_DIS = 0,    		
-	EPT_DB_OUTB_F,         		
-	EPT_DB_OUTA_R,        		
-	EPT_DB_OUTA_R_OUTB_F     	  
+	EPT_DBOUT_DELAY_DIS = 0,    		
+	EPT_DBOUT_DELAY_FALL,         		
+	EPT_DBOUT_DELAY_RISE,        		
+	EPT_DBOUT_DELAY_RISE_FALL     	  
 }ept_db_outsel_e;
 
 #define DB_CHA_POL_POS	(2)
@@ -635,18 +634,26 @@ typedef enum {
 #define DB_CHC_POL_POS	(18)
 #define DB_CHC_POL_MSK	(0x3 << DB_CHC_POL_POS)
 typedef enum {
-	EPT_DAB_POL_DIS = 0,
-	EPT_DB_POL_A,
-	EPT_DB_POL_B,
-	EPT_DB_POL_AB
+	EPT_DB_POL_DIS = 0,
+	EPT_DB_POLX_REVERSE,
+	EPT_DB_POLY_REVERSE,
+	EPT_DB_POLXY_REVERSE
 }ept_db_pol_e;       
 #define DB_CHA_INSEL_POS		(4)
 #define DB_CHA_INSEL_MSK	(0x3 << DB_CHA_INSEL_POS)
 typedef enum {
-	EPT_DBIN_PWMA_RISE_FALL = 0,
-	EPT_DBIN_PWMB_RISE_PWMA_FALL,
-	EPT_DBIN_PWMA_RISE_PWMB_FALL,
-	EPT_DBIN_PWMB_RISE_FALL
+	EPT_DBAIN_PWMA_RISE_FALL = 0,  //CHA
+	EPT_DBAIN_PWMB_RISE_PWMA_FALL,
+	EPT_DBAIN_PWMA_RISE_PWMB_FALL,
+	EPT_DBAIN_PWMB_RISE_FALL,
+	EPT_DBBIN_PWMB_RISE_FALL = 0, //CHB
+	EPT_DBBIN_PWMC_RISE_PWMB_FALL,
+	EPT_DBBIN_PWMB_RISE_PWMC_FALL,
+	EPT_DBBIN_PWMC_RISE_FALL,
+	EPT_DBCIN_PWMC_RISE_FALL = 0, //CHC
+	EPT_DBCIN_PWMD_RISE_PWMC_FALL,
+	EPT_DBCIN_PWMC_RISE_PWMD_FALL,
+	EPT_DBCIN_PWMD_RISE_FALL,
 }ept_dbchx_insel_e;
 
 #define DB_CHA_OUTSWAP_POS	(6)
@@ -858,14 +865,12 @@ typedef enum
 * EMSLSR, EMSLCLR, EMHLSR, EMHLCLR EMRISR, EMMISR, EMIMCR, EMICR :  EM int
 ********************************************************************************/
 typedef enum {
-	EPT_INT_EP0 = 0x1,
-	EPT_INT_EP1 = 0x1 << 1,
-	EPT_INT_CPUF= 0x1 << 8,
-	EPT_INT_MEMF= 0x1 << 9,
-	EPT_INT_EOMF= 0x1 << 10
+	EPT_EMINT_EP0 = 0x1,
+	EPT_EMINT_EP1 = 0x1 << 1,
+	EPT_EMINT_CPUF= 0x1 << 8,
+	EPT_EMINT_MEMF= 0x1 << 9,
+	EPT_EMINT_EOMF= 0x1 << 10
 }ept_emint_e;
-
-
 /******************************************************************************
 * EVTRG :  event trigger select register
 *******************************************************************************/
@@ -883,13 +888,13 @@ typedef enum{
 	EPT_TRGSRC_ZRO,
 	EPT_TRGSRC_PRD,
 	EPT_TRGSRC_ZRO_PRD,
-	EPT_TRGSRC_CMPA_RAISE,
+	EPT_TRGSRC_CMPA_RISE,
 	EPT_TRGSRC_CMPA_FALL,
-	EPT_TRGSRC_CMPB_RAISE,
+	EPT_TRGSRC_CMPB_RISE,
 	EPT_TRGSRC_CMPB_FALL,
-	EPT_TRGSRC_CMPC_RAISE,
+	EPT_TRGSRC_CMPC_RISE,
 	EPT_TRGSRC_CMPC_FALL,
-	EPT_TRGSRC_CMPD_RAISE,
+	EPT_TRGSRC_CMPD_RISE,
 	EPT_TRGSRC_CMPD_FALL,
 	EPT_TRGSRC_SYNC =0xc,
 	EPT_TRGSRC_PRD_END=0xc,
@@ -899,18 +904,12 @@ typedef enum{
 }ept_trgsrc_e;
 
 
-#define EPT_INITEN_POS_CNT(n)		(16+n)
-#define EPT_INITEN_MSK_CNT(n)	(0x1 << (EPT_INITEN_POS_CNT(n)))
 #define EPT_OUTEN_POS_TRG(n)	(20+n)
 #define EPT_OUTEN_MSK_TRG(n)	(0x1 << (EPT_OUTEN_POS_TRG(n)))
 typedef enum{
 	EPT_TRGOUT_DIS =0,
 	EPT_TRGOUT_EN
 }ept_trgout_md_e;
-
-#define EPT_CNTINIT_ALL_ENABLE 	0x0f0f0000
-
-#define EPT_SWTRG_EV(n)			(n+24)
 
 ///EVSWF
 /******************************************************************************
@@ -924,8 +923,8 @@ typedef enum{
 typedef enum{
 	EPT_INT_TRGEV0 	= 0x1 << 0,
 	EPT_INT_TRGEV1 	= 0x1 << 1,
-	EPT_INT_TRGEV2 	= 0x2 << 2,
-	EPT_INT_TRGEV3 	= 0x2 << 3,
+	EPT_INT_TRGEV2 	= 0x1 << 2,
+	EPT_INT_TRGEV3 	= 0x1<< 3,
 	EPT_INT_CAPLD0 	= 0x1 << 4,
 	EPT_INT_CAPLD1 	= 0x1 << 5,
 	EPT_INT_CAPLD2 	= 0x1 << 6,
@@ -938,7 +937,13 @@ typedef enum{
 	EPT_INT_CCD 	= 0x1 << 13,
 	EPT_INT_CDU 	= 0x1 << 14,
 	EPT_INT_CDD 	= 0x1 << 15,
-	EPT_INT_PEND 	= 0x1 << 16
+	EPT_INT_PEND 	= 0x1 << 16,
+	EPT_INT_PRD   = 0x1 << 17,
+	EPT_INT_ZRO   = 0x1 << 18,
+	EPT_INT_CHAPROT = 0x1 << 19,
+	EPT_INT_CHBPROT = 0x1 << 20,
+	EPT_INT_CHCPROT = 0x1 << 21,
+	EPT_INT_ALL = 0x3fffff,
 }ept_int_e;
 
 #define EPT_INT_EV(n)		(0x1 << n)
@@ -948,43 +953,6 @@ typedef enum{
 *  REGPROT: register write protection register
 ******************************************************************************/
 #define EPT_REGPROT			(0xa55a << 16 | 0xc73a)
-
-/******************************************************************************
-* ept IO related
-******************************************************************************/
-
-typedef enum
-{
-	EPT_IO_CHAX			=	 	0,
-	EPT_IO_CHAY			=	 	1,
-	EPT_IO_CHBX			=	 	2,
-	EPT_IO_CHBY			=	 	3,	
-	EPT_IO_CHCX			=	 	4,
-	EPT_IO_CHCY			=	 	5,
-	EPT_IO_CHD				=	 	6,
-	EPT_IO_EPI					=	 	7
-}ept_iomd_e;
-
-typedef enum
-{
-	IO_NUM_PA07			=		0X10,
-	IO_NUM_PA10			=		0X11,
-	IO_NUM_PA15			=		0X12,
-	IO_NUM_PB03			=		0X13,
-	IO_NUM_PB05			=		0X14,
-	IO_NUM_PA12			=		0X15,
-	IO_NUM_PB02			=		0X16,
-	IO_NUM_PA11			=		0X17,
-	IO_NUM_PA14			=		0X18,
-	IO_NUM_PB04			=		0X19,
-	IO_NUM_PA05			=		0X1A,
-	IO_NUM_PA08			=		0X1B,
-	IO_NUM_PA03			=		0X1C,
-	IO_NUM_PB00			=		0X1D,
-	IO_NUM_PA04			=		0X1E,
-	IO_NUM_PA09			=		0X1F,
-	IO_NUM_PA013		=		0X20
-}ept_ionum_e;	
 
 /*****************************************************************************
  * functions
@@ -1011,14 +979,6 @@ void ept_start(void);
  */  
 void ept_stop(void);
 
-/** \brief  EPT IO Config
- * 
- *  \param[in]  eIoMd : ept ouput channel \ref ept_iomd_e
- *  \param[in]  eIoNum : IO select  \ref ept_ionum_e
- * 
- *  \return none
- */  
-void ept_io_configure(ept_iomd_e eIoMd , ept_ionum_e eIoNum);
 /** \brief EPT PWM  Basic Configuration :clk , counter mode, operation  mode  ect.
  * 			
  *  \param[in] eClk : source clk select : PCLK OR SYNCIN3 \ref ept_clksel_e
@@ -1031,7 +991,7 @@ void ept_io_configure(ept_iomd_e eIoMd , ept_ionum_e eIoNum);
 void ept_pwm_configure(ept_clksel_e eClk , ept_cntmd_e eCntMd  , ept_opmd_e eOpMd, U16_T hwPscr);
 /** \brief EPT Clock Gate Filter Configuration :Clock Gate source select, filter div ,filter cnt , burst ect.
  * 			
- *  \param[in] eCgsrcSel : Clock Gate source select : DIS/TIN_BT0/TIN_BT1/CHAX/CHBX \ref ept_cgsrc_e
+ *  \param[in] eCgsrcSel : Clock Gate source select : DIS/CHAX/CHBX \ref ept_cgsrc_e
  *  \param[in] byCgfltDiv : Clock Gate Filter DIv Setting, range: 0~0xff 
  *  \param[in] byCgfltCnt : Clock Gate Filter Cnt Setting , range: 0~0x7
  *  \param[in] eBurst : Burst enable or disable control \ref ept_burst_e
@@ -1056,8 +1016,9 @@ void ept_clockgate_configure(ept_cgsrc_e eCgsrcSel , U8_T byCgfltDiv , U8_T byCg
  */  
 void ept_cap_configure(ept_clksel_e eClk, ept_cntmd_e eCntMd , ept_capmd_e eCapMd , ept_capld_e eCapldEn 
 					, ept_ldxrst_e eLoadCmpa, ept_ldxrst_e eLoadCmpb, ept_ldxrst_e eLoadCmpc, ept_ldxrst_e eLoadCmpd,  U8_T byStopWrap , U16_T hwPscr);
-/** \brief EPT sync0 config
+/** \brief EPT syncx config
  * 			
+ *  \param[in] eSycin : Syncin channel select \ref ept_syncin_e
  *  \param[in] eSyncMd : Sync Mode select : once or continus \ref ept_syncmd_e
  *  \param[in] eAutoRearm : Hardware Auto Rearm selection of sync0 ch: disable/ cnt=zreo/cnt=prd/cnt= zero or prd  \ref ept_arearm_e
  *  \param[in] eTrgo0Sel : Input trigger channel as ExtSync selection of TRGSRC0 \ref ept_trgoxsel_e
@@ -1066,7 +1027,7 @@ void ept_cap_configure(ept_clksel_e eClk, ept_cntmd_e eCntMd , ept_capmd_e eCapM
  * 			   
  *  \return none
  */  
-void ept_syncr_configure(ept_syncmd_e eSyncMd , ept_arearm_e eAutoRearm, ept_trgoxsel_e eTrgo0Sel ,ept_trgoxsel_e eTrgo1Sel , ept_syncxen_e eSync0En);
+void ept_syncr_configure(ept_syncin_e eSycin, ept_syncmd_e eSyncMd , ept_arearm_e eAutoRearm, ept_trgoxsel_e eTrgo0Sel ,ept_trgoxsel_e eTrgo1Sel , ept_syncxen_e eSync0En);
 /** \brief EPT dedband config
  * 			
  *  \param[in] eDbChSel : Deadband channel select: CHA/CHB/CHC \ref ept_dbsel_e
@@ -1192,7 +1153,7 @@ void ept_aqcr_load_configure(ept_ldr_e eAqcrLdr);
  */  
 void ept_deadband_load_configure(ept_ldr_e eDbLdr);
 
-/** \brief   EPT EVTRG Config
+ /** \brief   EPT EVTRG Config
  * 			
  *  \param[in] eTrg: Trigger event select \ref ept_trg_e
  *  \param[in] eTrgSrc: Trigger event source select \ref ept_trgsrc_e
@@ -1201,14 +1162,16 @@ void ept_deadband_load_configure(ept_ldr_e eDbLdr);
  * 
  *  \return none
  */  
-void ept_event_trigger_configure(ept_trgsrc_e eTrg , ept_trgsrc_e eTrgSrc , ept_trgout_md_e eTrgoutEn );
+void ept_event_trigger_configure(ept_trg_e eTrg , ept_trgsrc_e eTrgSrc , ept_trgout_md_e eTrgoutEn );
+
 /** \brief   EPT EVTRG software trigger
  * 			
  *  \param[in] eTrg: Trigger event select \ref ept_trg_e
  * 
  *  \return none
  */  
-void ept_event_software_trigger(ept_trgsrc_e eTrg);
+void ept_event_software_trigger(ept_trg_e eTrg);
+
 /** \brief   EPT interrupt enable 
  * 			
  *  \param[in] eInt: type of interrupt \ref ept_int_e

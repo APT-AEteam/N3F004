@@ -188,20 +188,13 @@ void gpt_cmpload_configure(csp_gpta_t *ptGptaBase,gpta_ldmd_e eCmpALd,gpta_ldmd_
 /** \brief GPT debug mode control
  * 
  *  \param[in] ptGptaBase: pointer of gpt register structure
- *  \param[in] eDebugEn:   Debug mode control : enable or disable \ref gpta_state_e
+ *  \param[in] eDebugEn:   Debug mode control  \ref gpt_debug_e
  * 
  *  \return none
  */ 
-void gpt_debug_mode(csp_gpta_t *ptGptaBase,gpta_state_e eDebugEn)
+void gpt_debug_mode(csp_gpta_t *ptGptaBase,gpt_debug_e eDebugEn)
 {
-	if (eDebugEn != GPT_ENABLE)
-	{
-		ptGptaBase->CEDR  |= (GPT_ENABLE<<GPTA_DBGEN_POS);						
-	}
-	else
-	{
-		ptGptaBase->CEDR  &= ~(GPT_ENABLE<<GPTA_DBGEN_POS);					
-	}
+	ptGptaBase->CEDR  =(ptGptaBase->CEDR &(~GPTA_DBGEN_MSK))| (GPT_ENABLE<<GPTA_DBGEN_POS);						
 }
 
 /** \brief GPT start
@@ -376,7 +369,6 @@ void gpt_reglink_configure(csp_gpta_t *ptGptaBase,gpt_reglk_e ePrdrLk, gpt_reglk
 void gpt_int_enable(csp_gpta_t *ptGptaBase,gpta_int_e eInt)
 {
 	ptGptaBase->ICR = eInt;
-	csi_vic_enable_irq(GPT0_INT);
 	ptGptaBase->IMCR  |= eInt;				
 }
 

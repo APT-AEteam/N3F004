@@ -125,7 +125,6 @@ void spi_read_data(csp_spi_t *ptSpiBase, U16_T hwData ,volatile U16_T *ptData , 
 void spi_int_enable(csp_spi_t *ptSpiBase,  spi_int_e eInt)
 {
 	ptSpiBase->ICR = eInt;
-	csi_vic_enable_irq(SPI_INT);
 	ptSpiBase->IMCR  |= eInt;						//SET
 }   
 

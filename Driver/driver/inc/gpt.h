@@ -86,7 +86,13 @@ typedef enum
 #define GPTA_CLKEN_POS         	  	 (0)
 #define GPTA_CLKEN_MSK          		 (0x1ul << GPTA_CLKEN_POS)
 #define GPTA_DBGEN_POS		    	 (1)
-#define GPTA_DBGEN_MSK         		 (0x1ul << GPTA_DBGEN_POS)
+#define GPTA_DBGEN_MSK         		 (0x3ul << GPTA_DBGEN_POS)
+typedef enum{
+    GPT_DEBUG_DIS= 0,
+	GPT_DEBUG_EN_PWM_HZ ,
+	GPT_DEBUG_EN_PWM_HOLD,
+}gpt_debug_e;
+
 #define GPTA_CSS_POS		    			 (3)
 #define GPTA_CSS_MSK		   		 	 (0x1ul << GPTA_CSS_POS)
 typedef enum{
@@ -188,7 +194,7 @@ typedef enum{
 typedef enum
 {
 	GPTA_MERGE_CAP = 0,
-	GPTA_SEPARATE_CAP
+	GPTA_SEPRATE_CAP
 }gpta_capmdsel_e;
 
 #define GPTA_CAPREARM_POS        (20)
@@ -196,7 +202,7 @@ typedef enum
 #define GPTA_CAPMD_POS           (21)
 #define GPTA_CAPMD_MSK	         (0x1 << GPTA_CAPMD_POS)
 typedef enum{
-	GPTA_CAPMD_CONTINOUS =0,
+	GPTA_CAPMD_CONTINUE =0,
 	GPTA_CAPMD_ONCE
 }gpta_capmd_e;
 
@@ -310,7 +316,9 @@ typedef enum
 	GPTA_LDCMP_DIS= 0,
 	GPTA_LDCMP_ZRO,
 	GPTA_LDCMP_PRD,
+	GPTA_LDCMP_ZRO_PRD,
 	GPTA_LDCMP_EXI_SYNC = 4,
+	GPTA_LDCMP_ZRO_PRD_EXI_SYNC =7,
 }gpta_shdwldmd_e;
 #define GPTA_SHDWAFULL 	         (0x1 <<20)
 #define GPTA_SHDWBFULL 	         (0x1 <<21)
@@ -371,13 +379,13 @@ typedef enum{
 #define GPTA_TRG1SEL_MSK  (0xf << GPTA_TRG1SEL_POS)
 typedef enum
 {
-	GPTA_TRG01_DIS = 0,
-	GPTA_TRG01_ZRO,
-	GPTA_TRG01_PRD,
-	GPTA_TRG01_ZRO_PRD,
-	GPTA_TRG01_CMPA_R,
-	GPTA_TRG01_CMPB_R=6,
-	GPTA_TRG01_SYNC = 0xc
+	GPTA_TRGSRC_DIS = 0,
+	GPTA_TRGSRC_ZRO,
+	GPTA_TRGSRC_PRD,
+	GPTA_TRGSRC_ZRO_PRD,
+	GPTA_TRGSRC_CMPA_R,
+	GPTA_TRGSRC_CMPB_R=6,
+	GPTA_TRGSRC_SYNC = 0xc
 }gpta_trgsrc_e;
 
 #define GPTA_TRG0OE_POS 	20
@@ -553,11 +561,11 @@ void gpt_cmpload_configure(csp_gpta_t *ptGptaBase,gpta_ldmd_e eCmpALd,gpta_ldmd_
 /** \brief GPT debug mode control
  * 
  *  \param[in] ptGptaBase: pointer of gpt register structure
- *  \param[in] eDebugEn:   Debug mode control : enable or disable \ref gpta_state_e
+ *  \param[in] eDebugEn:   Debug mode control  \ref gpt_debug_e
  * 
  *  \return none
  */ 
-void gpt_debug_mode(csp_gpta_t *ptGptaBase,gpta_state_e eDebugEn);
+void gpt_debug_mode(csp_gpta_t *ptGptaBase,gpt_debug_e eDebugEn);
 
 /** \brief GPT start
  * 

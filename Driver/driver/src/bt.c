@@ -314,14 +314,7 @@ void bt_trgev1_soft_trigger(csp_bt_t *ptBtBase)
 void bt_int_enable(csp_bt_t *ptBtBase,bt_int_e eImcr)
 {
 	ptBtBase->ICR = eImcr;
-	if((csp_bt_t *)ptBtBase == BT0)
-	{
-		csi_vic_enable_irq(BT0_INT);
-	}
-	else{
-		csi_vic_enable_irq(BT1_INT);
-	}
-	ptBtBase->IMCR  &= ~eImcr;			
+	ptBtBase->IMCR  |= eImcr;			
 }
 
 /** \brief  bt  interrupt disable
@@ -333,7 +326,7 @@ void bt_int_enable(csp_bt_t *ptBtBase,bt_int_e eImcr)
  */ 
 void bt_int_disable(csp_bt_t *ptBtBase,bt_int_e eImcr)
 {
-	ptBtBase->IMCR  |= eImcr;	
+	ptBtBase->IMCR  &= ~eImcr;	
 	ptBtBase->ICR = eImcr;
 }
 

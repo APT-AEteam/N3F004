@@ -70,7 +70,6 @@ void tc3_deinit(csp_tc3_t *ptTc3Base)
  {
 	ptTc3Base->ICR |= eInt;
 	ptTc3Base->IMCR |= eInt;
-	csi_vic_enable_irq(TC3_INT);
  }
  
 /** \brief tc3 int disable

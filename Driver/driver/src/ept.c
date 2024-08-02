@@ -56,145 +56,6 @@ void ept_stop(void)
 	while(EPT0->RSSR&EPT_START);
 }
 
-/** \brief  EPT IO Config
- * 
- *  \param[in]  eIoMd : ept ouput channel \ref ept_iomd_e
- *  \param[in]  eIoNum : IO select  \ref ept_ionum_e
- * 
- *  \return none
- */  
-void ept_io_configure(ept_iomd_e eIoMd , ept_ionum_e eIoNum)
-{
-	if(eIoMd==EPT_IO_CHAX)
-	{
-		if(eIoNum==IO_NUM_PA07)
-		{
-			GPIOA0->CONLR = (GPIOA0->CONLR&0X0FFFFFFF)|0X60000000;				//PA0.7
-		}
-		else if(eIoNum==IO_NUM_PA10)
-		{
-			GPIOA0->CONHR = (GPIOA0->CONHR&0XFFFFF0FF)|0X00000500;				//PA0.10
-		}
-		else if(eIoNum==IO_NUM_PA15)
-		{
-			GPIOA0->CONHR = (GPIOA0->CONHR&0X0FFFFFFF)|0X40000000;				//PA0.15
-		}
-	}
-	else if(eIoMd==EPT_IO_CHAY)
-	{
-		if(eIoNum==IO_NUM_PB03)
-		{
-			GPIOB0->CONLR = (GPIOB0->CONLR&0XFFFF0FFF)|0X00005000;				//PB0.3
-		}
-		else if(eIoNum==IO_NUM_PB05)
-		{
-			GPIOB0->CONLR = (GPIOB0->CONLR&0XFF0FFFFF)|0X00500000;				//PB0.5
-		}
-		else if(eIoNum==IO_NUM_PA12)
-		{
-			GPIOA0->CONHR = (GPIOA0->CONHR&0XFFF0FFFF)|0X00050000;				//PA0.12
-		}
-	}
-	else if(eIoMd==EPT_IO_CHBX)
-	{
-		if(eIoNum==IO_NUM_PB02)
-		{
-			GPIOB0->CONLR = (GPIOB0->CONLR&0XFFFFF0FF)|0X00000600;				//PB0.2
-		}
-		else if(eIoNum==IO_NUM_PA11)
-		{
-			GPIOA0->CONHR = (GPIOA0->CONHR&0XFFFF0FFF)|0X00005000;				//PA0.11
-		}
-		else if(eIoNum==IO_NUM_PA14)
-		{
-			GPIOA0->CONHR = (GPIOA0->CONHR&0XF0FFFFFF)|0X04000000;				//PA0.14
-		}
-	}
-	else if(eIoMd==EPT_IO_CHBY)
-	{
-		if(eIoNum==IO_NUM_PB04)
-		{
-			GPIOB0->CONLR = (GPIOB0->CONLR&0XFFF0FFFF)|0X00050000;				//PB0.4
-		}
-		else if(eIoNum==IO_NUM_PA05)
-		{
-			GPIOA0->CONLR = (GPIOA0->CONLR&0XFF0FFFFF)|0X00800000;				//PA0.5
-		}
-		else if(eIoNum==IO_NUM_PA08)
-		{
-			GPIOA0->CONHR = (GPIOA0->CONHR&0XFFFFFFF0)|0X00000005;				//PA0.8
-		}
-	}
-	else if(eIoMd==EPT_IO_CHCX)
-	{
-		if(eIoNum==IO_NUM_PB05)
-		{
-			GPIOB0->CONLR = (GPIOB0->CONLR&0XFF0FFFFF)|0X00400000;				//PB0.5
-		}
-		else if(eIoNum==IO_NUM_PA03)
-		{
-			GPIOA0->CONLR = (GPIOA0->CONLR&0XFFFF0FFF)|0X00005000;				//PA0.3
-		}
-		else if(eIoNum==IO_NUM_PB03)
-		{
-			GPIOB0->CONLR = (GPIOB0->CONLR&0XFFFF0FFF)|0X00004000;				//PB0.3
-		}
-		else if(eIoNum==IO_NUM_PB00)
-		{
-			GPIOB0->CONLR = (GPIOB0->CONLR&0XFFFFFFF0)|0X00000005;				//PB0.0
-		}
-	}
-	else if(eIoMd==EPT_IO_CHCY)
-	{
-		if(eIoNum==IO_NUM_PB04)
-		{
-			GPIOB0->CONLR = (GPIOB0->CONLR&0XFFF0FFFF)|0X00040000;				//PB0.4
-		}
-		else if(eIoNum==IO_NUM_PA04)
-		{
-			GPIOA0->CONLR = (GPIOA0->CONLR&0XFFF0FFFF)|0X00050000;				//PA0.4
-		}
-		else if(eIoNum==IO_NUM_PA09)
-		{
-			GPIOA0->CONHR = (GPIOA0->CONHR&0XFFFFFF0F)|0X00000070;				//PA0.9
-		}
-		else if(eIoNum==IO_NUM_PA013)
-		{
-			GPIOA0->CONHR = (GPIOA0->CONHR&0XFF0FFFFF)|0X00500000;				//PA0.13
-		}
-	}
-	else if(eIoMd==EPT_IO_CHD)
-	{
-		if(eIoNum==IO_NUM_PB03)
-		{
-			GPIOB0->CONLR = (GPIOB0->CONLR&0XFFFF0FFF)|0X00006000;				//PB0.3
-		}
-		else if(eIoNum==IO_NUM_PA08)
-		{
-			GPIOA0->CONHR = (GPIOA0->CONHR&0XFFFFFFF0)|0X00000004;				//PA0.8
-		}
-	}
-	else if(eIoMd==EPT_IO_EPI)
-	{
-		if(eIoNum==IO_NUM_PA07)
-		{
-			GPIOA0->CONLR = (GPIOA0->CONLR&0X0FFFFFFF)|0X50000000;				//PA0.7 EPI0
-		}
-		else if(eIoNum==IO_NUM_PA013)
-		{
-			GPIOA0->CONHR = (GPIOA0->CONHR&0XFF0FFFFF)|0X00400000;				//PA0.13 EPI1
-		}
-		else if(eIoNum==IO_NUM_PB03)
-		{
-			GPIOB0->CONLR = (GPIOB0->CONLR&0XFFFF0FFF)|0X00007000;				//PB0.3 EPI2
-		}
-		else if(eIoNum==IO_NUM_PB02)
-		{
-			GPIOB0->CONLR = (GPIOB0->CONLR&0XFFFFF0FF)|0X00000700;				//PB0.2 EPI3
-		}
-	}
-}
-
 /** \brief EPT PWM  Basic Configuration :clk , counter mode, operation  mode  ect.
  * 			
  *  \param[in] eClk : source clk select : PCLK OR SYNCIN3 \ref ept_clksel_e
@@ -207,7 +68,7 @@ void ept_io_configure(ept_iomd_e eIoMd , ept_ionum_e eIoNum)
 void ept_pwm_configure(ept_clksel_e eClk , ept_cntmd_e eCntMd  , ept_opmd_e eOpMd, U16_T hwPscr)		
 {
 	EPT0->CEDR=(EPT0->CEDR&(~(EPT_CLKEN_MSK|EPT_CKSRC_MSK|EPT_DBGEN_MSK|EPT_START_MSK)))|(EPT_CLKEN|(eClk <<EPT_CKSRC_POS)|(EPT_DBGEN)|(EPT_START_SHD));
-	if(eClk==EPT_Selecte_PCLK)
+	if(eClk==EPT_SELECT_PCLK)
 	{
 		EPT0->PSCR=hwPscr;
 	}
@@ -218,7 +79,7 @@ void ept_pwm_configure(ept_clksel_e eClk , ept_cntmd_e eCntMd  , ept_opmd_e eOpM
 
 /** \brief EPT Clock Gate Filter Configuration :Clock Gate source select, filter div ,filter cnt , burst ect.
  * 			
- *  \param[in] eCgsrcSel : Clock Gate source select : DIS/TIN_BT0/TIN_BT1/CHAX/CHBX \ref ept_cgsrc_e
+ *  \param[in] eCgsrcSel : Clock Gate source select : DIS/CHAX/CHBX \ref ept_cgsrc_e
  *  \param[in] byCgfltDiv : Clock Gate Filter DIv Setting, range: 0~0xff 
  *  \param[in] byCgfltCnt : Clock Gate Filter Cnt Setting , range: 0~0x7
  *  \param[in] eBurst : Burst enable or disable control \ref ept_burst_e
@@ -231,27 +92,14 @@ void ept_clockgate_configure(ept_cgsrc_e eCgsrcSel , U8_T byCgfltDiv , U8_T byCg
 	EPT0->CEDR=(EPT0->CEDR&(~EPT_FLTPRS_MSK))|(byCgfltDiv<<EPT_FLTPRS_POS);
 	if(eCgsrcSel==EPT_CGSRC_DIS)
 	{
-		EPT0->CEDR|=EPT_TIN_DIS<<EPT_TIN_POS;
 		EPT0->CR|=EPT_CGSRC_SEL_DIS<<EPT_CGSRC_POS;
-	}
-	else if(eCgsrcSel==EPT_CGSRC_TIN_BT0OUT)
-	{
-		EPT0->CEDR|=EPT_TIN_BT0<<EPT_TIN_POS;
-		EPT0->CR|=EPT_CGSRC_SEL_TIN<<EPT_CGSRC_POS;
-	}
-	else if(eCgsrcSel==EPT_CGSRC_TIN_BT1OUT)
-	{
-		EPT0->CEDR|=EPT_TIN_BT1<<EPT_TIN_POS;
-		EPT0->CR|=EPT_CGSRC_SEL_TIN<<EPT_CGSRC_POS;
 	}
 	else if(eCgsrcSel==EPT_CGSRC_CHAX)
 	{
-		EPT0->CEDR|=EPT_TIN_DIS<<EPT_TIN_POS;
 		EPT0->CR|=EPT_CGSRC_SEL_CHAX<<EPT_CGSRC_POS;
 	}
 	else if(eCgsrcSel==EPT_CGSRC_CHBX)
 	{
-		EPT0->CEDR|=EPT_TIN_DIS<<EPT_TIN_POS;
 		EPT0->CR|=EPT_CGSRC_SEL_CHBX<<EPT_CGSRC_POS;
 	}
 }
@@ -275,7 +123,7 @@ void ept_cap_configure(ept_clksel_e eClk, ept_cntmd_e eCntMd , ept_capmd_e eCapM
 					, ept_ldxrst_e eLoadCmpa, ept_ldxrst_e eLoadCmpb, ept_ldxrst_e eLoadCmpc, ept_ldxrst_e eLoadCmpd,  U8_T byStopWrap , U16_T hwPscr)
 {
 	EPT0->CEDR=(EPT0->CEDR&(~(EPT_CLKEN_MSK|EPT_CKSRC_MSK|EPT_DBGEN_MSK|EPT_START_MSK)))|(EPT_CLKEN|(eClk<<EPT_CKSRC_POS)|(EPT_DBGEN)|(EPT_START_SHD));
-	if(eClk==EPT_Selecte_PCLK)
+	if(eClk==EPT_SELECT_PCLK)
 	{
 		EPT0->PSCR=hwPscr;
 	}
@@ -285,21 +133,22 @@ void ept_cap_configure(ept_clksel_e eClk, ept_cntmd_e eCntMd , ept_capmd_e eCapM
 	|(eLoadCmpa<<EPT_CMPA_RST_POS)|(eLoadCmpb<<EPT_CMPB_RST_POS)|(eLoadCmpc<<EPT_CMPC_RST_POS)|(eLoadCmpd<<EPT_CMPD_RST_POS);
 }
 
-/** \brief EPT sync0 config
+/** \brief EPT syncx config
  * 			
+ *  \param[in] eSycin : Syncin channel select \ref ept_syncin_e
  *  \param[in] eSyncMd : Sync Mode select : once or continus \ref ept_syncmd_e
  *  \param[in] eAutoRearm : Hardware Auto Rearm selection of sync0 ch: disable/ cnt=zreo/cnt=prd/cnt= zero or prd  \ref ept_arearm_e
  *  \param[in] eTrgo0Sel : Input trigger channel as ExtSync selection of TRGSRC0 \ref ept_trgoxsel_e
  *  \param[in] eTrgo1Sel : Input trigger channel as ExtSync selection of TRGSRC1 \ref ept_trgoxsel_e
- *  \param[in] eSync0En : Sync0 ch control :enable /disable \ref ept_syncxen_e
+ *  \param[in] eSyncEn : Syncx ch control :enable /disable \ref ept_syncxen_e
  * 			   
  *  \return none
  */  
-void ept_syncr_configure(ept_syncmd_e eSyncMd , ept_arearm_e eAutoRearm, ept_trgoxsel_e eTrgo0Sel ,ept_trgoxsel_e eTrgo1Sel , ept_syncxen_e eSync0En)
+void ept_syncr_configure(ept_syncin_e eSycin, ept_syncmd_e eSyncMd , ept_arearm_e eAutoRearm, ept_trgoxsel_e eTrgo0Sel ,ept_trgoxsel_e eTrgo1Sel , ept_syncxen_e eSyncEn)
 {
 	EPT0->REGPROT = EPT_REGPROT;
-	EPT0->SYNCR = (EPT0->SYNCR&(~(EPT_OSTMD_MSK(0)|EPT_SYNC_MSK(0)|EPT_AREARM_MSK|EPT_TRGO0SEL_MSK|EPT_TRGO1SEL_MSK))) 
-						|(eSync0En<<EPT_SYNC_POS(0))|(eSyncMd<<EPT_OSTMD_POS(0))|(eAutoRearm<<EPT_AREARM_POS)|(eTrgo0Sel<<EPT_TRGO0SEL_POS)
+	EPT0->SYNCR = (EPT0->SYNCR&(~(EPT_OSTMD_MSK(eSycin)|EPT_SYNC_MSK(eSycin)|EPT_AREARM_MSK|EPT_TRGO0SEL_MSK|EPT_TRGO1SEL_MSK))) 
+						|(eSyncEn<<EPT_SYNC_POS(eSycin))|(eSyncMd<<EPT_OSTMD_POS(eSycin))|(eAutoRearm<<EPT_AREARM_POS)|(eTrgo0Sel<<EPT_TRGO0SEL_POS)
 						|(eTrgo1Sel<<EPT_TRGO1SEL_POS);
 }
 
@@ -594,7 +443,7 @@ void ept_deadband_load_configure(ept_ldr_e eDbLdr)
  * 
  *  \return none
  */  
-void ept_event_trigger_configure(ept_trgsrc_e eTrg , ept_trgsrc_e eTrgSrc , ept_trgout_md_e eTrgoutEn )
+void ept_event_trigger_configure(ept_trg_e eTrg , ept_trgsrc_e eTrgSrc , ept_trgout_md_e eTrgoutEn )
 {
 	if(eTrg==EPT_TRG0)
 	{
@@ -612,7 +461,6 @@ void ept_event_trigger_configure(ept_trgsrc_e eTrg , ept_trgsrc_e eTrgSrc , ept_
 	{
 		EPT0->EVTRG=(EPT0->EVTRG&(~(EPT_SEL_MSK_TRG(EPT_TRG3)|EPT_OUTEN_MSK_TRG(EPT_TRG3))))|(eTrgSrc<<EPT_SEL_POS_TRG(EPT_TRG3))|(eTrgoutEn<<EPT_OUTEN_POS_TRG(EPT_TRG3));
 	}
-	EPT0->EVTRG|=EPT_CNTINIT_ALL_ENABLE;
 }
 
 /** \brief   EPT EVTRG software trigger
@@ -621,7 +469,7 @@ void ept_event_trigger_configure(ept_trgsrc_e eTrg , ept_trgsrc_e eTrgSrc , ept_
  * 
  *  \return none
  */  
-void ept_event_software_trigger(ept_trgsrc_e eTrg)
+void ept_event_software_trigger(ept_trg_e eTrg)
 {
 	if(eTrg==EPT_TRG0)
 	{
@@ -650,7 +498,6 @@ void ept_event_software_trigger(ept_trgsrc_e eTrg)
 void ept_int_enable(ept_int_e eInt)
 {
 	EPT0->ICR 	= eInt;							//clear LVD INT status
-	csi_vic_enable_irq(EPT0_INT);
 	EPT0->IMCR  |= eInt;
 }
 

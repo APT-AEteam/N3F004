@@ -14,7 +14,7 @@
 #define _ADC_H
 
 /* Includes ------------------------------------------------------------------*/
-#include "n3f004.h"
+#include "types_local.h"
 
 /// \struct csp_adc_t
 /// \brief ADC Reg Description

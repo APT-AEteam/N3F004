@@ -141,7 +141,6 @@ void i2c_disable(csp_i2c_t *ptI2cBase)
 void i2c_int_enable(csp_i2c_t *ptI2cBase)
 {
     ptI2cBase->CR = ptI2cBase->CR & (~I2C_SI);					//clear I2C INT status
-	csi_vic_enable_irq(I2C_INT);
 	ptI2cBase->IER = I2C_SI_MSK;
 }
 
