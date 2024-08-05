@@ -81,8 +81,8 @@
 #define EPT0_INT    (4)       //IRQ4
 //DUMMY       //IRQ5
 //DUMMY       //IRQ6
-#define EXI0_INT    (7)       //IRQ7
-#define EXI1_INT    (8)       //IRQ8
+#define EXIV0_INT    (7)       //IRQ7
+#define EXIV1_INT    (8)       //IRQ8
 #define GPT0_INT    (9)       //IRQ9 
 //DUMMY      //IRQ10
 //DUMMY      //IRQ11
@@ -95,9 +95,9 @@
 //DUMMY      //IRQ18
 #define SPI_INT     (19)      //IRQ19
 //DUMMY      //IRQ20
-#define EXI2_INT    (21)      //IRQ21
-#define EXI3_INT    (22)      //IRQ22
-#define EXI4_INT    (23)      //IRQ23
+#define EXIV2_INT    (21)      //IRQ21
+#define EXIV3_INT    (22)      //IRQ22
+#define EXIV4_INT    (23)      //IRQ23
 #define TC3_INT     (24)      //IRQ24
 #define CMP0_INT    (25)      //IRQ25
 #define CMP1_INT    (26)      //IRQ26
@@ -169,6 +169,19 @@ typedef enum{
 	ET_GPT0_SYNCIN5,
 	ET_GPT0_SYNCIN6	
 }etcb_trgdes_e;
+
+
+/**
+  * @brief  GPIO  IO Group
+  */
+typedef enum
+{
+    PA0 = 0,
+    PB0 = 2,
+    GPIOA = 0,
+    GPIOB = 2,
+}gpio_group_e;
+
 
 typedef enum {
 	PIN_GPD				    =  0U,

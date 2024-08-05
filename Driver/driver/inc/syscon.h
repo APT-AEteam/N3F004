@@ -335,34 +335,34 @@ typedef enum{
 #define SYSCON_EXI_MSK(n)	(0x1 << SYSCON_EXI_POS(n))
 typedef enum
 {
-	EXI_EDGE_R	= 0,
-	EXI_EDGE_F	= 1,	
-	EXI_EDGE_BOTH	= 2
+	EXI_R	= 0,
+	EXI_F	= 1,	
+	EXI_BOTH	= 2
 }exi_trigger_e;
 
 typedef enum
 {
-	EXI_IGRP0		= (0),						
-	EXI_IGRP1		= (1),
-	EXI_IGRP2		= (2),
-	EXI_IGRP3		= (3),
-	EXI_IGRP4		= (4),
-	EXI_IGRP5		= (5),
-	EXI_IGRP6		= (6),
-	EXI_IGRP7		= (7),
-	EXI_IGRP8		= (8),
-	EXI_IGRP9		= (9),
-	EXI_IGRP10		= (10),
-	EXI_IGRP11		= (11),
-	EXI_IGRP12		= (12),
-	EXI_IGRP13		= (13),
-	EXI_IGRP14		= (14),
-	EXI_IGRP15		= (15),
-	EXI_IGRP16		= (16),
-	EXI_IGRP17		= (17),
-	EXI_IGRP18		= (18),
-	EXI_IGRP19		= (19)
-}exi_igrp_e;
+	EXI_GRP0		= (0),						
+	EXI_GRP1		= (1),
+	EXI_GRP2		= (2),
+	EXI_GRP3		= (3),
+	EXI_GRP4		= (4),
+	EXI_GRP5		= (5),
+	EXI_GRP6		= (6),
+	EXI_GRP7		= (7),
+	EXI_GRP8		= (8),
+	EXI_GRP9		= (9),
+	EXI_GRP10		= (10),
+	EXI_GRP11		= (11),
+	EXI_GRP12		= (12),
+	EXI_GRP13		= (13),
+	EXI_GRP14		= (14),
+	EXI_GRP15		= (15),
+	EXI_GRP16		= (16),
+	EXI_GRP17		= (17),
+	EXI_GRP18		= (18),
+	EXI_GRP19		= (19)
+}exi_grp_e;
 
 
 /******************************************************************************
@@ -704,26 +704,25 @@ U32_T syscon_read_reset_src(void);
 
 
 
-/** \brief external interrupt configuration
- *  \param[in] eNewState: ENABLE/DISABLE
+/** \brief external interrupt trigger mode configuration
  *  \param[in] byExiGrpNum: EXI group number \ref exi_igrp_e
  *  \param[in] eMode: falling/rising/both falling and risiing \ref exi_trigger_e
  *  \return none
  */
-void syscon_exi_trigger_cmd(functional_status_e eNewState , exi_igrp_e eExiGrpNum , exi_trigger_e eMode);
+void syscon_exi_mode_configure(exi_grp_e eExiGrpNum , exi_trigger_e eMode);
 
 
-
-/** \brief external interrupt enable, disable control
- *  \param[in] eNewState: ENABLE/DISABLE
+/** \brief external interrupt enable control
  *  \param[in] byExiGrpNum: EXI group number \ref exi_igrp_e
  *  \return none
  */
+void syscon_exi_enable(exi_grp_e eExiGrpNum);
 
-void syscon_exi_interrupt_cmd(functional_status_e eNewState , exi_igrp_e eExiGrpNum);
-
-
-
+/** \brief external interrupt disable control
+ *  \param[in] byExiGrpNum: EXI group number \ref exi_igrp_e
+ *  \return none
+ */
+void syscon_exi_disable(exi_grp_e eExiGrpNum);
 
 /** \brief chip enter idle mode: CPU clock shuts down
  *  \param[in] none

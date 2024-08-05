@@ -253,67 +253,65 @@ U32_T syscon_read_reset_src(void)
 
 
 
-/** \brief external interrupt configuration
- *  \param[in] eNewState: ENABLE/DISABLE
- *  \param[in] byExiGrpNum: EXI group number \ref exi_igrp_e
+/** \brief external interrupt trigger mode configuration
+ *  \param[in] byExiGrpNum: EXI group number \ref exi_grp_e
  *  \param[in] eMode: falling/rising/both falling and risiing \ref exi_trigger_e
  *  \return none
  */
-void syscon_exi_trigger_cmd(functional_status_e eNewState , exi_igrp_e eExiGrpNum , exi_trigger_e eMode)
+void syscon_exi_mode_configure(exi_grp_e eExiGrpNum , exi_trigger_e eMode)
 {
 	U32_T wPinMsak = (0x01ul << eExiGrpNum);
-	
-	if (eNewState) {
-		switch(eMode)
-		{
-			case EXI_EDGE_R: 	SYSCON->EXIRT |= wPinMsak;
-								SYSCON->EXIFT &= (~wPinMsak);break;
-			case EXI_EDGE_F:    SYSCON->EXIFT |= wPinMsak;
-								SYSCON->EXIRT &= (~wPinMsak);break;
-			
-			case EXI_EDGE_BOTH: SYSCON->EXIRT |= wPinMsak;
-								SYSCON->EXIFT |= wPinMsak; break;
-			
-			default: 	SYSCON->EXIRT &= (~wPinMsak);					
-						SYSCON->EXIFT &= (~wPinMsak);
-						break;
-		}
+	switch (eMode)
+	{
+		case (EXI_R): SYSCON->EXIRT |= wPinMsak; break;
+		case (EXI_F): SYSCON->EXIFT |= wPinMsak; break;
+		case (EXI_BOTH): SYSCON->EXIRT |= wPinMsak;
+						 SYSCON->EXIFT |= wPinMsak; break;	
+		default: break;
 	}
-	else {
-		switch(eMode)
-		{
-			case EXI_EDGE_R: 	SYSCON->EXIRT &= (~wPinMsak);break;
-			case EXI_EDGE_F:    SYSCON->EXIFT &= (~wPinMsak);break;
-			
-			case EXI_EDGE_BOTH: 			
-			default: 	SYSCON->EXIRT &= (~wPinMsak);					
-						SYSCON->EXIFT &= (~wPinMsak);
-						break;
-		}
-	}
-	
 }
 
 
-/** \brief external interrupt enable, disable control
- *  \param[in] eNewState: ENABLE/DISABLE
- *  \param[in] byExiGrpNum: EXI group number \ref exi_igrp_e
+/** \brief external interrupt enable control
+ *  \param[in] byExiGrpNum: EXI group number \ref exi_grp_e
  *  \return none
  */
-
-void syscon_exi_interrupt_cmd(functional_status_e eNewState , exi_igrp_e eExiGrpNum)
+void syscon_exi_enable(exi_grp_e eExiGrpNum)
 {
-	if(eNewState != DISABLE){
-		SYSCON->EXICR |=  0x1 << eExiGrpNum;							// Clear EXI status bit
-		SYSCON->EXIER |= 0x1 << eExiGrpNum;	
-		
+	SYSCON->EXICR |=  0x1 << eExiGrpNum;							// Clear EXI status bit
+	SYSCON->EXIER |= 0x1 << eExiGrpNum;	
+	
+	switch (eExiGrpNum)
+	{
+		case (0): 
+		case (16): csi_vic_enable_irq(EXIV0_INT); break;
+		case (1):  
+		case (17): csi_vic_enable_irq(EXIV1_INT); break;
+		case (2):
+		case (3):
+		case (18): 
+		case (19): csi_vic_enable_irq(EXIV2_INT); break;
+		case (4):
+		case (5):
+		case (6):
+		case (7):
+		case (8):
+		case (9):  csi_vic_enable_irq(EXIV3_INT); break;
+		default:   csi_vic_enable_irq(EXIV4_INT); break;
 	}
-	else {
-		SYSCON->EXIDR |= 0x1 << eExiGrpNum;
-		SYSCON->EXICR |= 0x1 << eExiGrpNum;								// Clear EXI status bit
-	}
+	
+	
 }
 
+/** \brief external interrupt disable control
+ *  \param[in] byExiGrpNum: EXI group number \ref exi_grp_e
+ *  \return none
+ */
+void syscon_exi_disable(exi_grp_e eExiGrpNum)
+{
+	SYSCON->EXIDR |= 0x1 << eExiGrpNum;
+	SYSCON->EXICR |= 0x1 << eExiGrpNum;								// Clear EXI status bit
+}
 
 
 

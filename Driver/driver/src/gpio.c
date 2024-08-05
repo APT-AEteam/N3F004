@@ -146,13 +146,14 @@ void gpio_mode_init(csp_gpio_t *ptGpioBase,gpio_mode_e eMode,U32_T wValue)
 }
 
 
+
 /** \brief Enable pull-up Resistor of a specific pin
  * 
  *  \param[in] ptGpioBase: GPIOA/GPIOB...
  *  \param[in] byPinNum: 0~15
  *  \return none
  */ 
-void gpio_pullhigh_init(csp_gpio_t *ptGpioBase,uint8_t byPinNum)
+void gpio_pull_high(csp_gpio_t *ptGpioBase,uint8_t byPinNum)
 {
 	(ptGpioBase)->PUDR  = (((ptGpioBase)->PUDR) & ~(0x03<<(byPinNum*2))) | (0x01<<(byPinNum*2));
 }
@@ -163,7 +164,7 @@ void gpio_pullhigh_init(csp_gpio_t *ptGpioBase,uint8_t byPinNum)
  *  \param[in] byPinNum: 0~15
  *  \return none
  */ 
-void gpio_pulllow_init(csp_gpio_t *ptGpioBase,uint8_t byPinNum)
+void gpio_pull_low(csp_gpio_t *ptGpioBase,uint8_t byPinNum)
 {
 	(ptGpioBase)->PUDR  = (((ptGpioBase)->PUDR) & ~(0x03<<(byPinNum*2))) | (0x02<<(byPinNum*2));
 }
@@ -265,7 +266,7 @@ void gpio_drive_strength_disable(csp_gpio_t *ptGpioBase,uint8_t byPinNum)
  *  \param[in] eExiGroup: SELECT_EXI_GROUP0~19 \ref exipin_e
  *  \return err_status_e
  */ 
-err_status_e gpio_igroup_set(gpio_group_e eGroup , uint8_t byPinNum , exi_group_e eExiGroup)
+err_status_e gpio_igroup_set(exi_grp_e eExiGroup,gpio_group_e eGroup , uint8_t byPinNum)
 {	
 	U32_T byMaskShift,byMask;
 	if (eExiGroup < 16) {
@@ -290,17 +291,17 @@ err_status_e gpio_igroup_set(gpio_group_e eGroup , uint8_t byPinNum , exi_group_
 	else {
 		switch(eExiGroup)
 		{
-			case (SELECT_EXI_GROUP16): 
-			case (SELECT_EXI_GROUP17): if ((eGroup != GPIOA) || (eGroup == GPIOA && (byPinNum>7)))
+			case (EXI_GRP16): 
+			case (EXI_GRP17): if ((eGroup != GPIOA) || (eGroup == GPIOA && (byPinNum>7)))
 															return ERROR;
 														break;
-			case (SELECT_EXI_GROUP18): 
-			case (SELECT_EXI_GROUP19): if ((eGroup != GPIOB) || (eGroup == GPIOB && (byPinNum>3)))
+			case (EXI_GRP18): 
+			case (EXI_GRP19): if ((eGroup != GPIOB) || (eGroup == GPIOB && (byPinNum>3)))
 															return ERROR;
 			default: return ERROR; break;
 		}
 		
-		byMaskShift = (eExiGroup - SELECT_EXI_GROUP15) << 2;
+		byMaskShift = (eExiGroup - EXI_GRP15) << 2;
 		byMask = ~(0x0Ful << byMaskShift);
 		GPIOGRP->IGREX = ((GPIOGRP->IGREX) & byMask) | (byPinNum << byMaskShift);
 	} 
@@ -313,12 +314,22 @@ err_status_e gpio_igroup_set(gpio_group_e eGroup , uint8_t byPinNum , exi_group_
 
 /** \brief Enable a specific gpio group signal output to SYSCON module
  *  \param[in] ptGpioBase: GPIOA/GPIOB...
- *  \param[in] eExiPin: EXI0~EXI15 \ref exi_e
+ *  \param[in] byPinNum: pin number
  *  \return none
  */ 
-void gpio_exi_enable(csp_gpio_t *ptGpioBase,exi_e eExiPin)
+void gpio_exi_enable(csp_gpio_t *ptGpioBase,U8_T byPinNum)
 {
-    (ptGpioBase)->IECR  |= 1<<eExiPin;
+    (ptGpioBase)->IECR  |= 1<<byPinNum;
+}
+
+/** \brief disable a specific gpio group signal output to SYSCON module
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] byPinNum: pin number
+ *  \return none
+ */ 
+void gpio_exi_disable(csp_gpio_t *ptGpioBase,U8_T byPinNum)
+{
+    (ptGpioBase)->IEDR  |= 1<<byPinNum;
 }
 
 
@@ -326,7 +337,7 @@ void gpio_exi_enable(csp_gpio_t *ptGpioBase,exi_e eExiPin)
  *  \param[in] wExiMsk: EXI pin mask, 0'b  for disable, 1'b for enable
  *  \return none
  */
-void gpio_exi_interrupt_cmd(csp_gpio_t * ptGpioBase,U32_T wExiMsk)
+void gpio_exi_port_cmd(csp_gpio_t * ptGpioBase,U32_T wExiMsk)
 {
 	ptGpioBase ->IECR = wExiMsk;
 }

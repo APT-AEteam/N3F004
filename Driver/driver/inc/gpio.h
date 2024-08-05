@@ -16,6 +16,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "types_local.h"
 #include "n3f004_top.h"
+#include "syscon.h"
 
 
 /// \struct csp_gpio_t
@@ -85,66 +86,58 @@ typedef enum
     OMCR =2,                        //open drain
     IECR =3,                        //int
 }gpio_mode_e;
-/**
-  * @brief  GPIO  IO Group
-  */
-typedef enum
-{
-    PA0 = 0,
-    PB0 = 2,
-    GPIOA = 0,
-    GPIOB = 2,
-}gpio_group_e;
+
 
 /**
   * @brief  GPIO  exi number
   */
+#define EXI_PIN(n) n
 typedef enum
 {
-    EXI0 = 0,
-    EXI1 = 1,
-    EXI2 = 2,
-    EXI3 = 3,
-    EXI4 = 4,
-    EXI5 = 5,
-    EXI6 = 6,
-    EXI7 = 7,
-    EXI8 = 8,
-    EXI9 = 9,
-    EXI10 = 10,
-    EXI11 = 11,
-    EXI12 = 12,
-    EXI13 = 13,
-	EXI14 = 14,
-	EXI15 = 15,
+    EXI_PIN0 = 0,
+    EXI_PIN1 = 1,
+    EXI_PIN2 = 2,
+    EXI_PIN3 = 3,
+    EXI_PIN4 = 4,
+    EXI_PIN5 = 5,
+    EXI_PIN6 = 6,
+    EXI_PIN7 = 7,
+    EXI_PIN8 = 8,
+    EXI_PIN9 = 9,
+    EXI_PIN10 = 10,
+    EXI_PIN11 = 11,
+    EXI_PIN12 = 12,
+    EXI_PIN13 = 13,
+	EXI_PIN14 = 14,
+	EXI_PIN15 = 15,
 }exi_e;
 
-/**
-  * @brief  EXI PIN
-  */
-typedef enum
-{
-	SELECT_EXI_GROUP0		=		(0),						
-	SELECT_EXI_GROUP1		=		(1),
-	SELECT_EXI_GROUP2		=		(2),
-	SELECT_EXI_GROUP3		=		(3),
-	SELECT_EXI_GROUP4		=		(4),
-	SELECT_EXI_GROUP5		=		(5),
-	SELECT_EXI_GROUP6		=		(6),
-	SELECT_EXI_GROUP7		=		(7),
-	SELECT_EXI_GROUP8		=		(8),
-	SELECT_EXI_GROUP9		=		(9),
-	SELECT_EXI_GROUP10	=		(10),
-	SELECT_EXI_GROUP11	=		(11),
-	SELECT_EXI_GROUP12	=		(12),
-	SELECT_EXI_GROUP13	=		(13),
-	SELECT_EXI_GROUP14	=		(14),
-	SELECT_EXI_GROUP15	=		(15),
-	SELECT_EXI_GROUP16	=		(16),
-	SELECT_EXI_GROUP17	=		(17),
-	SELECT_EXI_GROUP18	=		(18),
-	SELECT_EXI_GROUP19	=		(19)
-}exi_group_e;
+///**
+//  * @brief  EXI PIN
+//  */
+//typedef enum
+//{
+//	SELECT_EXI_GROUP0		=		(0),						
+//	SELECT_EXI_GROUP1		=		(1),
+//	SELECT_EXI_GROUP2		=		(2),
+//	SELECT_EXI_GROUP3		=		(3),
+//	SELECT_EXI_GROUP4		=		(4),
+//	SELECT_EXI_GROUP5		=		(5),
+//	SELECT_EXI_GROUP6		=		(6),
+//	SELECT_EXI_GROUP7		=		(7),
+//	SELECT_EXI_GROUP8		=		(8),
+//	SELECT_EXI_GROUP9		=		(9),
+//	SELECT_EXI_GROUP10	=		(10),
+//	SELECT_EXI_GROUP11	=		(11),
+//	SELECT_EXI_GROUP12	=		(12),
+//	SELECT_EXI_GROUP13	=		(13),
+//	SELECT_EXI_GROUP14	=		(14),
+//	SELECT_EXI_GROUP15	=		(15),
+//	SELECT_EXI_GROUP16	=		(16),
+//	SELECT_EXI_GROUP17	=		(17),
+//	SELECT_EXI_GROUP18	=		(18),
+//	SELECT_EXI_GROUP19	=		(19)
+//}exi_group_e;
 
 
 /**
@@ -302,7 +295,34 @@ void gpio_opendrain_disable(csp_gpio_t *ptGpioBase,uint8_t byPinNum);
  *  \param[in] eInputMode: \ref gpio_input_mode_e
  *  \return none
  */ 
-void gpio_ttl_gpioos_select(csp_gpio_t *ptGpioBase,uint8_t byPinNum,gpio_input_mode_e eInputMode);
+ 
+/** \brief Enable pull-up Resistor of a specific pin
+ * 
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] byPinNum: 0~15
+ *  \return none
+ */ 
+void gpio_pull_high(csp_gpio_t *ptGpioBase,uint8_t byPinNum);
+
+
+/** \brief Disable pull-down Resistor of a specific pin
+ * 
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] byPinNum: 0~15
+ *  \return none
+ */ 
+void gpio_pull_low(csp_gpio_t *ptGpioBase,uint8_t byPinNum);
+
+/** \brief Disable pull-down/up Resistor of a specific pin
+ * 
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] byPinNum: 0~15
+ *  \return none
+ */
+void gpio_pull_disable(csp_gpio_t *ptGpioBase,uint8_t byPinNum);
+
+
+void gpio_ttl_cmos_select(csp_gpio_t *ptGpioBase,uint8_t byPinNum,gpio_input_mode_e eInputMode);
 
 /** \brief Set a specific output pin to strong driving ability
  * 
@@ -330,17 +350,30 @@ void gpio_drive_strength_disable(csp_gpio_t *ptGpioBase,uint8_t byPinNum);
  *  - EXI18/19 could be PB0.0~PB0.3
  *  \param[in] eGroup: GPIOA/GPIOB...
  *  \param[in] byPinNum: 0~15
- *  \param[in] exi_group_e: SELECT_EXI_GROUP0 ~19 \ref exi_group_e
+ *  \param[in] eExiGroup: SELECT_EXI_GROUP0 ~19 \ref exi_grp_e
  *  \return err_status_e
  */ 
-err_status_e gpio_igroup_set(gpio_group_e eGroup , uint8_t byPinNum , exi_group_e eExiGroup);
+err_status_e gpio_igroup_set(exi_grp_e eExiGroup,gpio_group_e eGroup , uint8_t byPinNum);
 
-/** \brief Enable gpio group signal output to SYSCON module
+/** \brief Enable a specific gpio group signal output to SYSCON module
  *  \param[in] ptGpioBase: GPIOA/GPIOB...
- *  \param[in] eExiPin: EXI0~EXI15 \ref exi_e
+ *  \param[in] byPinNum: pin number
  *  \return none
  */ 
-void gpio_exi_enable(csp_gpio_t *ptGpioBase,exi_e eExiPin);
+void gpio_exi_enable(csp_gpio_t *ptGpioBase,U8_T byPinNum);
+
+/** \brief disable a specific gpio group signal output to SYSCON module
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] byPinNum: pin number
+ *  \return none
+ */ 
+void gpio_exi_disable(csp_gpio_t *ptGpioBase,U8_T byPinNum);
+
+/** \brief simultaneouly external interrupt enable, disable control in GPIO
+ *  \param[in] wExiMsk: EXI pin mask, 0'b  for disable, 1'b for enable
+ *  \return none
+ */
+void gpio_exi_port_cmd(csp_gpio_t * ptGpioBase,U32_T wExiMsk);
 
 /** \brief Set/Clear a specific output pin
  *  \param[in] ptGpioBase: GPIOA/GPIOB...
@@ -349,6 +382,10 @@ void gpio_exi_enable(csp_gpio_t *ptGpioBase,exi_e eExiPin);
  */ 
 void gpio_write_high(csp_gpio_t *ptGpioBase,uint8_t byPinNum);
 void gpio_write_low(csp_gpio_t *ptGpioBase,uint8_t byPinNum);
+
+
+
+
 
 /** \brief Set a specific output pin to a specific level
  * 
