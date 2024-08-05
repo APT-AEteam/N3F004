@@ -52,19 +52,7 @@ typedef enum
 /******************************************************************************
 *SWTRG : ETCB Software Trigger Register
 ******************************************************************************/
-typedef enum
-{
-    ET_SWTRG_CH0 = 0,
-	ET_SWTRG_CH1 = (1<<1),
-	ET_SWTRG_CH2 = (1<<2),
-	ET_SWTRG_CH3 = (1<<3),
-	ET_SWTRG_CH4 = (1<<4),
-	ET_SWTRG_CH5 = (1<<5),
-}etcb_ch_swtrg_e;
-
-  
-
-
+#define ETCB_SWTRG_CH(n) (0x1<<n)
 
 
 #define	ETCB_CH_EN_POS			(0U)	//CH(0->5) enable/disable		
@@ -101,9 +89,9 @@ typedef enum
 
 typedef enum
 {
-    SRC0 = 0,
-	SRC1 = 1,
-	SRC2 = 2,
+    ET_SRC0 = 0,
+	ET_SRC1 = 1,
+	ET_SRC2 = 2,
 }etcb_ch0_src_e;
 
 /******************************************************************************
@@ -180,14 +168,14 @@ ETCB Functions Declaration
  *  \param[in] none
  *  \return none
  */ 
-void ET_DeInit(void);
+void etcb_deinit(void);
 
 /** \brief Enable ETCB
  * 
  *  \param[in] none
  *  \return none
  */ 
-void ET_ENABLE(void);
+void etcb_enable(void);
 
 /** \brief Disable ETCB
  * 
@@ -195,22 +183,22 @@ void ET_ENABLE(void);
  *  \return none
  */ 
 
-void ET_DISABLE(void);
+void etcb_disable(void);
 
 /** \brief tigger ETCB manually, usually for debugging
  * 
- *  \param[in] eChSwTrg: ET_SWTRG_CH0 ~5 \ref etcb_ch_swtrg_e
+ *  \param[in] byChNum: ETCB channel number
  *  \return none
  */ 
-void ET_SWTRG_CMD(etcb_ch_swtrg_e eChSwTrg);
+void etcb_swtrg(U8_T byChNum);
 
 /** \brief Select a trigger source for CH0
- *  \param[in] eCh0SrcNum: SRC0~3, CH0 can have 3 trigger sources at the same time
- *  \param[in] eNewState: ENABLE/DISABLE
+ *  \param[in] eCh0SrcNum: SRC0~3, CH0 can have 3 trigger sources at the same time \ref etcb_ch0_src_e
  *  \param[in] eTrgSrc: trigger source \ref etcb_trgsrc_e
+ *  \param[in] eNewState: src ENABLE/DISABLE
  *  \return none
  */  
-void ET_CH0_SRCSEL(etcb_ch0_src_e eCh0SrcNum,functional_status_e eNewState,etcb_trgsrc_e eTrgSrc);
+void etcb_ch0_src_sel(etcb_ch0_src_e eCh0SrcNum,etcb_trgsrc_e eTrgSrc, functional_status_e eNewState);
 
 /** \brief  Select the trigger destination/trigger mode for CH0 and enable/dissable CH0
  *  \param[in] eNewState: ENABLE/DISABLE
@@ -218,15 +206,15 @@ void ET_CH0_SRCSEL(etcb_ch0_src_e eCh0SrcNum,functional_status_e eNewState,etcb_
  *  \param[in] eTrgDes: trigger destination \ref etcb_trgdes_e
  *  \return none
  */  
-void ET_CH0_CONTROL(functional_status_e eNewState,etcb_ch_trg_mode_e eTrgMode,etcb_trgdes_e eTrgDes);
+void etcb_ch0_configure(functional_status_e eNewState,etcb_ch_trg_mode_e eTrgMode,etcb_trgdes_e eTrgDes);
 
 /** \brief Select a trigger destination for CH1 and enable/disable the corresponding channel
- *  \param[in] eCh1DesNum: ET_DST0~ET_DST2
+ *  \param[in] eCh1DesNum: ETCB_DST0~DST2 \ref etcb_ch1_des_e
+ *  \param[in] eTrgDes: trigger destination \ref etcb_trgdes_e
  *  \param[in] eNewState: ENABLE/DISABLE
- *  \param[in] eTrgSrc: trigger source \ref etcb_trgsrc_e
  *  \return none
  */  
-void ET_CH1_SRCSEL(etcb_ch1_des_e eCh1DesNum,functional_status_e eNewState,etcb_trgdes_e eTrgDes);
+void etcb_ch1_dst_sel(etcb_ch1_des_e eCh1DesNum,etcb_trgdes_e eTrgDes,functional_status_e eNewState);
 
 /** \brief Select the trigger srouce/trigger mode for CH1 and enable/dissable the corresponding channel
  *  \param[in] eNewState: ENABLE/DISABLE
@@ -234,15 +222,15 @@ void ET_CH1_SRCSEL(etcb_ch1_des_e eCh1DesNum,functional_status_e eNewState,etcb_
  *  \param[in] eTrgSrc: trigger source \ref etcb_trgsrc_e
  *  \return none
  */   
-void ET_CH1_CONTROL(functional_status_e eNewState,etcb_ch_trg_mode_e eTrgMode,etcb_trgsrc_e eTrgSrc);
+void etcb_ch1_configure(functional_status_e eNewState,etcb_ch_trg_mode_e eTrgMode,etcb_trgsrc_e eTrgSrc);
 
 /** \brief Select a trigger destination for CH2 and enable/disable the corresponding channel
- *  \param[in] eCh1DesNum: ET_DST0~ET_DST2
- *  \param[in] eNewState: ENABLE/DISABLE
+ *  \param[in] eCh1DesNum: ET_DST0~ET_DST2 \ref etcb_ch1_des_e
  *  \param[in] eTrgDes: trigger destination \ref etcb_trgdes_e
+ *  \param[in] eNewState: ENABLE/DISABLE
  *  \return none
  */  
-void ET_CH2_SRCSEL(etcb_ch1_des_e eCh1DesNum,functional_status_e eNewState,etcb_trgdes_e eTrgDes);
+void etcb_ch2_dst_sel(etcb_ch1_des_e eCh1DesNum,etcb_trgdes_e eTrgDes, functional_status_e eNewState);
 
 /** \brief Select the trigger srouce/trigger mode for CH2 and enable/dissable the corresponding channel
  *  \param[in] eNewState: ENABLE/DISABLE
@@ -250,7 +238,7 @@ void ET_CH2_SRCSEL(etcb_ch1_des_e eCh1DesNum,functional_status_e eNewState,etcb_
  *  \param[in] eTrgSrc: trigger source \ref etcb_trgsrc_e
  *  \return none
  */   
-void ET_CH2_CONTROL(functional_status_e eNewState,etcb_ch_trg_mode_e eTrgMode,etcb_trgsrc_e eTrgSrc);
+void etcb_ch2_configure(functional_status_e eNewState,etcb_ch_trg_mode_e eTrgMode,etcb_trgsrc_e eTrgSrc);
 
 /** \brief Select the trigger srouce、trigger destination、trigger mode and enable/dissable the corresponding channel
  *  \param[in] byChNum: channel number > 3
@@ -260,7 +248,7 @@ void ET_CH2_CONTROL(functional_status_e eNewState,etcb_ch_trg_mode_e eTrgMode,et
  *  \param[in] eTrgDes: trigger destination \ref etcb_trgdes_e
  *  \return none
  */  
-void ET_CHx_CONTROL(etcb_chx_e eChNum,functional_status_e eNewState,etcb_ch_trg_mode_e eTrgMode,etcb_trgsrc_e eTrgSrc,etcb_trgdes_e eTrgDes);
+void etcb_chx_configure(etcb_chx_e eChNum,functional_status_e eNewState,etcb_ch_trg_mode_e eTrgMode,etcb_trgsrc_e eTrgSrc,etcb_trgdes_e eTrgDes);
 
 #endif   /**< ETCB_H */
 

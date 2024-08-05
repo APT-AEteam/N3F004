@@ -102,105 +102,49 @@ void gpio_init(csp_gpio_t *ptGpioBase,uint8_t byPinNum,io_mux_e eIoMux)
     }
 }
 
-/** \brief Set a specific pin to GPD(GPIO Disable) mode
+
+/** \brief Config pull-up or pull-down of a specific output pin
  * 
  *  \param[in] ptGpioBase: GPIOA/GPIOB...
  *  \param[in] byPinNum: 0~15
- * 	\param[in] Dir: 0  output
- * 					1  input
+ *  \param[in] eOutputMode: \ref gpio_pull_mode_e
  *  \return none
  */ 
-void gpio_inputoutput_disable(csp_gpio_t *ptGpioBase,uint8_t byPinNum)
+void gpio_pull_configure(csp_gpio_t *ptGpioBase,uint8_t byPinNum, gpio_pull_mode_e ePullMode)
 {
-    U32_T data_temp;
-    if(byPinNum<8)
-    {
-		(ptGpioBase)->CONLR = (ptGpioBase)->CONLR & (~PIN_MSK << ((byPinNum)<<2));
-    }
-    else if (byPinNum<16)
-    {
-       (ptGpioBase)->CONLR = (ptGpioBase)->CONLR & (~PIN_MSK << ((byPinNum-8)<<2));
+	ptGpioBase->PUDR  = (ptGpioBase->PUDR & ~(GPIO_PULL_MODE_MSK<<(byPinNum*2))) | (ePullMode<<(byPinNum*2)); 
+}
+
+
+
+
+/** \brief Config a specific output pin to opendrain or push-pull mode
+ * 
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] byPinNum: 0~15
+ *  \param[in] eOutputMode: \ref gpio_output_mode_e
+ *  \return none
+ */ 
+void gpio_output_mode_configure(csp_gpio_t *ptGpioBase,uint8_t byPinNum,gpio_output_mode_e eOutputMode)
+{
+	if (eOutputMode == OUTPUT_MODE_PUSHPULL_NORMAL) 
+	{
+		ptGpioBase->OMCR  &= ~(0x01<<byPinNum);
+		ptGpioBase->DSCR  &=  ~(0x01<<(byPinNum*2));
 	}
+	else if (eOutputMode == OUTPUT_MODE_PUSHPULL_STRONG)
+	{
+		ptGpioBase->OMCR  &= ~(0x01<<byPinNum);
+		ptGpioBase->DSCR  = ((ptGpioBase)->DSCR) | (0x01<<(byPinNum*2));
+	}
+	else if (eOutputMode == OUTPUT_MODE_OPENDRAIN)
+	{
+		ptGpioBase->OMCR  = ((ptGpioBase)->OMCR) | (0x01<<byPinNum);
+	}
+		
 }
 
 
-/** \brief port mode configuration
- * 	The operation changes all the 8 ports simutaneously
- *  \param[in] ptGpioBase: GPIOA/GPIOB...
- *  \param[in] eMode:   PUDR(IO PULL UP/DOWN Configuration)
-						DSCR(IO DRIVE STRENGHT Configuration)
-						OMCR(OUTPUT MODE Configuration)
-						IECR(IO INT ENABLE/DISABLE)
- * 	\param[in] wValue: 0x00000000 ~ 0xffffffff, refer to Chapter GPIO in user maunal for Mode definition
- *  \return none
- */ 
-void gpio_mode_init(csp_gpio_t *ptGpioBase,gpio_mode_e eMode,U32_T wValue)
-{
-        switch (eMode)
-        {
-            case PUDR:(ptGpioBase)->PUDR  = wValue;break;               
-            case DSCR:(ptGpioBase)->DSCR  = wValue;break;
-            case OMCR:(ptGpioBase)->OMCR  = wValue;break;
-            case IECR:(ptGpioBase)->IECR  = wValue;break;
-        }
-}
-
-
-
-/** \brief Enable pull-up Resistor of a specific pin
- * 
- *  \param[in] ptGpioBase: GPIOA/GPIOB...
- *  \param[in] byPinNum: 0~15
- *  \return none
- */ 
-void gpio_pull_high(csp_gpio_t *ptGpioBase,uint8_t byPinNum)
-{
-	(ptGpioBase)->PUDR  = (((ptGpioBase)->PUDR) & ~(0x03<<(byPinNum*2))) | (0x01<<(byPinNum*2));
-}
-
-/** \brief Disable pull-down Resistor of a specific pin
- * 
- *  \param[in] ptGpioBase: GPIOA/GPIOB...
- *  \param[in] byPinNum: 0~15
- *  \return none
- */ 
-void gpio_pull_low(csp_gpio_t *ptGpioBase,uint8_t byPinNum)
-{
-	(ptGpioBase)->PUDR  = (((ptGpioBase)->PUDR) & ~(0x03<<(byPinNum*2))) | (0x02<<(byPinNum*2));
-}
-
-/** \brief Disable pull-down/up Resistor of a specific pin
- * 
- *  \param[in] ptGpioBase: GPIOA/GPIOB...
- *  \param[in] byPinNum: 0~15
- *  \return none
- */
-void gpio_pull_disable(csp_gpio_t *ptGpioBase,uint8_t byPinNum)
-{
-	(ptGpioBase)->PUDR  = ((ptGpioBase)->PUDR) & ~(0x03<<(byPinNum*2));
-}
-
-/** \brief Enable open-drain of a specific pin
- * 
- *  \param[in] ptGpioBase: GPIOA/GPIOB...
- *  \param[in] byPinNum: 0~15
- *  \return none
- */ 
-void gpio_opendrain_enable(csp_gpio_t *ptGpioBase,uint8_t byPinNum)
-{
-	(ptGpioBase)->OMCR  = ((ptGpioBase)->OMCR) | (0x01<<byPinNum);
-}
-
-/** \brief Disable open-drain of a specific pin
- * 
- *  \param[in] ptGpioBase: GPIOA/GPIOB...
- *  \param[in] byPinNum: 0~15
- *  \return none
- */ 
-void gpio_opendrain_disable(csp_gpio_t *ptGpioBase,uint8_t byPinNum)
-{
-	(ptGpioBase)->OMCR  = ((ptGpioBase)->OMCR) & ~(0x01<<byPinNum);
-}
 
 
 /** \brief Config a specific input pin to TTL or CMOS mode
@@ -210,46 +154,24 @@ void gpio_opendrain_disable(csp_gpio_t *ptGpioBase,uint8_t byPinNum)
  *  \param[in] eInputMode: \ref gpio_input_mode_e
  *  \return none
  */ 
-void gpio_ttl_cmos_select(csp_gpio_t *ptGpioBase,uint8_t byPinNum,gpio_input_mode_e eInputMode)
+void gpio_input_mode_configure(csp_gpio_t *ptGpioBase,uint8_t byPinNum,gpio_input_mode_e eInputMode)
 {
-	if(eInputMode==INPUT_MODE_SETECTED_CMOS)
+	if(eInputMode==INPUT_MODE_CMOS)
 	{
 		(ptGpioBase)->DSCR  = ((ptGpioBase)->DSCR) & ~(0x01<<(byPinNum*2+1));
 	}
 	else
 	{
 		(ptGpioBase)->DSCR  = ((ptGpioBase)->DSCR) | (0x01<<(byPinNum*2+1));
-		if(eInputMode==INPUT_MODE_SETECTED_TTL1)
+		if(eInputMode==INPUT_MODE_TTL1)
 		{
 			(ptGpioBase)->OMCR  = ((ptGpioBase)->OMCR) | (0x01<<(byPinNum+16));
 		}
-		else if(eInputMode==INPUT_MODE_SETECTED_TTL2)
+		else if(eInputMode==INPUT_MODE_TTL2)
 		{
 			(ptGpioBase)->OMCR  = ((ptGpioBase)->OMCR) & ~(0x01<<(byPinNum+16));
 		}
 	}
-}
-
-/** \brief Set a specific output pin to strong driving ability
- * 
- *  \param[in] ptGpioBase: GPIOA/GPIOB...
- *  \param[in] byPinNum: 0~15
- *  \return none
- */ 
-void gpio_drive_strength_enable(csp_gpio_t *ptGpioBase,uint8_t byPinNum)
-{
-	(ptGpioBase)->DSCR  = ((ptGpioBase)->DSCR) | (0x01<<(byPinNum*2));
-}
-
-/** \brief Set a specific output pin to normal driving ability
- * 
- *  \param[in] ptGpioBase: GPIOA/GPIOB...
- *  \param[in] byPinNum: 0~15
- *  \return none
- */ 
-void gpio_drive_strength_disable(csp_gpio_t *ptGpioBase,uint8_t byPinNum)
-{
-	(ptGpioBase)->DSCR  = ((ptGpioBase)->DSCR) & ~(0x01<<(byPinNum*2));
 }
 
 
@@ -334,12 +256,12 @@ void gpio_exi_disable(csp_gpio_t *ptGpioBase,U8_T byPinNum)
 
 
 /** \brief simultaneouly external interrupt enable, disable control in GPIO
- *  \param[in] wExiMsk: EXI pin mask, 0'b  for disable, 1'b for enable
+ *  \param[in] hwExiMsk: EXI pin mask, 0'b  for disable, 1'b for enable
  *  \return none
  */
-void gpio_exi_port_cmd(csp_gpio_t * ptGpioBase,U32_T wExiMsk)
+void gpio_exi_port_cmd(csp_gpio_t * ptGpioBase,U16_T hwExiMsk)
 {
-	ptGpioBase ->IECR = wExiMsk;
+	ptGpioBase ->IECR = hwExiMsk;
 }
 
 
@@ -352,13 +274,22 @@ void gpio_exi_port_cmd(csp_gpio_t * ptGpioBase,U32_T wExiMsk)
  */ 
 void gpio_write_high(csp_gpio_t *ptGpioBase,uint8_t byPinNum)
 {
-        (ptGpioBase)->SODR = (1ul<<byPinNum);
+	(ptGpioBase)->SODR = (1ul<<byPinNum);
 }
 void gpio_write_low(csp_gpio_t *ptGpioBase,uint8_t byPinNum)
 {
-        (ptGpioBase)->CODR = (1ul<<byPinNum);
+    (ptGpioBase)->CODR = (1ul<<byPinNum);
 }
 
+/** \brief simultaneouly port write
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] hwExiMsk: pin mask, 0'b  for disable, 1'b for enable
+ *  \return none
+ */ 
+void gpio_port_write(csp_gpio_t * ptGpioBase,U16_T hwExiMsk)
+{
+	ptGpioBase ->WODR = hwExiMsk;
+}
 
 
 /** \brief Set a specific output pin to a specific level
@@ -368,7 +299,7 @@ void gpio_write_low(csp_gpio_t *ptGpioBase,uint8_t byPinNum)
  *  \param[in] bValue: 0 or 1
  *  \return none
  */ 
-void gpio_set_value(csp_gpio_t *ptGpioBase,uint8_t byPinNum, bool bValue)
+void gpio_write(csp_gpio_t *ptGpioBase,uint8_t byPinNum, bool bValue)
 {
     if (bValue == (bool)1)
     {
@@ -444,5 +375,24 @@ uint8_t gpio_read_output(csp_gpio_t *ptGpioBase,uint8_t byPinNum)
 }
 
 
-
+/** \brief port mode configuration, an alternative function for port configurations
+ * 	The operation changes all the 8 ports simutaneously
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] eMode:   PUDR(IO PULL UP/DOWN Configuration)
+						DSCR(IO DRIVE STRENGHT Configuration)
+						OMCR(OUTPUT MODE Configuration)
+						IECR(IO INT ENABLE/DISABLE)
+ * 	\param[in] wValue: 0x00000000 ~ 0xffffffff, refer to Chapter GPIO in user maunal for Mode definition
+ *  \return none
+ */ 
+void gpio_port_mode_init(csp_gpio_t *ptGpioBase,gpio_mode_e eMode,U32_T wValue)
+{
+        switch (eMode)
+        {
+            case PUDR:(ptGpioBase)->PUDR  = wValue;break;               
+            case DSCR:(ptGpioBase)->DSCR  = wValue;break;
+            case OMCR:(ptGpioBase)->OMCR  = wValue;break;
+            case IECR:(ptGpioBase)->IECR  = wValue;break;
+        }
+}
 /******************* (C) COPYRIGHT 2024 APT Chip *****END OF FILE****/

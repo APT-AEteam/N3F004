@@ -107,6 +107,13 @@ typedef enum
 #define	CMP_SWFEN_POS		    (12)
 #define	CMP_SWFEN_MSK		    (0x01ul << CMP_SWFEN_POS)
 
+typedef enum{
+	CMP_DF1 = 0x1<<CMP_DF1EN_POS,
+	CMP_HWF = 0x1<<CMP_HWFEN_POS,
+	CMP_SWF = 0x1<<CMP_SWFEN_POS
+}cmp_flt_type_e;
+
+
 #define	CMP_SWFALIGN_POS		(13)
 #define	CMP_SWFALIGN_MSK		(0x01ul << CMP_SWFALIGN_POS)
 
@@ -204,12 +211,7 @@ typedef enum{
 #define	CMP_NSEL_SET_MSK		    (0x1ful << CMP_NSEL_SET_POS)
 typedef enum
 {
-	
-	NSEL_CP1       =  0,
-	NSEL_CP2,
-	NSEL_CP3,	
-	NSEL_CP4,
-	NSEL_INTREF1,
+	NSEL_INTREF1  = 0,
 	NSEL_INTREF2,
 	NSEL_INTREF3,
 	NSEL_INTREF4,
@@ -224,7 +226,12 @@ typedef enum
 	NSEL_INTREF13,
 	NSEL_INTREF14,
 	NSEL_INTREF15,
-	NSEL_INTREF16
+	NSEL_INTREF16,
+	NSEL_CN1,
+	NSEL_CN2,
+	NSEL_CN3,	
+	NSEL_CN4,
+	NSEL_INTBEMFN
 }nsel_e;
 
 #define	CMP_PSEL_SET_POS		    (8)
@@ -244,7 +251,7 @@ typedef enum
 #define	CMP_REFSEL_MSK		    (0x1ul << CMP_REFSEL_POS)
 typedef enum
 {
-	CMP_VREF_INTERNAL = 0,
+	CMP_VREF_INTVREF = 0,
 	CMP_VREF_VDD
 }cmp_vref_e;
 
@@ -317,7 +324,7 @@ void cmp_close(csp_cmp_t *ptCmpBase);
  *  \param[in] ptCmpBase: pointer of CMP register structure
  *  \return none
  */
-void cmp_inpcr_configure(csp_cmp_t *ptCmpBase , nsel_e eNSel , psel_e ePSel );
+void cmp_input_configure(csp_cmp_t *ptCmpBase , nsel_e eNSel , psel_e ePSel );
 
 
 /** \brief cmp voltage reference selection
@@ -380,8 +387,35 @@ void cmp_hwflt_configure(csp_cmp_t *ptCmpBase, U8_T byWCnt, U8_T byDiv, cmp_wf_a
  *  \param[in] eSwSetVal: filter output status when window is valid
  *  \return none
  */
-void cmp_swflt_configure(csp_cmp_t *ptCmpBase, U8_T byWCnt, U8_T byDiv, cmp_wf_align_e eNewTrigEffect, cmp_swsetval_e eSwSetVal);
+void cmp_swflt_configure(csp_cmp_t *ptCmpBase, U8_T byWCnt, U8_T byDiv, cmp_wf_align_e eNewTrigEffect);
 
+/** \brief soft window filter configuration, including:
+ *  \param[in] ptCmpBase: pointer of CMP register structure
+ *  \param[in] eSwSetVal: filter output status when window is valid
+ *  \return none
+ */
+ 
+/** \brief CMP Filter disable
+ *  \param[in] ptCmpBase: pointer of CMP register structure
+ *  \param[in] eFltType :filter type \ref cmp_flt_type_e
+ *  \return none
+ */
+void cmp_flt_disable(csp_cmp_t *ptCmpBase, cmp_flt_type_e eFltType);
+
+/** \brief CMP Filter enable
+ *  \param[in] ptCmpBase: pointer of CMP register structure
+ *  \param[in] eFltType :filter type \ref cmp_flt_type_e
+ *  \return none
+ */
+void cmp_flt_enable(csp_cmp_t *ptCmpBase, cmp_flt_type_e eFltType);
+
+
+/** \brief soft window filter start
+ *  \param[in] ptCmpBase: pointer of CMP register structure
+ *  \param[in] eSwSetVal: filter output status when window is valid
+ *  \return none
+ */
+void cmp_swflt_start(csp_cmp_t *ptCmpBase,cmp_swsetval_e eSwSetVal);
 
 /** \brief CMP interrupt enable
  *  \param[in] ptCmpBase: pointer of CMP register structure

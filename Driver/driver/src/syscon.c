@@ -80,6 +80,17 @@ void syscon_osc_disable(osc_enable_e eOscEnable )
 	
 }
 
+/** \brief enable pclk for all ips
+ * 
+ *  \param[in] none
+ *  \return none
+ */
+void syscon_ip_pclk_enable(void)
+{
+	SYSCON ->PCER0 = 0xffffffff;
+	SYSCON ->PCER1 = 0xffffffff;
+}
+
 
 /** \brief PLL configuration
  *  \param[in] eType: PLL_TYPE_ANA/PLL_TYPE_DIG \ref pll_type_e

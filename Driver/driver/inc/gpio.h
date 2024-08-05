@@ -112,32 +112,6 @@ typedef enum
 	EXI_PIN15 = 15,
 }exi_e;
 
-///**
-//  * @brief  EXI PIN
-//  */
-//typedef enum
-//{
-//	SELECT_EXI_GROUP0		=		(0),						
-//	SELECT_EXI_GROUP1		=		(1),
-//	SELECT_EXI_GROUP2		=		(2),
-//	SELECT_EXI_GROUP3		=		(3),
-//	SELECT_EXI_GROUP4		=		(4),
-//	SELECT_EXI_GROUP5		=		(5),
-//	SELECT_EXI_GROUP6		=		(6),
-//	SELECT_EXI_GROUP7		=		(7),
-//	SELECT_EXI_GROUP8		=		(8),
-//	SELECT_EXI_GROUP9		=		(9),
-//	SELECT_EXI_GROUP10	=		(10),
-//	SELECT_EXI_GROUP11	=		(11),
-//	SELECT_EXI_GROUP12	=		(12),
-//	SELECT_EXI_GROUP13	=		(13),
-//	SELECT_EXI_GROUP14	=		(14),
-//	SELECT_EXI_GROUP15	=		(15),
-//	SELECT_EXI_GROUP16	=		(16),
-//	SELECT_EXI_GROUP17	=		(17),
-//	SELECT_EXI_GROUP18	=		(18),
-//	SELECT_EXI_GROUP19	=		(19)
-//}exi_group_e;
 
 
 /**
@@ -145,12 +119,29 @@ typedef enum
   */
 typedef enum
 {
-	INPUT_MODE_SETECTED_CMOS			=		0,
-	INPUT_MODE_SETECTED_TTL1			=		1,
-	INPUT_MODE_SETECTED_TTL2			=		2
+	INPUT_MODE_CMOS			=		0,
+	INPUT_MODE_TTL1			=		1,
+	INPUT_MODE_TTL2			=		2
 }gpio_input_mode_e;
 
+/**
+  * @brief  GPIO INPUT MODE SETECTED
+  */
+typedef enum
+{
+	OUTPUT_MODE_PUSHPULL_NORMAL		=		0,
+	OUTPUT_MODE_PUSHPULL_STRONG,
+	OUTPUT_MODE_OPENDRAIN
+}gpio_output_mode_e;
 
+
+#define GPIO_PULL_MODE_MSK	3
+
+typedef enum{
+	PULL_MODE_NOPULL = 0,
+	PULL_MODE_PULLUP = 0x1 << 0,
+	PULL_MODE_PULLDN = 0x1 << 1,
+}gpio_pull_mode_e;
 
 #define SETPA0(n)   (GPIOA0->SODR = (1ul<<n))
 #define CLRPA0(n)   (GPIOA0->CODR = (1ul<<n))
@@ -217,15 +208,6 @@ void gpio_port_init(csp_gpio_t *ptGpioBase,gpio_byte_e eByte,U32_T wValue);
  */ 
 void gpio_init(csp_gpio_t *ptGpioBase,uint8_t byPinNum,io_mux_e eIoMux);
 
-/** \brief Set a specific pin to GPD(GPIO Disable) mode
- * 
- *  \param[in] ptGpioBase: GPIOA/GPIOB...
- *  \param[in] byPinNum: 0~15
- * 	\param[in] Dir: 0  output
- * 					1  input
- *  \return none
- */ 
-void gpio_inputoutput_disable(csp_gpio_t *ptGpioBase,uint8_t byPinNum);
 
 /** \brief port mode configuration
  * 	The operation changes all the 8 ports simutaneously
@@ -237,56 +219,17 @@ void gpio_inputoutput_disable(csp_gpio_t *ptGpioBase,uint8_t byPinNum);
  * 	\param[in] wValue: 0x00000000 ~ 0xffffffff, refer to Chapter GPIO in user maunal for Mode definition
  *  \return none
  */ 
-void gpio_mode_init(csp_gpio_t *ptGpioBase,gpio_mode_e eMode,U32_T wValue);
+void gpio_port_mode_init(csp_gpio_t *ptGpioBase,gpio_mode_e eMode,U32_T wValue);
 
-/** \brief Enable pull-up Resistor of a specific pin
+/** \brief Config pull-up or pull-down of a specific output pin
  * 
  *  \param[in] ptGpioBase: GPIOA/GPIOB...
  *  \param[in] byPinNum: 0~15
+ *  \param[in] eOutputMode: \ref gpio_pull_mode_e
  *  \return none
  */ 
-void gpio_pull_high_init(csp_gpio_t *ptGpioBase,uint8_t byPinNum);
+void gpio_pull_configure(csp_gpio_t *ptGpioBase,uint8_t byPinNum, gpio_pull_mode_e ePullMode);
 
-/** \brief Disable pull-down Resistor of a specific pin
- * 
- *  \param[in] ptGpioBase: GPIOA/GPIOB...
- *  \param[in] byPinNum: 0~15
- *  \return none
- */ 
-void gpio_pull_low_init(csp_gpio_t *ptGpioBase,uint8_t byPinNum);
-
-/** \brief Disable pull-down/up Resistor of a specific pin
- * 
- *  \param[in] ptGpioBase: GPIOA/GPIOB...
- *  \param[in] byPinNum: 0~15
- *  \return none
- */
-void gpio_pull_disable(csp_gpio_t *ptGpioBase,uint8_t byPinNum);
-
-/** \brief Set/Unset a specific pin to open-drain
- * 
- *  \param[in] ptGpioBase: GPIOA/GPIOB...
- *  \param[in] byPinNum: 0~15
- *  \return none
- */ 
-
-void gpio_opendrain_enable(csp_gpio_t *ptGpioBase,uint8_t byPinNum);
-
-/** \brief Enable open-drain of a specific pin
- * 
- *  \param[in] ptGpioBase: GPIOA/GPIOB...
- *  \param[in] byPinNum: 0~15
- *  \return none
- */ 
-void gpio_opendrain_enable(csp_gpio_t *ptGpioBase,uint8_t byPinNum);
-
-/** \brief Disable open-drain of a specific pin
- * 
- *  \param[in] ptGpioBase: GPIOA/GPIOB...
- *  \param[in] byPinNum: 0~15
- *  \return none
- */ 
-void gpio_opendrain_disable(csp_gpio_t *ptGpioBase,uint8_t byPinNum);
 
 /** \brief Config a specific input pin to TTL or CMOS mode
  * 
@@ -295,6 +238,16 @@ void gpio_opendrain_disable(csp_gpio_t *ptGpioBase,uint8_t byPinNum);
  *  \param[in] eInputMode: \ref gpio_input_mode_e
  *  \return none
  */ 
+void gpio_input_mode_configure(csp_gpio_t *ptGpioBase,uint8_t byPinNum,gpio_input_mode_e eInputMode);
+
+/** \brief Config a specific output pin to opendrain or push-pull mode
+ * 
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] byPinNum: 0~15
+ *  \param[in] eOutputMode: \ref gpio_output_mode_e
+ *  \return none
+ */ 
+void gpio_output_mode_configure(csp_gpio_t *ptGpioBase,uint8_t byPinNum,gpio_output_mode_e eOutputMode);
  
 /** \brief Enable pull-up Resistor of a specific pin
  * 
@@ -322,23 +275,6 @@ void gpio_pull_low(csp_gpio_t *ptGpioBase,uint8_t byPinNum);
 void gpio_pull_disable(csp_gpio_t *ptGpioBase,uint8_t byPinNum);
 
 
-void gpio_ttl_cmos_select(csp_gpio_t *ptGpioBase,uint8_t byPinNum,gpio_input_mode_e eInputMode);
-
-/** \brief Set a specific output pin to strong driving ability
- * 
- *  \param[in] ptGpioBase: GPIOA/GPIOB...
- *  \param[in] byPinNum: 0~15
- *  \return none
- */ 
-void gpio_drive_strength_enable(csp_gpio_t *ptGpioBase,uint8_t byPinNum);
-
-/** \brief Set a specific output pin to normal driving ability
- * 
- *  \param[in] ptGpioBase: GPIOA/GPIOB...
- *  \param[in] byPinNum: 0~15
- *  \return none
- */ 
-void gpio_drive_strength_disable(csp_gpio_t *ptGpioBase,uint8_t byPinNum);
 
 /** \brief IO Group configuration
  *  There are 20 possible groups seperately connecting to EXI0~19 in SYSCON 
@@ -370,10 +306,10 @@ void gpio_exi_enable(csp_gpio_t *ptGpioBase,U8_T byPinNum);
 void gpio_exi_disable(csp_gpio_t *ptGpioBase,U8_T byPinNum);
 
 /** \brief simultaneouly external interrupt enable, disable control in GPIO
- *  \param[in] wExiMsk: EXI pin mask, 0'b  for disable, 1'b for enable
+ *  \param[in] hwExiMsk: EXI pin mask, 0'b  for disable, 1'b for enable
  *  \return none
  */
-void gpio_exi_port_cmd(csp_gpio_t * ptGpioBase,U32_T wExiMsk);
+void gpio_exi_port_cmd(csp_gpio_t * ptGpioBase,U16_T hwExiMsk);
 
 /** \brief Set/Clear a specific output pin
  *  \param[in] ptGpioBase: GPIOA/GPIOB...
@@ -384,7 +320,12 @@ void gpio_write_high(csp_gpio_t *ptGpioBase,uint8_t byPinNum);
 void gpio_write_low(csp_gpio_t *ptGpioBase,uint8_t byPinNum);
 
 
-
+/** \brief simultaneouly port write
+ *  \param[in] ptGpioBase: GPIOA/GPIOB...
+ *  \param[in] wExiMsk: pin mask, 0'b  for disable, 1'b for enable
+ *  \return none
+ */ 
+void gpio_port_write(csp_gpio_t * ptGpioBase,U16_T hwExiMsk);
 
 
 /** \brief Set a specific output pin to a specific level
@@ -394,7 +335,7 @@ void gpio_write_low(csp_gpio_t *ptGpioBase,uint8_t byPinNum);
  *  \param[in] bValue: 0 or 1
  *  \return none
  */ 
-void gpio_set_value(csp_gpio_t *ptGpioBase,uint8_t byPinNum, bool bValue);
+void gpio_write(csp_gpio_t *ptGpioBase,uint8_t byPinNum, bool bValue);
 
 /** \brief Toggle a specific output pin
  * 

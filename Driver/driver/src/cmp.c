@@ -71,7 +71,7 @@ void cmp_close(csp_cmp_t *ptCmpBase)
  *  \param[in] ptCmpBase: pointer of CMP register structure
  *  \return none
  */
-void cmp_inpcr_configure(csp_cmp_t *ptCmpBase , nsel_e eNSel , psel_e ePSel )
+void cmp_input_configure(csp_cmp_t *ptCmpBase , nsel_e eNSel , psel_e ePSel )
 {
 	ptCmpBase->INPCR &= (~CMP_NSEL_SET_MSK) & (~CMP_PSEL_SET_MSK)| (eNSel << CMP_NSEL_SET_POS) | (ePSel << CMP_PSEL_SET_POS);
 }
@@ -147,6 +147,26 @@ void cmp_hwflt_configure(csp_cmp_t *ptCmpBase, U8_T byWCnt, U8_T byDiv, cmp_wf_a
 	ptCmpBase -> CR &= (~CMP_HWFALIGN_MSK) | ( eNewTrigEffect << CMP_HWFALIGN_POS);
 }
 
+/** \brief CMP Filter enable
+ *  \param[in] ptCmpBase: pointer of CMP register structure
+ *  \param[in] eFltType :filter type \ref cmp_flt_type_e
+ *  \return none
+ */
+void cmp_flt_enable(csp_cmp_t *ptCmpBase, cmp_flt_type_e eFltType)
+{
+	ptCmpBase -> CR |= eFltType;
+}
+
+/** \brief CMP Filter disable
+ *  \param[in] ptCmpBase: pointer of CMP register structure
+ *  \param[in] eFltType :filter type \ref cmp_flt_type_e
+ *  \return none
+ */
+void cmp_flt_disable(csp_cmp_t *ptCmpBase, cmp_flt_type_e eFltType)
+{
+	ptCmpBase -> CR &= ~eFltType;
+}
+
 /** \brief soft window filter configuration, including:
  *  - window width
  *  - clock = PCLK/byDiv
@@ -157,13 +177,22 @@ void cmp_hwflt_configure(csp_cmp_t *ptCmpBase, U8_T byWCnt, U8_T byDiv, cmp_wf_a
  *  \param[in] eSwSetVal: filter output status when window is valid
  *  \return none
  */
-void cmp_swflt_configure(csp_cmp_t *ptCmpBase, U8_T byWCnt, U8_T byDiv, cmp_wf_align_e eNewTrigEffect, cmp_swsetval_e eSwSetVal)
+void cmp_swflt_configure(csp_cmp_t *ptCmpBase, U8_T byWCnt, U8_T byDiv, cmp_wf_align_e eNewTrigEffect)
 {
-	ptCmpBase -> SWFCR &= (~CMP_WCNT_MSK) & (~CMP_WF_DIVN_MSK) & (~CMP_SWSET_MSK)
-						|(byWCnt << CMP_WCNT_POS) | (byDiv << CMP_WF_DIVN_POS) | (eSwSetVal << CMP_SWSET_POS);
+	ptCmpBase -> SWFCR &= (~CMP_WCNT_MSK) & (~CMP_WF_DIVN_MSK) 
+						|(byWCnt << CMP_WCNT_POS) | (byDiv << CMP_WF_DIVN_POS) ;
 	ptCmpBase -> CR &= (~CMP_SWFALIGN_MSK) | ( eNewTrigEffect << CMP_SWFALIGN_POS);
 }
 
+/** \brief soft window filter start
+ *  \param[in] ptCmpBase: pointer of CMP register structure
+ *  \param[in] eSwSetVal: filter output status when window is valid
+ *  \return none
+ */
+void cmp_swflt_start(csp_cmp_t *ptCmpBase,cmp_swsetval_e eSwSetVal)
+{
+	ptCmpBase -> SWFCR &= (~CMP_SWSET_MSK)| (eSwSetVal << CMP_SWSET_POS);
+}
 
 
 /** \brief CMP interrupt enable

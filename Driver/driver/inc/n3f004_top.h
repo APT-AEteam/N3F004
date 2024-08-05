@@ -184,7 +184,7 @@ typedef enum
 
 
 typedef enum {
-	PIN_GPD				    =  0U,
+	PIN_GPD				    =  0U,		//input,output disable
 	PIN_INPUT				=  1U,		//input
 	PIN_OUTPUT				=  2U,		//output
 	PIN_OUTPUT_MONI			=  3U,		//output with monitor
